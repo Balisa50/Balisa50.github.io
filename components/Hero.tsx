@@ -15,35 +15,88 @@ const HeroParticles = dynamic(
 );
 
 const ROTATING_WORDS = [
+  // AI / LLMs
   "agentic systems",
   "RAG pipelines",
-  "forecasting models",
-  "AI tooling",
-  "production ML"
+  "LLM fine-tuning",
+  "prompt engineering",
+  "multimodal AI",
+  "embedding models",
+  "vector databases",
+  "AI evaluation",
+  "inference pipelines",
+  "AI orchestration",
+  "transformer models",
+  "neural networks",
+  "model compression",
+  "language chains",
+  "tool-calling agents",
+  // Agents & workflows
+  "multi-agent systems",
+  "autonomous agents",
+  "reasoning agents",
+  "memory-augmented AI",
+  "agent orchestration",
+  "workflow automation",
+  "agentic workflows",
+  // Data science
+  "data pipelines",
+  "feature engineering",
+  "predictive models",
+  "time-series models",
+  "anomaly detection",
+  "causal inference",
+  "data visualisation",
+  "recommendation systems",
+  "A/B frameworks",
+  "synthetic data gen",
+  // Statistics
+  "Bayesian inference",
+  "regression models",
+  "hypothesis testing",
+  "stochastic models",
+  "probability models",
+  "statistical learning",
+  "Monte Carlo sims",
+  "maximum likelihood",
+  // Actuarial science
+  "survival analysis",
+  "mortality models",
+  "actuarial pricing",
+  "risk reserving",
+  "credit risk models",
+  "life table analysis",
+  "solvency models",
+  "hazard rate models",
+  // Engineering
+  "forecasting systems",
+  "real-time analytics",
+  "production ML",
+  "intelligent systems",
 ];
 
 export function Hero() {
   const gpu = useGPUTier();
   const [wordIndex, setWordIndex] = useState(0);
 
-  // Pre-mount: show static SVG (matches worst-case fallback). Once the
-  // detector reports back, we mount WebGL or keep the SVG.
   const useWebGL = gpu.ready && gpu.shouldUseWebGL;
 
+  // Cycle words regardless of reducedMotion — the CSS media query makes
+  // the AnimatePresence transition instant when reduce-motion is on,
+  // which IS the correct accessible behaviour.
   useEffect(() => {
-    if (gpu.reducedMotion) return;
     const id = setInterval(() => {
       setWordIndex((i) => (i + 1) % ROTATING_WORDS.length);
-    }, 2400);
+    }, 2200);
     return () => clearInterval(id);
-  }, [gpu.reducedMotion]);
+  }, []);
 
   return (
     <section
       className="relative isolate flex min-h-[100svh] w-full items-center justify-center overflow-hidden"
       aria-label="Hero"
     >
-      {/* Background visual: WebGL particle brain or SVG fallback */}
+      {/* Background visual: WebGL particle brain (desktop only) or SVG fallback */}
       <div className="pointer-events-none absolute inset-0 z-0">
         {useWebGL ? (
           <ErrorBoundary
@@ -72,46 +125,46 @@ export function Hero() {
         />
       </div>
 
-      {/* Text content */}
+      {/* ── Text content ──────────────────────────────────────────────────── */}
+      {/* All entrance animations are pure CSS (@keyframes hero-fade-up in
+          globals.css). This guarantees visibility even if JS is slow or
+          Framer Motion hasn't hydrated yet — critical for mobile. */}
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1.5 text-xs font-medium text-text-secondary backdrop-blur-sm"
+
+        {/* Status badge */}
+        <p
+          className="hero-item mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1.5 text-xs font-medium text-text-secondary backdrop-blur-sm"
+          style={{ animationDelay: "0.05s" }}
         >
           <span className="relative inline-flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-status-live opacity-60" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-status-live" />
           </span>
           Available for new work · {PROFILE.location}
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-semibold leading-[1.05] tracking-tight"
+        {/* Name */}
+        <h1
+          className="hero-item text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-semibold leading-[1.05] tracking-tight"
+          style={{ animationDelay: "0.15s" }}
         >
           <span className="bg-gradient-to-br from-white via-white to-cyan/80 bg-clip-text text-transparent">
             {PROFILE.fullName}
           </span>
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="mt-4 font-mono text-xs uppercase tracking-[0.35em] text-cyan/90"
+        {/* Title */}
+        <p
+          className="hero-item mt-4 font-mono text-xs uppercase tracking-[0.35em] text-cyan/90"
+          style={{ animationDelay: "0.25s" }}
         >
           {PROFILE.title}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-5 text-pretty text-[clamp(1.05rem,2.2vw,1.35rem)] text-text-secondary"
+        {/* Tagline + rotating word */}
+        <div
+          className="hero-item mt-5 text-pretty text-[clamp(1.05rem,2.2vw,1.35rem)] text-text-secondary"
+          style={{ animationDelay: "0.35s" }}
         >
           <p className="flex flex-wrap items-baseline justify-center gap-x-2">
             <span>I build</span>
@@ -122,7 +175,7 @@ export function Hero() {
             <span>Currently working on</span>
             <span
               aria-live="polite"
-              className="relative inline-block h-[1.3em] w-[19ch] overflow-hidden text-left align-bottom"
+              className="relative inline-block h-[1.3em] w-[22ch] overflow-hidden text-left align-bottom"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span
@@ -130,7 +183,7 @@ export function Hero() {
                   initial={{ y: "110%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: "-110%", opacity: 0 }}
-                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0 flex items-baseline whitespace-nowrap font-medium text-cyan"
                 >
                   {ROTATING_WORDS[wordIndex]}
@@ -139,22 +192,20 @@ export function Hero() {
             </span>
             <span>.</span>
           </p>
-        </motion.div>
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.55 }}
-          className="mt-3 max-w-xl text-sm text-text-secondary/80"
+        {/* Sub-tagline */}
+        <p
+          className="hero-item mt-3 max-w-xl text-sm text-text-secondary/80"
+          style={{ animationDelay: "0.45s" }}
         >
           Real products, measurable results, open-source by default.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-9 flex flex-wrap items-center justify-center gap-3"
+        {/* CTA buttons */}
+        <div
+          className="hero-item mt-9 flex flex-wrap items-center justify-center gap-3"
+          style={{ animationDelay: "0.6s" }}
         >
           <a
             href="#projects"
@@ -189,25 +240,23 @@ export function Hero() {
             <Mail className="h-4 w-4" aria-hidden="true" />
             Email
           </a>
-        </motion.div>
+        </div>
       </div>
 
       {/* Scroll hint */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
-        className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-text-secondary"
+      <div
+        className="hero-item absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-text-secondary"
+        style={{ animationDelay: "1.1s" }}
         aria-hidden="true"
       >
-        <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/15 p-1.5">
-          <motion.span
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            className="h-2 w-1 rounded-full bg-cyan"
-          />
-        </div>
-      </motion.div>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="flex h-10 w-6 items-start justify-center rounded-full border border-white/15 p-1.5"
+        >
+          <span className="h-2 w-1 rounded-full bg-cyan" />
+        </motion.div>
+      </div>
     </section>
   );
 }

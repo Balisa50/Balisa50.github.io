@@ -26,7 +26,7 @@ export function Metrics() {
       <motion.ul
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.6 }}
         className="grid grid-cols-2 gap-3 rounded-2xl border border-white/10 bg-black/40 p-4 backdrop-blur-sm md:grid-cols-4 md:gap-6 md:p-6"
       >
@@ -35,7 +35,7 @@ export function Metrics() {
             key={it.label}
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.4 }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.4, delay: 0.08 * i }}
             className="flex flex-col gap-1 border-white/10 px-2 md:px-4 md:[&:not(:last-child)]:border-r"
           >

@@ -27,7 +27,7 @@ export function Skills() {
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.6 }}
         className="flex flex-col gap-8"
       >
@@ -44,7 +44,7 @@ export function Skills() {
               key={group.label}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.4, delay: gi * 0.08 }}
               className="flex flex-col gap-3"
             >

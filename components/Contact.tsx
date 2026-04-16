@@ -27,7 +27,7 @@ export function Contact() {
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.7 }}
         className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-black/60 via-black/40 to-cyan/5 p-8 backdrop-blur-md md:p-14"
       >
