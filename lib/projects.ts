@@ -111,6 +111,36 @@ export const PROJECTS: Project[] = [
     launchLabel: "In active iteration",
     accent: "violet",
     fallbackStars: 0
+  },
+  {
+    slug: "credit-risk-scorecard",
+    title: "Credit Risk Scorecard",
+    tagline: "Basel II scorecard for West African microfinance",
+    description:
+      "Full credit scoring pipeline: WoE/IV feature selection, logistic regression with Basel II points conversion, Gini/KS/PSI validation, and multi-scenario stress testing. Built on 12,000 synthetic West African microfinance loans.",
+    tech: ["Python", "scikit-learn", "Pandas", "Next.js", "Recharts"],
+    github: "https://github.com/Balisa50/credit-risk-scorecard",
+    githubRepo: "Balisa50/credit-risk-scorecard",
+    demo: "https://credit-risk-scorecard.vercel.app/",
+    status: "live",
+    metric: "Gini 0.56 · KS 0.42",
+    accent: "pink",
+    fallbackStars: 0
+  },
+  {
+    slug: "life-insurance-risk",
+    title: "Life Insurance Risk Model",
+    tagline: "Actuarial risk model for Sub-Saharan Africa",
+    description:
+      "Gompertz-Makeham mortality model, Kaplan-Meier survival analysis, Cox PH (concordance 0.77), actuarial premium pricing, and Monte Carlo VaR simulation with pandemic stress testing across 5,000 scenarios.",
+    tech: ["Python", "lifelines", "NumPy", "Next.js", "Recharts"],
+    github: "https://github.com/Balisa50/life-insurance-risk",
+    githubRepo: "Balisa50/life-insurance-risk",
+    demo: "https://life-insurance-risk.vercel.app/",
+    status: "live",
+    metric: "Cox PH C-index 0.77 · 5k Monte Carlo sims",
+    accent: "violet",
+    fallbackStars: 0
   }
 ];
 
