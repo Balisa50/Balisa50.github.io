@@ -23,6 +23,21 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "ayat",
+    title: "AYAT",
+    tagline: "6,236 Qur'anic verses as a semantic galaxy",
+    description:
+      "Every verse of the Qur'an embedded with sentence-transformers, projected to 3D with UMAP, clustered with HDBSCAN, and rendered as a live particle galaxy in Three.js. Colour-codes Meccan vs Medinan revelation, surfaces semantic neighbours, and pulls Claude-generated historical context for any ayah you click.",
+    tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "Next.js 16", "Three.js", "Claude API"],
+    github: "https://github.com/Balisa50/ayat",
+    githubRepo: "Balisa50/ayat",
+    demo: "https://ayat-galaxy.vercel.app/",
+    status: "live",
+    metric: "6,236 verses, live 3D semantic search",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "vantage",
     title: "VANTAGE",
     tagline: "Tech intelligence platform",
@@ -73,12 +88,12 @@ export const PROJECTS: Project[] = [
     tagline: "Accountability OS for self-taught learners",
     description:
       "Daily lock-screen app that refuses to let you in until you have logged real progress. An AI interrogator grills you on what you built; only a convincing answer unlocks the machine. Streaks, PIN-locked settings, and consequence mechanisms make skipping painful.",
-    tech: ["Next.js", "Prisma", "NextAuth", "HuggingFace API", "TypeScript"],
+    tech: ["Next.js", "Prisma", "NextAuth", "OpenRouter", "TypeScript"],
     github: "https://github.com/Balisa50/forge",
     githubRepo: "Balisa50/forge",
-    status: "in-progress",
-    progress: 80,
-    launchLabel: "Deploying soon",
+    demo: "https://the-forge-coral-mu.vercel.app",
+    status: "live",
+    metric: "AI interrogation · streak engine · anti-cheat",
     accent: "cyan",
     fallbackStars: 0
   },
@@ -87,28 +102,28 @@ export const PROJECTS: Project[] = [
     title: "ColdPilot",
     tagline: "Autonomous cold-outreach agent",
     description:
-      "Two-mode agent (Hunter for B2B, Seeker for job apps) that finds contacts, researches the target, writes personalised emails, sends, and follows up. Pipeline goes contact_finder, researcher, email_writer, sender, follow-up.",
-    tech: ["Python", "FastAPI", "Groq", "Hunter.io", "SMTP", "SQLite"],
+      "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline — contact discovery via Hunter.io, Tavily company research, Groq-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
+    tech: ["Python", "FastAPI", "Groq", "Hunter.io", "Tavily", "APScheduler", "SMTP", "Next.js 16"],
     github: "https://github.com/Balisa50/coldpilot",
     githubRepo: "Balisa50/coldpilot",
-    status: "in-progress",
-    progress: 60,
-    launchLabel: "In progress",
+    demo: "https://coldpilot-dashboard.vercel.app",
+    status: "live",
+    metric: "Hunter · Seeker · 3 autonomy levels",
     accent: "pink",
     fallbackStars: 0
   },
   {
     slug: "formly",
     title: "Formly",
-    tagline: "AI form-filling agent",
+    tagline: "AI agent that fills any web form for you",
     description:
-      "Reads any web form (React Select dropdowns, file uploads, conditional fields) and fills it on your behalf. A Groq-backed LLM produces answers from your profile; Playwright drives the browser to submit.",
-    tech: ["Python", "Playwright", "Groq", "FastAPI", "Docker"],
+      "Paste a URL — Formly opens the form in a headless browser, reads every field (including React Select dropdowns, ATS iframes like Workday and Greenhouse, file uploads, date pickers, and multi-page flows), matches your stored profile via Groq, asks only for what it can't infer, then fills and submits. Returns a screenshot and per-field audit trail.",
+    tech: ["Python", "Playwright", "Groq", "FastAPI", "Docker", "Next.js 16"],
     github: "https://github.com/Balisa50/formly",
     githubRepo: "Balisa50/formly",
-    status: "in-progress",
-    progress: 50,
-    launchLabel: "In active iteration",
+    demo: "https://formly-dashboard.vercel.app",
+    status: "live",
+    metric: "ATS iframes · React Select · auto-submit",
     accent: "violet",
     fallbackStars: 0
   },
@@ -298,7 +313,7 @@ export const EXPERIENCE: Experience[] = [
     location: "Remote",
     bullets: [
       "Building production AI products end to end: ingestion, modelling, orchestration, and the UIs on top.",
-      "Shipped VANTAGE, Gamba Legal Aid, and Dalasi Pulse. FORGE, ColdPilot, and Formly in active development.",
+      "Shipped VANTAGE, Gamba Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and Formly — six production AI products end to end.",
       "Open-sourcing tooling around RAG, agentic pipelines, and forecasting on the Dalasi."
     ]
   },
