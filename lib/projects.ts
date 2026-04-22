@@ -113,6 +113,22 @@ export const PROJECTS: Project[] = [
     fallbackStars: 0
   },
   {
+    slug: "formly",
+    title: "Formly",
+    tagline: "AI agent that fills any web form for you",
+    description:
+      "Paste a URL — Formly opens the form in a headless browser, reads every field (including React Select dropdowns, ATS iframes like Workday and Greenhouse, file uploads, date pickers, and multi-page flows), matches your stored profile via Groq, asks only for what it can't infer, then fills and submits. Returns a screenshot and per-field audit trail.",
+    tech: ["Python", "Playwright", "Groq", "FastAPI", "Docker", "Next.js 16"],
+    github: "https://github.com/Balisa50/formly",
+    githubRepo: "Balisa50/formly",
+    status: "in-progress",
+    progress: 70,
+    launchLabel: "In development",
+    metric: "ATS iframes · React Select · multi-page forms",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "credit-risk-scorecard",
     title: "Credit Risk Scorecard",
     tagline: "Basel II scorecard for West African microfinance",
