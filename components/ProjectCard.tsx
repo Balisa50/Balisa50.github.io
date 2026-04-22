@@ -44,12 +44,12 @@ const STATUS_STYLES: Record<
  * Clicking anywhere in the card navigates there (new tab).
  */
 function primaryHref(p: Project): string {
-  if (p.status === "live" && p.demo) return p.demo;
+  if (p.demo) return p.demo;
   return p.github;
 }
 
 function primaryLabel(p: Project): string {
-  if (p.status === "live" && p.demo) return "Visit";
+  if (p.demo) return p.status === "live" ? "Visit" : "Preview";
   return "View code";
 }
 
@@ -205,7 +205,7 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
             <Github className="h-3.5 w-3.5" aria-hidden="true" />
             Code
           </a>
-          {project.demo && project.status === "live" && (
+          {project.demo && (
             <a
               href={project.demo}
               target="_blank"
@@ -214,7 +214,7 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
               className="inline-flex min-h-[36px] items-center gap-1.5 rounded-md bg-cyan/10 px-3 py-1.5 text-xs font-medium text-cyan transition hover:bg-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
               aria-label={`${project.title} live site`}
             >
-              Live
+              {project.status === "live" ? "Live" : "Preview"}
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           )}
@@ -284,14 +284,14 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
               >
                 <Github className="h-4 w-4" /> GitHub
               </a>
-              {project.demo && project.status === "live" && (
+              {project.demo && (
                 <a
                   href={project.demo}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full bg-cyan px-4 py-2 text-sm font-medium text-background"
                 >
-                  Visit site <ArrowUpRight className="h-4 w-4" />
+                  {project.status === "live" ? "Visit site" : "Preview"} <ArrowUpRight className="h-4 w-4" />
                 </a>
               )}
             </div>
