@@ -75,7 +75,7 @@ export async function GET() {
           "Shipped VANTAGE, a global tech intelligence feed with AI synthesis and signal scoring",
           "Shipped Gambia Legal Aid, a RAG chatbot on Gambian law with a hallucination-guard pipeline",
           "Shipped Dalasi Pulse, FX and remittance forecasting on CBG and World Bank data (Python + Next.js)",
-          "Building FORGE (accountability OS), ColdPilot (cold-outreach agent), Formly (AI form-filling agent)"
+          "Shipped FORGE (accountability OS), ColdPilot (cold-outreach agent), and AYAT (Qur'anic verse galaxy)"
         ]
       }
     ],
