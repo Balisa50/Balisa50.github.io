@@ -107,7 +107,9 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Balisa50/coldpilot",
     githubRepo: "Balisa50/coldpilot",
     demo: "https://coldpilot-dashboard.vercel.app",
-    status: "live",
+    status: "in-progress",
+    progress: 80,
+    launchLabel: "80% — v2 coming",
     metric: "Hunter · Seeker · 3 autonomy levels",
     accent: "pink",
     fallbackStars: 0
