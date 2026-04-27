@@ -91,7 +91,7 @@ export const PROJECTS: Project[] = [
     tech: ["Next.js", "Prisma", "NextAuth", "OpenRouter", "TypeScript"],
     github: "https://github.com/Balisa50/forge",
     githubRepo: "Balisa50/forge",
-    demo: "https://forge-balisa.vercel.app",
+    demo: "https://forge-ab.vercel.app",
     status: "live",
     metric: "AI interrogation · streak engine · anti-cheat",
     accent: "cyan",

@@ -2,6 +2,8 @@
 const nextConfig = {
   output: "export",          // static HTML export for GitHub Pages
   trailingSlash: true,       // /about → /about/index.html
+  basePath: "/portfolio",    // GitHub Pages project page lives at /portfolio
+  assetPrefix: "/portfolio", // ensures JS/CSS/images load from the right path
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
