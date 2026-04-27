@@ -3,7 +3,7 @@ import type { MetadataRoute } from "next";
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://balisa50.github.io/portfolio";
+  const base = "https://balisa50.github.io";
   const now = new Date();
   return [
     { url: `${base}/`, lastModified: now, changeFrequency: "weekly", priority: 1 },
