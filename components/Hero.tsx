@@ -31,6 +31,15 @@ const ROTATING_WORDS = [
   "model compression",
   "language chains",
   "tool-calling agents",
+  "chain-of-thought",
+  "knowledge graphs",
+  "context windows",
+  "structured outputs",
+  "function calling",
+  "retrieval systems",
+  "AI safety",
+  "zero-shot learning",
+  "transfer learning",
   // Agents & workflows
   "multi-agent systems",
   "autonomous agents",
@@ -39,6 +48,7 @@ const ROTATING_WORDS = [
   "agent orchestration",
   "workflow automation",
   "agentic workflows",
+  "event-driven systems",
   // Data science
   "data pipelines",
   "feature engineering",
@@ -50,6 +60,16 @@ const ROTATING_WORDS = [
   "recommendation systems",
   "A/B frameworks",
   "synthetic data gen",
+  "NLP pipelines",
+  "gradient boosting",
+  "ensemble methods",
+  "SHAP values",
+  "model explainability",
+  "tabular ML",
+  "cross-validation",
+  "class imbalance",
+  "dimensionality reduction",
+  "signal processing",
   // Statistics
   "Bayesian inference",
   "regression models",
@@ -59,6 +79,13 @@ const ROTATING_WORDS = [
   "statistical learning",
   "Monte Carlo sims",
   "maximum likelihood",
+  "Bayesian networks",
+  "survival curves",
+  "panel data models",
+  "GLMs",
+  "mixed effects models",
+  "nonparametric stats",
+  "pattern recognition",
   // Actuarial science
   "survival analysis",
   "mortality models",
@@ -68,11 +95,35 @@ const ROTATING_WORDS = [
   "life table analysis",
   "solvency models",
   "hazard rate models",
+  "loss reserving",
+  "claims modelling",
+  "VaR analysis",
+  "IBNR estimation",
+  "reinsurance pricing",
   // Engineering
   "forecasting systems",
   "real-time analytics",
   "production ML",
   "intelligent systems",
+  "API design",
+  "stream processing",
+  "open source",
+  // Human / love
+  "the craft",
+  "curiosity",
+  "the grind",
+  "late nights",
+  "doing the work",
+  "systems thinking",
+  "deep focus",
+  "stubbornness",
+  "discipline",
+  "momentum",
+  "learning in public",
+  "problems worth solving",
+  "The Gambia's future",
+  "exponential growth",
+  "shipping things",
 ];
 
 export function Hero() {
@@ -87,7 +138,7 @@ export function Hero() {
   useEffect(() => {
     const id = setInterval(() => {
       setWordIndex((i) => (i + 1) % ROTATING_WORDS.length);
-    }, 2200);
+    }, 3500);
     return () => clearInterval(id);
   }, []);
 
@@ -183,8 +234,9 @@ export function Hero() {
                   initial={{ y: "110%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: "-110%", opacity: 0 }}
-                  transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                  className="absolute inset-0 flex items-baseline whitespace-nowrap font-medium text-cyan"
+                  transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 flex items-baseline whitespace-nowrap font-semibold text-white"
+                  style={{ textShadow: "0 0 28px rgba(0,240,255,0.65), 0 0 8px rgba(0,240,255,0.35)" }}
                 >
                   {ROTATING_WORDS[wordIndex]}
                 </motion.span>

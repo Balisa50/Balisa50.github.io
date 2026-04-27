@@ -35,3 +35,5 @@ next-env.d.ts.bak
 # editor
 .idea/
 .vscode/
+
+.vercel

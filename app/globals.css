@@ -73,13 +73,30 @@ body {
   }
 }
 
-/* ---------- hero CSS entrance animations (always work, even without JS) --- */
+/* ---------- hero CSS entrance animations ---------------------------------- */
+/* Progressive-enhancement approach:
+   - Default (no animation support / reduced motion): elements are ALWAYS visible.
+   - Only hide + animate when the user explicitly allows motion.
+   This prevents the "stuck at opacity:0" bug on Android with animations disabled. */
+
 @keyframes hero-fade-up {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0);    }
 }
+
+/* Always-visible default — works on every device, every browser */
 .hero-item {
-  animation: hero-fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animate only when the OS has motion enabled */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-item {
+    opacity: 0;
+    transform: translateY(18px);
+    animation: hero-fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 }
 
 /* ---------- utilities ---------- */

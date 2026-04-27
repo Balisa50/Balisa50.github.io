@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Github, Star, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, Github, Star, X } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { cn, formatStarCount } from "@/lib/utils";
 
@@ -218,6 +218,19 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           )}
+          {project.articleUrl && (
+            <a
+              href={project.articleUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-md bg-cyan/10 px-3 py-1.5 text-xs font-medium text-cyan transition hover:bg-cyan/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              aria-label={`${project.title} article`}
+            >
+              <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+              Read Article
+            </a>
+          )}
         </div>
       </motion.article>
 
@@ -292,6 +305,16 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
                   className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full bg-cyan px-4 py-2 text-sm font-medium text-background"
                 >
                   {project.status === "live" ? "Visit site" : "Preview"} <ArrowUpRight className="h-4 w-4" />
+                </a>
+              )}
+              {project.articleUrl && (
+                <a
+                  href={project.articleUrl}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full bg-cyan px-4 py-2 text-sm font-medium text-background"
+                >
+                  <BookOpen className="h-4 w-4" /> Read Article
                 </a>
               )}
             </div>

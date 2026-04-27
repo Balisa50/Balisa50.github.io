@@ -13,6 +13,7 @@ export interface Project {
   github: string;
   githubRepo: string; // owner/repo for API calls
   demo?: string;
+  articleUrl?: string; // Read Article link (e.g. Medium post)
   status: ProjectStatus;
   progress?: number;
   launchLabel?: string;
@@ -173,6 +174,21 @@ export const PROJECTS: Project[] = [
     status: "live",
     metric: "Cox PH C-index 0.77 · 5k Monte Carlo sims",
     accent: "violet",
+    fallbackStars: 0
+  },
+  {
+    slug: "global-restaurant-analytics",
+    title: "Global Restaurant Analytics",
+    tagline: "Customer satisfaction drivers in world food service",
+    description:
+      "Analysed 21 variables across a global restaurant dataset to identify key drivers of customer satisfaction. Built predictive models for restaurant performance forecasting and presented findings through comprehensive visualisations.",
+    tech: ["Python", "Pandas", "Matplotlib", "Seaborn"],
+    github: "https://github.com/Balisa50/global-restaurant-analytics",
+    githubRepo: "Balisa50/global-restaurant-analytics",
+    articleUrl: "https://medium.com/@abdouliebalisa904/what-restaurant-data-from-around-the-world-tells-us-about-food-service-and-customer-ratings-4eead0ce8a22",
+    status: "live",
+    metric: "21 variables · customer satisfaction drivers",
+    accent: "cyan",
     fallbackStars: 0
   }
 ];
@@ -347,12 +363,15 @@ export const EXPERIENCE: Experience[] = [
   },
   {
     company: "Lujo Heights Real Estate",
-    role: "Data Analyst",
-    period: "Mar 2024 - Jun 2024",
-    location: "The Gambia",
+    role: "AI Automation Engineer",
+    period: "Mar 2024 - Jun 2024 · Contract",
+    location: "Remote · Nigeria",
     bullets: [
-      "Cleaned and analysed listing and client data to surface conversion and pricing insights.",
-      "Built dashboards for the sales team to track pipeline and performance."
+      "Built an automated lead-classification system that categorised prospects as Hot, Warm, or Cold from CRM engagement data, improving sales team conversion prioritisation.",
+      "Implemented Python-based ETL workflows that cut manual data processing significantly.",
+      "Developed a lead-scoring model to improve pipeline conversion rates.",
+      "Designed interactive dashboards for real-time sales performance tracking.",
+      "Built automation workflows using n8n and Make."
     ]
   }
 ];
