@@ -98,6 +98,21 @@ export const PROJECTS: Project[] = [
     fallbackStars: 0
   },
   {
+    slug: "hireiq",
+    title: "HireIQ",
+    tagline: "AI-powered hiring platform",
+    description:
+      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate gets interviewed by Gemini; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
+    tech: ["Python", "FastAPI", "Gemini Flash 2.0", "Next.js 14", "Supabase", "WeasyPrint"],
+    github: "https://github.com/Balisa50/hireiq",
+    githubRepo: "Balisa50/hireiq",
+    demo: "https://hireiq-ab.vercel.app",
+    status: "live",
+    metric: "AI interviews · ranked scoring · PDF reports",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "coldpilot",
     title: "ColdPilot",
     tagline: "Autonomous cold-outreach agent",
