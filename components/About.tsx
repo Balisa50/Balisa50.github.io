@@ -31,17 +31,17 @@ export function About() {
               src="/avatar.jpg"
               alt={PROFILE.fullName}
               fill
-              className="object-cover object-center"
+              className="relative z-10 object-cover object-center"
               sizes="(max-width: 640px) 96px, 112px"
               onError={(e) => {
                 // Hide broken image, fallback initials show through bg
                 (e.currentTarget as HTMLImageElement).style.display = "none";
               }}
             />
-            {/* Initials fallback — visible when avatar.jpg is missing */}
+            {/* Initials fallback — sits behind the image, only visible if image fails */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 flex items-center justify-center font-mono text-2xl font-semibold text-cyan/80 select-none"
+              className="absolute inset-0 z-0 flex items-center justify-center font-mono text-2xl font-semibold text-cyan/80 select-none"
             >
               AB
             </span>
