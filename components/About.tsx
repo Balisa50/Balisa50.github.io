@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
@@ -22,25 +23,64 @@ export function About() {
           ~/about
         </span>
 
-        <h2
-          id="about-heading"
-          className="text-balance text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-tight"
-        >
-          I got into this because I kept seeing problems
-          around me{" "}
-          <span className="text-text-secondary">
-            that nobody was building for.
-          </span>
-        </h2>
+        {/* Photo + heading row */}
+        <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+          {/* Profile photo */}
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border border-white/15 bg-white/5 shadow-glow-cyan sm:h-28 sm:w-28">
+            <Image
+              src="/avatar.jpg"
+              alt={PROFILE.fullName}
+              fill
+              className="object-cover object-center"
+              sizes="(max-width: 640px) 96px, 112px"
+              onError={(e) => {
+                // Hide broken image, fallback initials show through bg
+                (e.currentTarget as HTMLImageElement).style.display = "none";
+              }}
+            />
+            {/* Initials fallback — visible when avatar.jpg is missing */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 flex items-center justify-center font-mono text-2xl font-semibold text-cyan/80 select-none"
+            >
+              AB
+            </span>
+          </div>
+
+          <h2
+            id="about-heading"
+            className="text-balance text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-tight"
+          >
+            I got into this because I kept seeing problems
+            around me{" "}
+            <span className="text-text-secondary">
+              that nobody was building for.
+            </span>
+          </h2>
+        </div>
 
         <div className="mt-2 space-y-4 text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
           <p>
-            Self-taught, based in The Gambia, studying Statistics at KNUST. I
-            work across AI, data science, and engineering because the
-            interesting problems don&apos;t fit neatly into one field.
+            Self-taught. Started with HTML and JavaScript, ended up here.
+            Based in Fajikunda, The Gambia — a country where the problems
+            worth solving look very different from what gets covered in most
+            tech spaces.
           </p>
           <p>
-            Currently picking up actuarial science. Always shipping something.
+            I&apos;m studying Statistics at KNUST in Ghana while building
+            things on the side. The work started because I kept bumping into
+            real gaps — Gambians with no easy access to legal information,
+            families sending money home with no clear picture of what the
+            rate would be next week, learners with no accountability
+            structure that actually held. I started building what I needed
+            instead of waiting.
+          </p>
+          <p>
+            The stack changes depending on what the problem needs. I end up
+            across Python, TypeScript, machine learning, and statistical
+            modelling because the interesting problems don&apos;t stay in one
+            lane. Currently picking up actuarial science. Always shipping
+            something.
           </p>
         </div>
 

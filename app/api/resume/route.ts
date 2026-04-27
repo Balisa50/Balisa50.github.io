@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { PROFILE, PROJECTS } from "@/lib/projects";
 
-export const revalidate = 86400; // 24h
+export const dynamic = "force-static";
+export const revalidate = 86400;
 
 export async function GET() {
   const resume = {

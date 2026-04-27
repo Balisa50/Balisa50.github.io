@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "export",          // static HTML export for GitHub Pages
+  trailingSlash: true,       // /about → /about/index.html
   reactStrictMode: true,
   poweredByHeader: false,
-  turbopack: {
-    // Pin the workspace root so Turbopack stops walking up to user home.
-    root: __dirname
-  },
   images: {
+    unoptimized: true,       // required for static export
     remotePatterns: [
       { protocol: "https", hostname: "avatars.githubusercontent.com" },
       { protocol: "https", hostname: "raw.githubusercontent.com" }
@@ -17,20 +16,9 @@ const nextConfig = {
       process.env.NODE_ENV === "production"
         ? { exclude: ["warn", "error", "info"] }
         : false
-  },
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: [
-          { key: "X-Content-Type-Options", value: "nosniff" },
-          { key: "X-Frame-Options", value: "DENY" },
-          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" }
-        ]
-      }
-    ];
   }
+  // Note: headers() is not supported with output: 'export'
+  // Security headers are handled by the GitHub Pages CNAME / CDN layer
 };
 
 module.exports = nextConfig;

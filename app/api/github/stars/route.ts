@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { fetchAllStars } from "@/lib/github";
 
-export const revalidate = 3600; // cache for 1h at the route level
+export const dynamic = "force-static";
+export const revalidate = 3600;
 
 export async function GET() {
   try {

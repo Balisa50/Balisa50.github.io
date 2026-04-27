@@ -4,6 +4,9 @@ import { Hero } from "@/components/Hero";
 import { Metrics } from "@/components/Metrics";
 import { Skills } from "@/components/Skills";
 import { About } from "@/components/About";
+import { Experience } from "@/components/Experience";
+import { Education } from "@/components/Education";
+import { Certifications } from "@/components/Certifications";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
@@ -23,6 +26,9 @@ export default function HomePage() {
         <ProjectsGrid />
         <Skills />
         <About />
+        <Experience />
+        <Education />
+        <Certifications />
         <Contact />
         <Footer />
       </main>
