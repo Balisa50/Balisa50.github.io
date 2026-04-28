@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "gambia-legal-aid",
-    title: "Gamba Legal Aid",
+    title: "Gambia Legal Aid",
     tagline: "RAG chatbot for Gambian law",
     description:
       "Retrieval-augmented chatbot answering legal questions grounded in Gambian statutes. Has a hallucination-guard pipeline that rejects answers without citation anchors in the retrieved context.",
@@ -347,7 +347,7 @@ export const EXPERIENCE: Experience[] = [
     location: "Remote",
     bullets: [
       "Building production AI products end to end: ingestion, modelling, orchestration, and the UIs on top.",
-      "Shipped VANTAGE, Gamba Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT — six production AI products end to end.",
+      "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT — six production AI products end to end.",
       "Open-sourcing tooling around RAG, agentic pipelines, and forecasting on the Dalasi."
     ]
   },
@@ -372,6 +372,15 @@ export const EXPERIENCE: Experience[] = [
       "Developed a lead-scoring model to improve pipeline conversion rates.",
       "Designed interactive dashboards for real-time sales performance tracking.",
       "Built automation workflows using n8n and Make."
+    ]
+  },
+  {
+    company: "Techy Jaunt",
+    role: "Frontend Engineer",
+    period: "2023",
+    bullets: [
+      "Built and maintained frontend interfaces as part of the engineering team.",
+      "Worked across UI implementation, component development, and cross-browser compatibility."
     ]
   }
 ];

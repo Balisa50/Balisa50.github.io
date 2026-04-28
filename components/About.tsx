@@ -61,26 +61,24 @@ export function About() {
 
         <div className="mt-2 space-y-4 text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
           <p>
-            Self-taught. Started with HTML and JavaScript, ended up here.
-            Based in Fajikunda, The Gambia — a country where the problems
-            worth solving look very different from what gets covered in most
-            tech spaces.
+            Based in Fajikunda, The Gambia. Studying Statistics at KNUST
+            in Ghana and building things in parallel. The Gambia is a small
+            country, and the problems here look different from what most tech
+            spaces talk about — which is part of why I started building.
           </p>
           <p>
-            I&apos;m studying Statistics at KNUST in Ghana while building
-            things on the side. The work started because I kept bumping into
-            real gaps — Gambians with no easy access to legal information,
-            families sending money home with no clear picture of what the
-            rate would be next week, learners with no accountability
-            structure that actually held. I started building what I needed
-            instead of waiting.
+            A lot of the work came from bumping into real gaps: Gambians with
+            no easy access to legal information, families sending money home
+            with no clear picture of what the exchange rate would be, people
+            who needed accountability tools that actually worked. I started
+            building what I needed instead of waiting for someone else to do it.
           </p>
           <p>
-            The stack changes depending on what the problem needs. I end up
+            The stack changes depending on what the problem needs. I work
             across Python, TypeScript, machine learning, and statistical
             modelling because the interesting problems don&apos;t stay in one
-            lane. Currently picking up actuarial science. Always shipping
-            something.
+            lane. Currently going deeper into actuarial science. Always
+            shipping something.
           </p>
         </div>
 
