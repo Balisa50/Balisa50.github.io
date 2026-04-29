@@ -108,7 +108,9 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Balisa50/hireiq",
     githubRepo: "Balisa50/hireiq",
     demo: "https://hireiq-ab.vercel.app",
-    status: "live",
+    status: "in-progress",
+    progress: 95,
+    launchLabel: "95% — shipping soon",
     metric: "AI interviews · ranked scoring · PDF reports",
     accent: "violet",
     fallbackStars: 0
