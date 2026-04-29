@@ -372,14 +372,12 @@ export const EXPERIENCE: Experience[] = [
   {
     company: "Lujo Heights Real Estate",
     role: "AI Automation Engineer",
-    period: "Mar 2024 - Jun 2024 · Contract",
+    period: "Mar 2024 · 3-week contract",
     location: "Remote · Nigeria",
     bullets: [
-      "Built an automated lead-classification system that categorised prospects as Hot, Warm, or Cold from CRM engagement data, improving sales team conversion prioritisation.",
-      "Implemented Python-based ETL workflows that cut manual data processing significantly.",
-      "Developed a lead-scoring model to improve pipeline conversion rates.",
-      "Designed interactive dashboards for real-time sales performance tracking.",
-      "Built automation workflows using n8n and Make."
+      "Short-term engagement to automate their manual lead pipeline — built a Python script that pulled CRM data and tagged prospects as Hot, Warm, or Cold based on engagement signals.",
+      "Wired up n8n workflows to route leads automatically so the sales team stopped doing it by hand.",
+      "Left them with a working system and a brief doc — done in three weeks, no ongoing dependency."
     ]
   },
 ];

@@ -5,7 +5,13 @@ import { motion } from "framer-motion";
 const STACK: { label: string; items: string[] }[] = [
   {
     label: "AI / ML",
-    items: ["RAG", "Agentic AI", "LangChain", "HuggingFace", "Fine-tuning", "Prompt Engineering", "scikit-learn", "TensorFlow"]
+    items: [
+      "RAG", "Agentic AI", "LangChain", "HuggingFace", "Fine-tuning", "Prompt Engineering",
+      "Tool Use", "Function Calling", "Embeddings", "Vector Search",
+      "Multi-agent Orchestration", "MCP", "Chain-of-Thought", "Semantic Similarity",
+      "Hallucination Detection", "Context Window", "Inference", "Grounding",
+      "scikit-learn", "TensorFlow"
+    ]
   },
   {
     label: "Data Science & Stats",
@@ -13,7 +19,7 @@ const STACK: { label: string; items: string[] }[] = [
   },
   {
     label: "Engineering",
-    items: ["Python", "TypeScript", "Next.js", "React", "FastAPI", "Docker"]
+    items: ["Python", "TypeScript", "Next.js", "React", "FastAPI", "Docker", "Groq", "Supabase"]
   }
 ];
 
