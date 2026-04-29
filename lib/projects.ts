@@ -322,6 +322,12 @@ export const CERTIFICATES: Certificate[] = [
     category: "ai"
   },
   {
+    name: "Frontend Engineering Bootcamp",
+    issuer: "Techy Jaunt",
+    date: "2023",
+    category: "software"
+  },
+  {
     name: "Peer Tutor Certification",
     issuer: "TechUp Africa",
     date: "2024",
@@ -376,15 +382,6 @@ export const EXPERIENCE: Experience[] = [
       "Built automation workflows using n8n and Make."
     ]
   },
-  {
-    company: "Techy Jaunt",
-    role: "Frontend Engineer",
-    period: "2023",
-    bullets: [
-      "Built and maintained frontend interfaces as part of the engineering team.",
-      "Worked across UI implementation, component development, and cross-browser compatibility."
-    ]
-  }
 ];
 
 /* ----------------------------------------------------------------- */
