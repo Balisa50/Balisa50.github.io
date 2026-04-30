@@ -38,7 +38,7 @@ export function About() {
                 (e.currentTarget as HTMLImageElement).style.display = "none";
               }}
             />
-            {/* Initials fallback — sits behind the image, only visible if image fails */}
+            {/* Initials fallback, sits behind the image, only visible if image fails */}
             <span
               aria-hidden="true"
               className="absolute inset-0 z-0 flex items-center justify-center font-mono text-2xl font-semibold text-cyan/80 select-none"
@@ -64,7 +64,7 @@ export function About() {
             Based in Fajikunda, The Gambia. Studying Statistics at KNUST
             in Ghana and building things in parallel. The Gambia is a small
             country, and the problems here look different from what most tech
-            spaces talk about — which is part of why I started building.
+            spaces talk about, which is part of why I started building.
           </p>
           <p>
             A lot of the work came from bumping into real gaps: Gambians with

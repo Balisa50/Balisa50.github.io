@@ -110,7 +110,7 @@ export const PROJECTS: Project[] = [
     demo: "https://hireiq-ab.vercel.app",
     status: "in-progress",
     progress: 95,
-    launchLabel: "95% — shipping soon",
+    launchLabel: "95%, shipping soon",
     metric: "AI interviews · ranked scoring · PDF reports",
     accent: "violet",
     fallbackStars: 0
@@ -120,14 +120,14 @@ export const PROJECTS: Project[] = [
     title: "ColdPilot",
     tagline: "Autonomous cold-outreach agent",
     description:
-      "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline — contact discovery via Hunter.io, Tavily company research, Groq-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
+      "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline, contact discovery via Hunter.io, Tavily company research, Groq-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
     tech: ["Python", "FastAPI", "Groq", "Hunter.io", "Tavily", "APScheduler", "SMTP", "Next.js 16"],
     github: "https://github.com/Balisa50/coldpilot",
     githubRepo: "Balisa50/coldpilot",
     demo: "https://coldpilot-ab.vercel.app",
     status: "in-progress",
     progress: 80,
-    launchLabel: "80% — v2 coming",
+    launchLabel: "80%, v2 coming",
     metric: "Hunter · Seeker · 3 autonomy levels",
     accent: "pink",
     fallbackStars: 0
@@ -137,7 +137,7 @@ export const PROJECTS: Project[] = [
     title: "Formly",
     tagline: "AI agent that fills any web form for you",
     description:
-      "Paste a URL — Formly opens the form in a headless browser, reads every field (including React Select dropdowns, ATS iframes like Workday and Greenhouse, file uploads, date pickers, and multi-page flows), matches your stored profile via Groq, asks only for what it can't infer, then fills and submits. Returns a screenshot and per-field audit trail.",
+      "Paste a URL, Formly opens the form in a headless browser, reads every field (including React Select dropdowns, ATS iframes like Workday and Greenhouse, file uploads, date pickers, and multi-page flows), matches your stored profile via Groq, asks only for what it can't infer, then fills and submits. Returns a screenshot and per-field audit trail.",
     tech: ["Python", "Playwright", "Groq", "FastAPI", "Docker", "Next.js 16"],
     github: "https://github.com/Balisa50/formly",
     githubRepo: "Balisa50/formly",
@@ -355,7 +355,7 @@ export const EXPERIENCE: Experience[] = [
     location: "Remote",
     bullets: [
       "Building production AI products end to end: ingestion, modelling, orchestration, and the UIs on top.",
-      "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT — six production AI products end to end.",
+      "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT, six production AI products end to end.",
       "Open-sourcing tooling around RAG, agentic pipelines, and forecasting on the Dalasi."
     ]
   },
@@ -375,9 +375,9 @@ export const EXPERIENCE: Experience[] = [
     period: "Mar 2024 · 3-week contract",
     location: "Remote · Nigeria",
     bullets: [
-      "Short-term engagement to automate their manual lead pipeline — built a Python script that pulled CRM data and tagged prospects as Hot, Warm, or Cold based on engagement signals.",
+      "Short-term engagement to automate their manual lead pipeline, built a Python script that pulled CRM data and tagged prospects as Hot, Warm, or Cold based on engagement signals.",
       "Wired up n8n workflows to route leads automatically so the sales team stopped doing it by hand.",
-      "Left them with a working system and a brief doc — done in three weeks, no ongoing dependency."
+      "Left them with a working system and a brief doc, done in three weeks, no ongoing dependency."
     ]
   },
 ];

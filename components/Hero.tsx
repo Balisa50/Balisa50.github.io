@@ -132,7 +132,7 @@ export function Hero() {
 
   const useWebGL = gpu.ready && gpu.shouldUseWebGL;
 
-  // Cycle words regardless of reducedMotion — the CSS media query makes
+  // Cycle words regardless of reducedMotion, the CSS media query makes
   // the AnimatePresence transition instant when reduce-motion is on,
   // which IS the correct accessible behaviour.
   useEffect(() => {
@@ -179,7 +179,7 @@ export function Hero() {
       {/* ── Text content ──────────────────────────────────────────────────── */}
       {/* All entrance animations are pure CSS (@keyframes hero-fade-up in
           globals.css). This guarantees visibility even if JS is slow or
-          Framer Motion hasn't hydrated yet — critical for mobile. */}
+          Framer Motion hasn't hydrated yet, critical for mobile. */}
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
 
         {/* Status badge */}

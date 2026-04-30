@@ -24,7 +24,7 @@ body {
 }
 
 body {
-  /* background-attachment: fixed is broken on mobile Safari — removed */
+  /* background-attachment: fixed is broken on mobile Safari, removed */
   background-color: var(--bg);
   background-image:
     radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0, 240, 255, 0.08), transparent 70%),
@@ -84,7 +84,7 @@ body {
   to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* Always-visible default — works on every device, every browser */
+/* Always-visible default, works on every device, every browser */
 .hero-item {
   opacity: 1;
   transform: translateY(0);
