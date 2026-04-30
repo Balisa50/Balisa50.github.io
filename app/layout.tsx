@@ -9,7 +9,7 @@ import { FloatingCTA } from "@/components/FloatingCTA";
 import { PROFILE } from "@/lib/projects";
 
 const description =
-  "ML/AI engineer and data scientist. I build intelligent systems that ship: LLM tooling, applied NLP, and full-stack AI products.";
+  "AI Systems Developer and Data Science student building intelligent systems that ship: LLM tooling, applied NLP, RAG pipelines, and full-stack AI products.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://balisa.dev"),
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   description,
   keywords: [
     "Abdoulie Balisa",
-    "ML Engineer",
-    "AI Engineer",
-    "Data Scientist",
+    "AI Systems Developer",
+    "Data Science Student",
+    "Aspiring Actuary",
     "LLM",
     "TypeScript",
     "Python",

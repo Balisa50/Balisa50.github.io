@@ -1,7 +1,6 @@
 /* Portfolio service worker. Minimal, cache-first for static assets. */
-const CACHE = "portfolio-v1";
+const CACHE = "portfolio-v3";
 const ASSETS = [
-  "/",
   "/favicon.svg",
   "/manifest.webmanifest"
 ];
@@ -32,6 +31,14 @@ self.addEventListener("fetch", (event) => {
   if (url.pathname.startsWith("/_next/")) return;
   if (url.pathname.startsWith("/api/")) return;
 
+  // Network-first for HTML documents so we never serve a stale shell.
+  if (req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html")) {
+    event.respondWith(
+      fetch(req).catch(() => caches.match(req))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(req).then((cached) => {
       if (cached) return cached;
@@ -44,7 +51,7 @@ self.addEventListener("fetch", (event) => {
           }
           return res;
         })
-        .catch(() => caches.match("/"));
+        .catch(() => undefined);
     })
   );
 });

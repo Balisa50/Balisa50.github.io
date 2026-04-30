@@ -198,7 +198,7 @@ export const PROJECTS: Project[] = [
 export const PROFILE = {
   name: "Balisa",
   fullName: "Abdoulie Balisa",
-  title: "Data Scientist · AI Engineer · Aspiring Actuary",
+  title: "AI Systems Developer · Data Science Student · Aspiring Actuary",
   email: "[redacted, use the contact form]",
   phone: "[redacted, use the contact form]",
   github: "https://github.com/Balisa50",
@@ -350,7 +350,7 @@ export interface Experience {
 export const EXPERIENCE: Experience[] = [
   {
     company: "Independent",
-    role: "ML / AI Engineer · Data Scientist",
+    role: "AI Systems Developer · Data Science Student",
     period: "2024 - present",
     location: "Remote",
     bullets: [
@@ -371,7 +371,7 @@ export const EXPERIENCE: Experience[] = [
   },
   {
     company: "Lujo Heights Real Estate",
-    role: "AI Automation Engineer",
+    role: "AI Automation Developer",
     period: "Mar 2024 · 3-week contract",
     location: "Remote · Nigeria",
     bullets: [

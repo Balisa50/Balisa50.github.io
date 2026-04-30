@@ -6,20 +6,17 @@ const STACK: { label: string; items: string[] }[] = [
   {
     label: "AI / ML",
     items: [
-      "RAG", "Agentic AI", "LangChain", "HuggingFace", "Fine-tuning", "Prompt Engineering",
-      "Tool Use", "Function Calling", "Embeddings", "Vector Search",
-      "Multi-agent Orchestration", "MCP", "Chain-of-Thought", "Semantic Similarity",
-      "Hallucination Detection", "Context Window", "Inference", "Grounding",
-      "scikit-learn", "TensorFlow"
+      "LangChain", "HuggingFace", "PyTorch", "TensorFlow", "scikit-learn",
+      "Anthropic SDK", "OpenAI SDK", "Groq", "Pinecone", "ChromaDB"
     ]
   },
   {
     label: "Data Science & Stats",
-    items: ["Pandas", "scikit-learn", "R", "MATLAB", "SQL", "Prophet"]
+    items: ["Pandas", "NumPy", "scikit-learn", "R", "MATLAB", "SQL", "Prophet"]
   },
   {
     label: "Engineering",
-    items: ["Python", "TypeScript", "Next.js", "React", "FastAPI", "Docker", "Groq", "Supabase"]
+    items: ["Python", "TypeScript", "Next.js", "React", "FastAPI", "Flask", "Docker", "Streamlit", "Supabase"]
   }
 ];
 

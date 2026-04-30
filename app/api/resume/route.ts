@@ -68,7 +68,7 @@ export async function GET() {
     work: [
       {
         name: "Independent",
-        position: "ML/AI Engineer & Data Scientist",
+        position: "AI Systems Developer · Data Science Student",
         startDate: "2024-01",
         summary:
           "Building production AI products end-to-end: ingestion, modelling, orchestration, and the UIs on top.",
