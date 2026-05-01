@@ -24,6 +24,16 @@ export async function fetchAllStars(): Promise<RepoStars[]> {
 
   const results = await Promise.allSettled(
     PROJECTS.map(async (p) => {
+      // Projects without a public repo (e.g. Global Restaurant Analytics)
+      // still need a stars entry so indices line up; just return null.
+      if (!p.githubRepo) {
+        return {
+          slug: p.slug,
+          repo: "",
+          stars: null,
+          source: "api" as const
+        };
+      }
       const res = await fetch(`${GITHUB_API}/repos/${p.githubRepo}`, {
         headers,
         // Next 15: revalidate every hour
@@ -45,7 +55,7 @@ export async function fetchAllStars(): Promise<RepoStars[]> {
     if (r.status === "fulfilled" && r.value.stars != null) return r.value;
     return {
       slug: p.slug,
-      repo: p.githubRepo,
+      repo: p.githubRepo ?? "",
       stars: p.fallbackStars,
       source: "fallback" as const
     };

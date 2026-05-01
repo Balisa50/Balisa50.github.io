@@ -192,19 +192,23 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
           </p>
         )}
 
-        {/* Explicit links, stopPropagation so they win over card click */}
+        {/* Explicit links, stopPropagation so they win over card click.
+            GitHub button is conditional, projects without a public repo
+            (e.g. Global Restaurant Analytics) skip it entirely. */}
         <div className="relative mt-auto flex items-center gap-3 pt-6">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noreferrer noopener"
-            onClick={(e) => e.stopPropagation()}
-            className="inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white transition hover:border-white/25 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-            aria-label={`${project.title} on GitHub`}
-          >
-            <Github className="h-3.5 w-3.5" aria-hidden="true" />
-            Code
-          </a>
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noreferrer noopener"
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white transition hover:border-white/25 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              aria-label={`${project.title} on GitHub`}
+            >
+              <Github className="h-3.5 w-3.5" aria-hidden="true" />
+              Code
+            </a>
+          )}
           {project.demo && (
             <a
               href={project.demo}
@@ -289,14 +293,16 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
             </div>
 
             <div className="mt-6 flex flex-wrap gap-3">
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium"
-              >
-                <Github className="h-4 w-4" /> GitHub
-              </a>
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium"
+                >
+                  <Github className="h-4 w-4" /> GitHub
+                </a>
+              )}
               {project.demo && (
                 <a
                   href={project.demo}
