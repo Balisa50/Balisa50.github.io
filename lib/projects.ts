@@ -186,8 +186,8 @@ export const PROJECTS: Project[] = [
     description:
       "Analysed 21 variables across a global restaurant dataset to identify key drivers of customer satisfaction. Built predictive models for restaurant performance forecasting and presented findings through comprehensive visualisations.",
     tech: ["Python", "Pandas", "Matplotlib", "Seaborn"],
-    github: "https://github.com/Balisa50/global-restaurant-analytics",
-    githubRepo: "Balisa50/global-restaurant-analytics",
+    github: "https://github.com/Balisa50/restaurant-data-analysis",
+    githubRepo: "Balisa50/restaurant-data-analysis",
     articleUrl: "https://medium.com/@abdouliebalisa904/what-restaurant-data-from-around-the-world-tells-us-about-food-service-and-customer-ratings-4eead0ce8a22",
     status: "live",
     metric: "21 variables · customer satisfaction drivers",
