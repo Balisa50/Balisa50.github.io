@@ -93,7 +93,8 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Balisa50/forge",
     githubRepo: "Balisa50/forge",
     demo: "https://forge-ab.vercel.app",
-    status: "live",
+    status: "in-progress",
+    progress: 90,
     metric: "AI interrogation · streak engine · anti-cheat",
     accent: "cyan",
     fallbackStars: 0
