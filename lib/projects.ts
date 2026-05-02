@@ -191,6 +191,20 @@ export const PROJECTS: Project[] = [
     metric: "21 variables · customer satisfaction drivers",
     accent: "cyan",
     fallbackStars: 0
+  },
+  {
+    slug: "gambia-health-dashboard",
+    title: "Gambia Health & Development",
+    tagline: "65 years of Gambian indicators from the World Bank, read for what they actually say",
+    description:
+      "Pulled 19 development indicators for The Gambia from the World Bank API spanning 1960 to today. Cleaned, EDA'd, and charted health, education, economy, and demographic series. Wrote up six findings and six policy-level recommendations covering maternal mortality (still 354/100k), school enrolment, GDP volatility, the diaspora as a sector ($529M/year), and the urbanisation megatrend.",
+    tech: ["Python", "Pandas", "Matplotlib", "Seaborn", "wbdata", "Jupyter"],
+    github: "https://github.com/Balisa50/gambia-health-dashboard",
+    githubRepo: "Balisa50/gambia-health-dashboard",
+    status: "live",
+    metric: "65 years · 19 indicators · 13 figures · policy report",
+    accent: "violet",
+    fallbackStars: 0
   }
 ];
 
