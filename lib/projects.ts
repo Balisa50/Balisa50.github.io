@@ -201,6 +201,7 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "Pandas", "Matplotlib", "Seaborn", "wbdata", "Jupyter"],
     github: "https://github.com/Balisa50/gambia-health-dashboard",
     githubRepo: "Balisa50/gambia-health-dashboard",
+    demo: "/projects/gambia/",
     status: "live",
     metric: "65 years · 19 indicators · 13 figures · policy report",
     accent: "violet",

@@ -39,18 +39,23 @@ const STATUS_STYLES: Record<
 
 /**
  * Primary destination logic:
- *   - live + demo   → demo URL
- *   - everything else → github URL
+ *   - live + demo     → demo URL
+ *   - github present  → github URL
+ *   - article-only    → articleUrl
  * Clicking anywhere in the card navigates there (new tab).
  */
 function primaryHref(p: Project): string {
   if (p.demo) return p.demo;
-  return p.github;
+  if (p.github) return p.github;
+  if (p.articleUrl) return p.articleUrl;
+  return "#";
 }
 
 function primaryLabel(p: Project): string {
   if (p.demo) return p.status === "live" ? "Visit" : "Preview";
-  return "View code";
+  if (p.github) return "View code";
+  if (p.articleUrl) return "Read article";
+  return "View";
 }
 
 export function ProjectCard({ project, stars, index, isMobile }: Props) {
