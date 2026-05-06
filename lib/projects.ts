@@ -39,6 +39,23 @@ export const PROJECTS: Project[] = [
     fallbackStars: 0
   },
   {
+    slug: "ayat-v2",
+    title: "AYAT v2",
+    tagline: "The galaxy becomes a companion",
+    description:
+      "v2 turns AYAT into a contemplative companion you live inside. Personal Trail Constellation (every verse you open glows softly, building your unique star map over months). Chat With The Verse (conversational follow-ups grounded strictly in Ibn Kathir, Tabari, Qurtubi, and Jalalayn). Year in AYAT (Spotify-Wrapped-style annual recap). Saved private reflections with a Time-Capsule that resurfaces what you wrote months ago. Scholar-by-scholar tafsir comparison, five galaxy themes, time-sensitive modes (Ramadan / Friday / Tahajjud / Dawn), verse share cards, ElevenLabs audio narration, semantic neighbour jumps, magic-link auth, premium gating ready for native launch.",
+    tech: ["Next.js 16", "React 19", "Three.js", "Supabase", "Claude Sonnet 4.5", "ElevenLabs", "TypeScript"],
+    github: "https://github.com/Balisa50/ayat-v2",
+    githubRepo: "Balisa50/ayat-v2",
+    demo: "https://ayat-v2-ab.vercel.app/",
+    status: "in-progress",
+    progress: 85,
+    launchLabel: "Web live, native launching Ramadan",
+    metric: "3 killer features · 13 API routes · RLS-protected",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "vantage",
     title: "VANTAGE",
     tagline: "Tech intelligence platform",
