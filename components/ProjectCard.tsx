@@ -1,10 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BookOpen, Github, Star, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, FileText, Github, Star, X } from "lucide-react";
 import type { Project } from "@/lib/projects";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { cn, formatStarCount } from "@/lib/utils";
+
+/** Per-project case-study URL.
+ *  - Gambia Health & Development has its own bespoke long-form page.
+ *  - Everything else uses the shared dynamic route, gated on whether
+ *    a CASE_STUDIES entry exists for the slug. */
+function caseStudyHref(p: Project): string | null {
+  if (p.slug === "gambia-health-dashboard") return "/projects/gambia";
+  if (CASE_STUDIES[p.slug]) return `/projects/${p.slug}`;
+  return null;
+}
 
 interface Props {
   project: Project;
@@ -63,6 +75,7 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
   const status = STATUS_STYLES[project.status];
   const href = primaryHref(project);
   const label = primaryLabel(project);
+  const caseStudy = caseStudyHref(project);
 
   // Esc closes the mobile sheet
   useEffect(() => {
@@ -240,6 +253,17 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
               Read Article
             </a>
           )}
+          {caseStudy && (
+            <Link
+              href={caseStudy}
+              onClick={(e) => e.stopPropagation()}
+              className="ml-auto inline-flex min-h-[36px] items-center gap-1.5 rounded-md border border-white/15 bg-transparent px-3 py-1.5 text-xs font-medium text-white/85 transition hover:border-cyan/50 hover:text-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              aria-label={`Read the ${project.title} case study`}
+            >
+              <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+              Case study
+            </Link>
+          )}
         </div>
       </motion.article>
 
@@ -329,6 +353,17 @@ export function ProjectCard({ project, stars, index, isMobile }: Props) {
                 </a>
               )}
             </div>
+
+            {caseStudy && (
+              <Link
+                href={caseStudy}
+                onClick={() => setOpen(false)}
+                className="mt-3 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white"
+              >
+                <FileText className="h-4 w-4" />
+                Read the case study
+              </Link>
+            )}
           </motion.div>
         </div>
       )}

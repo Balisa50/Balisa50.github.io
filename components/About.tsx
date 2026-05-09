@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Mail } from "lucide-react";
+import { Mail, Download } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 export function About() {
@@ -95,6 +95,15 @@ export function About() {
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
           >
             See the work
+          </a>
+          <a
+            href="/cv/Abdoulie-Balisa-CV.pdf"
+            download
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cyan/40 bg-cyan/[0.06] px-5 py-2.5 text-sm font-medium text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+            aria-label="Download Abdoulie Balisa CV (PDF)"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Download CV
           </a>
         </div>
       </motion.div>

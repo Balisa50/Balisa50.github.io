@@ -43,8 +43,8 @@ export const PROJECTS: Project[] = [
     title: "AYAT v2",
     tagline: "The galaxy becomes a companion",
     description:
-      "v2 turns AYAT into a contemplative companion you live inside. Personal Trail Constellation (every verse you open glows softly, building your unique star map over months). Chat With The Verse (conversational follow-ups grounded strictly in Ibn Kathir, Tabari, Qurtubi, and Jalalayn). Year in AYAT (Spotify-Wrapped-style annual recap). Saved private reflections with a Time-Capsule that resurfaces what you wrote months ago. Scholar-by-scholar tafsir comparison, five galaxy themes, time-sensitive modes (Ramadan / Friday / Tahajjud / Dawn), verse share cards, ElevenLabs audio narration, semantic neighbour jumps, magic-link auth, premium gating ready for native launch.",
-    tech: ["Next.js 16", "React 19", "Three.js", "Supabase", "Claude Sonnet 4.5", "ElevenLabs", "TypeScript"],
+      "v2 turns AYAT into a contemplative companion you live inside. Five-dimensional learning system: 80+ hand-curated Journeys (themes, prophets, places, people), an Atlas of Qur'anic geography, a 45-event Asbab al-Nuzul Timeline in revelation order, 19 Arabic Roots with derivative webs, and a People index. Personal Trail Constellation (every verse you open glows softly, building your unique star map over months). Click-to-reveal AI tafsir grounded strictly in Ibn Kathir, Tabari, Qurtubi, and Jalalayn. Detective semantic search, Chat With The Verse follow-ups, Recall for memorisation, private + community reflections, Year in AYAT recap, time-sensitive modes (Ramadan / Friday / Tahajjud / Dawn), verse share cards, magic-link auth, Capacitor-wrapped for iOS + Android.",
+    tech: ["Next.js 16", "React 19", "Three.js", "Supabase", "Claude Sonnet 4.5", "Capacitor", "TypeScript"],
     github: "https://github.com/Balisa50/ayat-v2",
     githubRepo: "Balisa50/ayat-v2",
     demo: "https://ayat-v2-ab.vercel.app/",

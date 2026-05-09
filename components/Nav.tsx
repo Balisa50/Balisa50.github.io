@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Download } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
@@ -118,6 +118,17 @@ export function Nav() {
               </a>
             </li>
           ))}
+          <li>
+            <a
+              href="/cv/Abdoulie-Balisa-CV.pdf"
+              download
+              className="ml-2 inline-flex items-center gap-1.5 rounded-full border border-cyan/40 bg-cyan/[0.06] px-3 py-1.5 text-sm text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              aria-label="Download CV (PDF)"
+            >
+              <Download className="h-3.5 w-3.5" aria-hidden="true" />
+              CV
+            </a>
+          </li>
         </ul>
 
         {/* Mobile toggle */}
@@ -162,6 +173,17 @@ export function Nav() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a
+                  href="/cv/Abdoulie-Balisa-CV.pdf"
+                  download
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 rounded-lg border border-cyan/40 bg-cyan/[0.06] px-3 py-3 text-base text-cyan transition hover:bg-cyan/[0.12]"
+                >
+                  <Download className="h-4 w-4" aria-hidden="true" />
+                  Download CV
+                </a>
+              </li>
             </ul>
           </div>
         </div>
