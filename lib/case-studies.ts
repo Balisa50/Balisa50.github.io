@@ -32,6 +32,101 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   // ─────────────────────────────────────────────────────────────────
+  "gambia-political-risk": {
+    slug: "gambia-political-risk",
+    problem:
+      "The Gambia has no public-facing political risk index. International indices (Moody's, EIU, Fitch) cover the country annually, with proprietary methodology and a paywall most Gambians can't afford. Citizens, diaspora investors, and small businesses making real decisions about risk in The Gambia have nothing they can read in real time. International ratings also tend to lag, they downgrade after a crisis, not before. I wanted to build a transparent, weekly, public index grounded in what Gambian newsrooms are actually publishing, the kind of leading indicator a serious analyst would build for a country they care about.",
+    research: [
+      "Read the methodology of EIU's Political Stability Index, Fitch Solutions Country Risk Reports, and the World Bank's Worldwide Governance Indicators. Most blend expert opinion with macro data. None use real-time news. That's the gap.",
+      "Read 'Text as Data' (Grimmer, Stewart, Roberts 2022) end-to-end before designing the pipeline. The book's lesson on validation, that a model has to be tested against something the researchers couldn't see during training, drove the manual-labelling and event-annotation steps.",
+      "Studied Hutto & Gilbert's VADER paper to understand what the lexicon-based baseline could and couldn't do. VADER was designed for social media; news headlines are slightly different register but close enough for a baseline.",
+      "Read Sanh et al. 2019 on distilBERT and HuggingFace's distilbert-base-uncased-finetuned-sst-2-english model card. SST-2 was trained on movie reviews, so I expected weaker transfer to political news, that's exactly what manual evaluation has to confirm or refute.",
+      "Read Blei, Ng, Jordan 2003 (LDA) and Roder, Both, Hinneburg 2015 on topic-coherence metrics (c_v specifically). c_v correlates better with human topic-quality judgements than perplexity, so it's the right metric to optimise k.",
+      "Studied UMAP (McInnes, Healy, Melville 2018) before picking it over t-SNE for cluster visualisation. UMAP preserves global structure; t-SNE is local-only. I wanted to see whether LDA topics and K-Means clusters agreed at a global level, so global structure matters.",
+      "Read about The Gambia's actual political timeline (Jammeh era 1994-2017, the 2016 election that ended it, Barrow's first term, the 2021 re-election, the 2022 National Assembly elections, COVID's economic shock) to know which events the index would have to capture during validation.",
+    ],
+    constraints: [
+      "All four sources have to be scraped politely. Aggressive scraping gets the IP blacklisted, which is unrecoverable since they're small publications with one IP block away from killing the project.",
+      "Free-tier compute throughout. No GPU, no managed vector DB, no paid embedding API.",
+      "Model choices have to fit on a laptop and on Render's free tier (512 MB RAM after the runtime).",
+      "Hallucination in this domain would be reputationally fatal, the index has to be defensible at every step, not a black box.",
+      "English-only corpus. Wolof, Mandinka, Fula print isn't accessible. The index measures the English-language political conversation specifically, and the README has to acknowledge that limitation.",
+    ],
+    decisions: [
+      {
+        call: "Scrape with BeautifulSoup + requests, not Scrapy.",
+        reason:
+          "Scrapy is overkill for four publications and adds a heavy framework dependency. BeautifulSoup + requests is enough, easier to read, and handles the per-site selector quirks naturally. Each publication has its own scraper function with site-specific selectors and a fall-through to generic <p> tags if a class isn't found.",
+      },
+      {
+        call: "Hand-curated section selectors per source, not generic boilerplate stripping.",
+        reason:
+          "Generic boilerplate-removal libraries (newspaper3k, trafilatura) miss site-specific markup or include navigation. For four sites I can test by hand, hardcoded selectors per source give cleaner extraction. The trade-off: the scraper breaks if a site redesigns. Acceptable, I can fix selectors faster than I can debug a black-box library.",
+      },
+      {
+        call: "Sentence-transformers all-MiniLM-L6-v2 over mpnet-base.",
+        reason:
+          "MiniLM is 384-dim vs mpnet's 768-dim, ~22 MB vs ~120 MB on disk. Quality on retrieval benchmarks is roughly 95% of mpnet. For a corpus of ~5k articles where I run embeddings on a laptop, MiniLM's speed advantage matters more than mpnet's quality bump.",
+      },
+      {
+        call: "VADER + distilBERT side-by-side, evaluate on 200 manually-labelled articles, pick the winner.",
+        reason:
+          "Lexicon vs transformer is a classic comparison. VADER is fast, instant, no GPU. distilBERT is more contextual but trained on movie reviews, so transfer to news is uncertain. Rather than guess which works better, I label 200 random articles by hand and let the F1 score decide. The winner drives the PRI; the loser becomes a sanity-check baseline.",
+      },
+      {
+        call: "Stream Anthropic / HuggingFace responses chunked, but validate AFTER, not during.",
+        reason:
+          "Same lesson as Gambia Legal Aid. If a sentiment label appears mid-stream and turns out to be wrong on validation, the user already saw it. I generate the full response, validate (label is in the SST-2 binary set, score is in [0,1]), then return. Trust over speed.",
+      },
+      {
+        call: "LDA on TF-IDF for interpretability + K-Means on embeddings for tightness, cross-validate.",
+        reason:
+          "LDA gives interpretable topic-word distributions (you can label the topics by reading the top words). K-Means on embeddings gives semantically tighter clusters but no human-readable summary. Used together they cross-validate: a stable topic should appear in both. If a topic appears only in LDA, I check the top words for spurious lexical clustering. If it appears only in K-Means, I read sample articles to understand what's holding them together.",
+      },
+      {
+        call: "FastAPI for the service, not Flask.",
+        reason:
+          "FastAPI is async-native, has Pydantic validation built in, and matches the Python backend stack I use across HireIQ, ColdPilot, Gambia Legal Aid. Flask would mean adding Marshmallow or Pydantic-Flask for validation and bolting on async. FastAPI is the cleaner default for new services.",
+      },
+      {
+        call: "Next.js 16 + Recharts dashboard, not Streamlit.",
+        reason:
+          "Streamlit is fast to prototype, but the result feels like a dashboard built in 30 minutes. For a public-facing tool that will be linked from my portfolio, the design language has to match the rest of my work. Next.js + Recharts gives me real control over the UI, deploys for free on Vercel, and reuses skills from every other project I've built.",
+      },
+      {
+        call: "Validate the PRI against known events AND macro data, not just face validity.",
+        reason:
+          "The index has to drop during the 2016 transition, the 2017 Jammeh exile, the COVID-19 declaration, and the 2021 election cycle. If it doesn't, the weighting is wrong and I re-tune. On top of that, Pearson correlation with World Bank GDP growth and remittance inflows. If the index has positive face validity but zero macro correlation, that's a sign the news cycle and the economy are decoupled (possible) or the index is measuring noise (more likely). Two-layer validation.",
+      },
+    ],
+    pivots: [
+      "Initial plan was Flask + Streamlit per the brief I was given. I made the call to switch to FastAPI + Next.js because they match the rest of my stack, and explained why in the README so the swap is defensible to anyone reviewing the original spec.",
+      "Originally planned to scrape with Selenium for JavaScript-rendered content. Tested the four sites; all four serve server-rendered HTML, BeautifulSoup is enough. Saved a heavy Selenium dependency and Chromium install.",
+      "First risk-index draft used unweighted average of the four signals. Plotted it; the result was too noisy and didn't drop sharply during the 2016 election. Re-weighted to 40/30/20/10 based on signal-to-noise on the validation events. The weights are now justified explicitly in the README rather than hidden as magic numbers.",
+    ],
+    weaknesses: [
+      "I had not used HuggingFace's transformers pipeline at scale before. First attempt loaded the full distilBERT model on every API call, cold start was 30+ seconds. Refactored to lazy-load on first /analyze request and cache the pipeline in module-level state. Cold start is now once per Render instance lifetime, not per request.",
+      "I underestimated how messy real Gambian news HTML would be. The Point and Foroyaa share WordPress markup; Gainako and Standard have hand-rolled custom themes with inconsistent class names. Wrote per-source extractors after the generic approach kept missing 30% of articles. Sometimes the cheap solution (hand-tune four selectors) beats the elegant one.",
+      "I had not implemented coherence scoring before. Read Roder et al. 2015 to understand c_v specifically (it combines NPMI with sliding-window co-occurrence and cosine similarity). Used gensim's CoherenceModel rather than implementing from scratch, but read the source to understand what it was computing.",
+      "Manual labelling of 200 articles is harder than it sounds. Ambiguous tone, sarcasm, headlines that read positive but cover a negative event, all require careful judgement. Built a labelling rubric (positive = the event/decision is good for The Gambia; negative = bad for The Gambia; neutral = factual reporting with no clear valence) and applied it consistently. Inter-rater consistency would be the next step if I had a labelling team.",
+    ],
+    outcome: [
+      "End-to-end pipeline scaffolded: scraper → preprocessor → features → sentiment → topics → weekly PRI",
+      "9 Jupyter notebooks documenting every step with markdown explanations",
+      "FastAPI service with three endpoints (/analyze, /risk-index, /risk-index/current)",
+      "Next.js + Recharts dashboard with PRI line chart, current score, and analyse-text widget",
+      "VADER + distilBERT side-by-side architecture, evaluation harness ready for the 200-article labelling pass",
+      "LDA + K-Means cross-validating topics, UMAP visualisation",
+      "PRI validation framework: event annotations + Pearson correlation with World Bank macro data",
+      "Render config for the API + Vercel-ready dashboard",
+    ],
+    regret:
+      "I'd add a multilingual ingestion path next, Wolof and Mandinka coverage matters because those languages dominate radio and informal political conversation in The Gambia. The technical bar is a translation pipeline plus accepting that the source quality (transcribed audio vs newspaper text) is messier. The single most useful extension to the index. Also planning to compare PRI against EIU / Fitch annual ratings as a long-term ground truth once a year of data has accumulated.",
+    takeaway:
+      "When the data is messy and the stakes are visible (a public political index for a country with no other public index), every layer of the pipeline has to be defensible on its own. Scraping has to be polite, preprocessing has to be reproducible, sentiment has to be evaluated against ground truth, the index has to drop during real crises. Cut corners anywhere and the whole thing collapses.",
+  },
+
+  // ─────────────────────────────────────────────────────────────────
   "ayat": {
     slug: "ayat",
     problem:
