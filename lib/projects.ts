@@ -206,9 +206,9 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/Balisa50/gambia-political-risk",
     githubRepo: "Balisa50/gambia-political-risk",
     status: "in-progress",
-    progress: 60,
-    launchLabel: "Pipeline scaffolded, data collection running",
-    metric: "9 notebooks · 4 sources · weekly PRI",
+    progress: 80,
+    launchLabel: "Pipeline shipping, scaling corpus",
+    metric: "9 notebooks · weekly PRI · validated against 5 events",
     accent: "violet",
     fallbackStars: 0
   },
