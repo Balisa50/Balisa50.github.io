@@ -201,13 +201,12 @@ export const PROJECTS: Project[] = [
     title: "Gambia Political Risk Index",
     tagline: "Weekly 0-100 risk index from Gambian news, end-to-end NLP pipeline",
     description:
-      "Scrapes four Gambian news publications (The Point, Foroyaa, Gainako, Standard), runs a full NLP stack on the corpus (TF-IDF + sentence-transformers + VADER vs distilBERT-SST2 + LDA + K-Means), and produces a weekly Political Risk Index for The Gambia. Validated against known events (2016 election, Jammeh exile, COVID, 2021 election) and Pearson-correlated with World Bank GDP growth and remittance inflows. Includes SHAP interpretation of the sentiment classifier.",
+      "Scrapes multiple Gambian news publications (The Point, Foroyaa, Standard, Kaironews, Fatu Network, Kerr Fatou), runs a full NLP stack on the corpus (TF-IDF + sentence-transformers + VADER vs distilBERT-SST2 + LDA + K-Means), and produces a weekly Political Risk Index for The Gambia. Validated against known events (2016 election, Jammeh exile, COVID, 2021 election) and Pearson-correlated with World Bank GDP growth and remittance inflows. Includes SHAP interpretation of the sentiment classifier.",
     tech: ["Python", "scikit-learn", "sentence-transformers", "transformers", "NLTK", "spaCy", "FastAPI", "Next.js 16", "Recharts"],
     github: "https://github.com/Balisa50/gambia-political-risk",
     githubRepo: "Balisa50/gambia-political-risk",
-    status: "in-progress",
-    progress: 80,
-    launchLabel: "Pipeline shipping, scaling corpus",
+    demo: "https://gambia-pri.vercel.app",
+    status: "live",
     metric: "9 notebooks · weekly PRI · validated against 5 events",
     accent: "violet",
     fallbackStars: 0
