@@ -11,11 +11,16 @@ import { cn, formatStarCount } from "@/lib/utils";
 /** Per-project case-study URL.
  *  - Gambia Health & Development has its own bespoke long-form page.
  *  - Everything else uses the shared dynamic route, gated on whether
- *    a CASE_STUDIES entry exists for the slug. */
+ *    a CASE_STUDIES entry exists for the slug.
+ *  - If the case study URL is the same as the live demo, return null,
+ *    we hide the duplicate link in the card. */
 function caseStudyHref(p: Project): string | null {
-  if (p.slug === "gambia-health-dashboard") return "/projects/gambia";
-  if (CASE_STUDIES[p.slug]) return `/projects/${p.slug}`;
-  return null;
+  let href: string | null = null;
+  if (p.slug === "gambia-health-dashboard") href = "/projects/gambia";
+  else if (CASE_STUDIES[p.slug]) href = `/projects/${p.slug}`;
+  if (!href) return null;
+  if (p.demo === href) return null;
+  return href;
 }
 
 interface Props {
