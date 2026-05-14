@@ -24,21 +24,6 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    slug: "umbra",
-    title: "UMBRA",
-    tagline: "A shadow traversal RPG built entirely on Canvas 2D",
-    description:
-      "You are an Umbral — a being made of shadow. Seven Radiant Spirits have invaded your world and their light burns you. Navigate silhouette-art levels by staying in shadow, striking enemies from the dark, and managing a real-time shadow meter that drains in light and kills you slowly. Built without any game engine: full shadow raycasting (visibility polygon algorithm), AABB physics, enemy patrol AI, particle system, Web Audio drone, and a boss fight that requires destroying three light crystals. Act I ships with 3 stages and the Solaris boss. World map, essence economy, and save system included.",
-    tech: ["Next.js 16", "Canvas 2D API", "Shadow Raycasting", "Web Audio API", "TypeScript", "Framer Motion"],
-    github: "https://github.com/Balisa50/umbra",
-    githubRepo: "Balisa50/umbra",
-    demo: "https://umbra-alpha.vercel.app",
-    status: "live",
-    metric: "Shadow raycasting · visibility polygon · boss fight",
-    accent: "violet",
-    fallbackStars: 0
-  },
-  {
     slug: "ayat",
     title: "AYAT",
     tagline: "6,236 Qur'anic verses as a semantic galaxy",
