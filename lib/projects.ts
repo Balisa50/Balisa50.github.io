@@ -24,6 +24,21 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "sage",
+    title: "SAGE",
+    tagline: "A psychological thriller that maps your mind",
+    description:
+      "A game that watches how you think — silently. Crisis scenarios demand intelligent decisions under distress. Three AI-powered NPCs with Theory of Mind lie, deflect, and remember across sessions. A cognitive fingerprinting engine builds your unique neural constellation from every choice you make. 7 level tiers, cinematic reveal after 5 scenarios, shareable Mind Map. Fully playable without an API key via 5 pre-written scenarios; upgrades to infinite AI-generated crises when Claude is connected.",
+    tech: ["Next.js 16", "Claude API", "Theory of Mind", "Web Audio API", "Canvas API", "Framer Motion", "TypeScript"],
+    github: "https://github.com/Balisa50/sage",
+    githubRepo: "Balisa50/sage",
+    demo: "https://sage-game.vercel.app",
+    status: "live",
+    metric: "Cognitive fingerprinting · 7 level tiers · infinite AI scenarios",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "ayat",
     title: "AYAT",
     tagline: "6,236 Qur'anic verses as a semantic galaxy",
