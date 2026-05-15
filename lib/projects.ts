@@ -24,6 +24,19 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "mindlock",
+    title: "MINDLOCK",
+    tagline: "Real-time 1v1 mind-reading duel game",
+    description:
+      "Two players. One secret each. Ask yes/no questions to crack theirs before they crack yours. Real-time multiplayer via Supabase Realtime — questions, answers, and guesses sync instantly across browsers. Adaptive secret algorithm scores every secret by tension (EMA on guess difficulty) and does gaussian-weighted selection so games always feel balanced. Features: 10 categories, 4 difficulty tiers (3–10 question limits), rank system (Bronze → MINDLOCK), spectator mode with pressure pulses that shake opponents' screens, daily solo challenge, leaderboard, quick matchmaking, private rooms.",
+    tech: ["Next.js 16", "Supabase Realtime", "TypeScript", "Framer Motion", "PostgreSQL", "RLS"],
+    demo: "https://mindlock-game.vercel.app",
+    status: "live",
+    metric: "Real-time duels · adaptive secrets · spectator pressure",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "ayat",
     title: "AYAT",
     tagline: "6,236 Qur'anic verses as a semantic galaxy",
@@ -387,7 +400,7 @@ export const EXPERIENCE: Experience[] = [
     location: "Remote",
     bullets: [
       "Building production AI products end to end: ingestion, modelling, orchestration, and the UIs on top.",
-      "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT, six production AI products end to end.",
+      "Shipped MINDLOCK, VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT — seven production products end to end spanning real-time games, AI agents, and forecasting.",
       "Open-sourcing tooling around RAG, agentic pipelines, and forecasting on the Dalasi."
     ]
   },
