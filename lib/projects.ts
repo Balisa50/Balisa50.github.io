@@ -159,9 +159,8 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "Playwright", "Groq", "FastAPI", "Docker", "Next.js 16"],
     github: "https://github.com/Balisa50/formly",
     githubRepo: "Balisa50/formly",
-    status: "in-progress",
-    progress: 70,
-    launchLabel: "In development",
+    demo: "https://formly-ab.vercel.app",
+    status: "live",
     metric: "ATS iframes · React Select · multi-page forms",
     accent: "violet",
     fallbackStars: 0
