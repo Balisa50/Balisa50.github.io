@@ -24,6 +24,23 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "hireiq",
+    title: "HireIQ",
+    tagline: "AI-powered hiring platform",
+    description:
+      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate gets interviewed by Gemini; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
+    tech: ["Python", "FastAPI", "Gemini Flash 2.0", "Next.js 14", "Supabase", "WeasyPrint"],
+    github: "https://github.com/Balisa50/hireiq",
+    githubRepo: "Balisa50/hireiq",
+    demo: "https://hireiq-ab.vercel.app",
+    status: "in-progress",
+    progress: 95,
+    launchLabel: "95%, shipping soon",
+    metric: "AI interviews · ranked scoring · PDF reports",
+    accent: "violet",
+    fallbackStars: 0
+  },
+  {
     slug: "ayat",
     title: "AYAT",
     tagline: "6,236 Qur'anic verses as a semantic galaxy",
@@ -114,23 +131,6 @@ export const PROJECTS: Project[] = [
     progress: 90,
     metric: "AI interrogation · streak engine · anti-cheat",
     accent: "cyan",
-    fallbackStars: 0
-  },
-  {
-    slug: "hireiq",
-    title: "HireIQ",
-    tagline: "AI-powered hiring platform",
-    description:
-      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate gets interviewed by Gemini; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
-    tech: ["Python", "FastAPI", "Gemini Flash 2.0", "Next.js 14", "Supabase", "WeasyPrint"],
-    github: "https://github.com/Balisa50/hireiq",
-    githubRepo: "Balisa50/hireiq",
-    demo: "https://hireiq-ab.vercel.app",
-    status: "in-progress",
-    progress: 95,
-    launchLabel: "95%, shipping soon",
-    metric: "AI interviews · ranked scoring · PDF reports",
-    accent: "violet",
     fallbackStars: 0
   },
   {
