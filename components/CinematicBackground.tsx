@@ -42,14 +42,14 @@ export function CinematicBackground() {
     requestAnimationFrame(resize);
 
     // Star density scales with capability.
-    const density = gpu.isMobile || gpu.tier === "low" ? 0.00010 : 0.00022;
+    const density = gpu.isMobile || gpu.tier === "low" ? 0.0002 : 0.00042;
     const starCount = Math.round(w * h * density);
     type Star = { x: number; y: number; z: number; r: number; tw: number };
     const stars: Star[] = Array.from({ length: starCount }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
       z: Math.random() * 0.7 + 0.3, // depth → parallax + size
-      r: Math.random() * 1.2 + 0.2,
+      r: Math.random() * 1.6 + 0.5,
       tw: Math.random() * Math.PI * 2
     }));
 
@@ -77,9 +77,9 @@ export function CinematicBackground() {
 
     // Nebula blobs.
     const nebula = [
-      { x: w * 0.2, y: h * 0.25, r: Math.max(w, h) * 0.5, c: "0,240,255", a: 0.05, dx: 0.012, dy: 0.006 },
-      { x: w * 0.8, y: h * 0.7, r: Math.max(w, h) * 0.55, c: "138,43,226", a: 0.045, dx: -0.01, dy: 0.008 },
-      { x: w * 0.6, y: h * 0.15, r: Math.max(w, h) * 0.4, c: "255,0,85", a: 0.03, dx: 0.008, dy: -0.01 }
+      { x: w * 0.2, y: h * 0.25, r: Math.max(w, h) * 0.55, c: "0,240,255", a: 0.14, dx: 0.012, dy: 0.006 },
+      { x: w * 0.82, y: h * 0.7, r: Math.max(w, h) * 0.6, c: "138,43,226", a: 0.13, dx: -0.01, dy: 0.008 },
+      { x: w * 0.6, y: h * 0.12, r: Math.max(w, h) * 0.45, c: "255,0,85", a: 0.08, dx: 0.008, dy: -0.01 }
     ];
 
     const reduced = gpu.reducedMotion;
@@ -176,11 +176,18 @@ export function CinematicBackground() {
       for (const s of stars) {
         const py = (s.y - scrollY * s.z * 0.15) % h;
         const yy = py < 0 ? py + h : py;
-        const twinkle = reduced ? 0.7 : 0.55 + 0.45 * Math.sin(t * 0.02 + s.tw);
+        const twinkle = reduced ? 0.85 : 0.55 + 0.45 * Math.sin(t * 0.02 + s.tw);
+        const bright = s.z > 0.78;
+        const a = Math.min(1, twinkle * (0.55 + s.z * 0.6));
+        if (bright) {
+          ctx.shadowBlur = 7;
+          ctx.shadowColor = "rgba(155,246,255,0.9)";
+        }
         ctx.beginPath();
-        ctx.arc(s.x, yy, s.r * s.z, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${s.z > 0.75 ? "155,246,255" : "255,255,255"},${twinkle * s.z})`;
+        ctx.arc(s.x, yy, s.r * (0.7 + s.z), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.z > 0.7 ? "185,250,255" : "255,255,255"},${a})`;
         ctx.fill();
+        if (bright) ctx.shadowBlur = 0;
       }
 
       // Matrix data streams

@@ -52,9 +52,13 @@ export function CinematicName({ name }: { name: string }) {
       scheduleTimer = setTimeout(() => {
         if (!document.hidden) runGlitch();
         schedule();
-      }, 9000 + Math.random() * 9000);
+      }, 5000 + Math.random() * 6000);
     };
-    schedule();
+    // Fire one shortly after load so the effect is seen immediately.
+    scheduleTimer = setTimeout(() => {
+      if (!document.hidden) runGlitch();
+      schedule();
+    }, 2200);
 
     return () => {
       clearInterval(scrambleTimer);

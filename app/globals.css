@@ -130,12 +130,12 @@ body {
   pointer-events: none;
   /* faint holographic grid that drifts; canvas stars draw on top */
   background-image:
-    linear-gradient(to right, rgba(0, 240, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 240, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 240, 255, 0.06) 1px, transparent 1px);
   background-size: 60px 60px;
   animation: grid-drift 24s linear infinite;
-  mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, #000 30%, transparent 85%);
-  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 30%, #000 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 95% 85% at 50% 35%, #000 45%, transparent 92%);
+  -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 35%, #000 45%, transparent 92%);
 }
 @keyframes grid-drift {
   from { background-position: 0 0; }
@@ -148,16 +148,17 @@ body {
   display: inline-block;
   background-image: linear-gradient(
     110deg,
-    #ffffff 0%, #ffffff 32%,
-    #9bf6ff 46%, #00f0ff 52%, #9bf6ff 58%,
-    #ffffff 72%, #ffffff 100%
+    #ffffff 0%, #cfefff 26%,
+    #4fe3ff 42%, #00f0ff 50%, #4fe3ff 58%,
+    #cfefff 74%, #ffffff 100%
   );
   background-size: 220% 100%;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: name-shimmer 7s linear infinite;
+  animation: name-shimmer 5s linear infinite;
   transform-style: preserve-3d;
+  filter: drop-shadow(0 0 22px rgba(0, 240, 255, 0.35));
 }
 @keyframes name-shimmer {
   0%   { background-position: 200% 0; }

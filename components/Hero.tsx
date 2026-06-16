@@ -9,7 +9,6 @@ import { PROFILE } from "@/lib/projects";
 import { StaticBrainSVG } from "./StaticBrainSVG";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { CinematicName } from "./CinematicName";
-import { OrbitalAvatar } from "./OrbitalAvatar";
 
 const HeroParticles = dynamic(
   () => import("./HeroParticles").then((m) => m.HeroParticles),
@@ -206,11 +205,6 @@ export function Hero() {
           globals.css). This guarantees visibility even if JS is slow or
           Framer Motion hasn't hydrated yet, critical for mobile. */}
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
-
-        {/* Orbital profile avatar */}
-        <div className="hero-item mb-6" style={{ animationDelay: "0s" }}>
-          <OrbitalAvatar />
-        </div>
 
         {/* Status badge */}
         <p
