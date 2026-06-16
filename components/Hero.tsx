@@ -8,6 +8,8 @@ import { useGPUTier } from "@/hooks/useGPUTier";
 import { PROFILE } from "@/lib/projects";
 import { StaticBrainSVG } from "./StaticBrainSVG";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { CinematicName } from "./CinematicName";
+import { OrbitalAvatar } from "./OrbitalAvatar";
 
 const HeroParticles = dynamic(
   () => import("./HeroParticles").then((m) => m.HeroParticles),
@@ -182,6 +184,11 @@ export function Hero() {
           Framer Motion hasn't hydrated yet, critical for mobile. */}
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
 
+        {/* Orbital profile avatar */}
+        <div className="hero-item mb-6" style={{ animationDelay: "0s" }}>
+          <OrbitalAvatar />
+        </div>
+
         {/* Status badge */}
         <p
           className="hero-item mb-5 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1.5 text-xs font-medium text-text-secondary backdrop-blur-sm"
@@ -199,9 +206,7 @@ export function Hero() {
           className="hero-item text-balance text-[clamp(2.5rem,8vw,5.5rem)] font-semibold leading-[1.05] tracking-tight"
           style={{ animationDelay: "0.15s" }}
         >
-          <span className="bg-gradient-to-br from-white via-white to-cyan/80 bg-clip-text text-transparent">
-            {PROFILE.fullName}
-          </span>
+          <CinematicName name={PROFILE.fullName} />
         </h1>
 
         {/* Title */}

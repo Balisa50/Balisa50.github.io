@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Copy, Github, Linkedin, Mail, Phone, Check, MapPin } from "lucide-react";
 import { useState } from "react";
 import { PROFILE } from "@/lib/projects";
+import { MagneticButton } from "./MagneticButton";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -61,40 +62,46 @@ export function Contact() {
         </p>
 
         <div className="relative mt-8 flex flex-wrap items-center gap-3">
-          <a
-            href={`mailto:${PROFILE.email}?subject=Let%27s%20talk`}
-            className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-cyan px-6 py-3 text-sm font-medium text-background shadow-glow-cyan transition hover:shadow-glow-cyan-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            <Mail className="h-4 w-4" aria-hidden="true" />
-            Email me
-          </a>
+          <MagneticButton>
+            <a
+              href={`mailto:${PROFILE.email}?subject=Let%27s%20talk`}
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-cyan px-6 py-3 text-sm font-medium text-background shadow-glow-cyan transition hover:shadow-glow-cyan-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              Email me
+            </a>
+          </MagneticButton>
 
-          <a
-            href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
-            className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-          >
-            <Phone className="h-4 w-4" aria-hidden="true" />
-            {PROFILE.phone}
-          </a>
+          <MagneticButton>
+            <a
+              href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+            >
+              <Phone className="h-4 w-4" aria-hidden="true" />
+              {PROFILE.phone}
+            </a>
+          </MagneticButton>
 
-          <button
-            onClick={copyEmail}
-            className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-            aria-label={`Copy email ${PROFILE.email} to clipboard`}
-            title={`${PROFILE.email} · PGP available on request`}
-          >
-            {copied ? (
-              <>
-                <Check className="h-4 w-4 text-status-live" aria-hidden="true" />
-                <span className="text-status-live">Copied</span>
-              </>
-            ) : (
-              <>
-                <Copy className="h-4 w-4" aria-hidden="true" />
-                {PROFILE.email}
-              </>
-            )}
-          </button>
+          <MagneticButton>
+            <button
+              onClick={copyEmail}
+              className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              aria-label={`Copy email ${PROFILE.email} to clipboard`}
+              title={`${PROFILE.email} · PGP available on request`}
+            >
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4 text-status-live" aria-hidden="true" />
+                  <span className="text-status-live">Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" aria-hidden="true" />
+                  {PROFILE.email}
+                </>
+              )}
+            </button>
+          </MagneticButton>
         </div>
 
         <div className="relative mt-10 flex flex-wrap items-center gap-5 text-sm text-text-secondary">
@@ -102,18 +109,22 @@ export function Contact() {
             href={PROFILE.github}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white"
+            className="group inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white"
           >
-            <Github className="h-4 w-4" aria-hidden="true" />
+            <span className="energy-icon grid place-items-center">
+              <Github className="h-4 w-4" aria-hidden="true" />
+            </span>
             github.com/{PROFILE.githubHandle}
           </a>
           <a
             href={PROFILE.linkedin}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white"
+            className="group inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white"
           >
-            <Linkedin className="h-4 w-4" aria-hidden="true" />
+            <span className="energy-icon grid place-items-center">
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+            </span>
             linkedin.com/in/{PROFILE.linkedinHandle}
           </a>
           <span className="inline-flex items-center gap-2">

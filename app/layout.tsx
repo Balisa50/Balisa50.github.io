@@ -6,6 +6,7 @@ import { SkipLink } from "@/components/SkipLink";
 import { ConsoleGreeting } from "@/components/ConsoleGreeting";
 import { KonamiEasterEgg } from "@/components/KonamiEasterEgg";
 import { FloatingCTA } from "@/components/FloatingCTA";
+import { CinematicBackground } from "@/components/CinematicBackground";
 import { PROFILE } from "@/lib/projects";
 
 const description =
@@ -75,6 +76,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="bg-background font-sans text-text antialiased">
+        <CinematicBackground />
         <SkipLink />
         <ConsoleGreeting />
         {children}
