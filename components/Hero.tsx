@@ -171,6 +171,9 @@ export function Hero() {
           </div>
         )}
 
+        {/* Volumetric lens flare drifting through the scene */}
+        <div className="lens-flare" aria-hidden="true" />
+
         {/* Vignette for text contrast */}
         <div
           className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(5,5,5,0.4)_60%,rgba(5,5,5,0.85)_100%)]"

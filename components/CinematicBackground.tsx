@@ -53,6 +53,28 @@ export function CinematicBackground() {
       tw: Math.random() * Math.PI * 2
     }));
 
+    // Matrix-style data streams (capable GPUs only).
+    const showStreams = !gpu.isMobile && gpu.tier !== "low";
+    const STREAM_GLYPHS = "01<>/{}[]#$%&*+=ｱｲｳｴｵｶｷｸ";
+    type Stream = { x: number; y: number; speed: number; size: number; chars: string[] };
+    const streams: Stream[] = Array.from(
+      { length: showStreams ? Math.min(14, Math.round(w / 140)) : 0 },
+      () => {
+        const size = 12 + Math.floor(Math.random() * 4);
+        const len = 8 + Math.floor(Math.random() * 14);
+        return {
+          x: Math.random() * w,
+          y: Math.random() * h,
+          speed: 0.6 + Math.random() * 1.4,
+          size,
+          chars: Array.from(
+            { length: len },
+            () => STREAM_GLYPHS[Math.floor(Math.random() * STREAM_GLYPHS.length)]
+          )
+        };
+      }
+    );
+
     // Nebula blobs.
     const nebula = [
       { x: w * 0.2, y: h * 0.25, r: Math.max(w, h) * 0.5, c: "0,240,255", a: 0.05, dx: 0.012, dy: 0.006 },
@@ -99,8 +121,22 @@ export function CinematicBackground() {
       }));
     };
 
+    type Sat = { x: number; y: number; vx: number; vy: number; blink: number };
+    let satellite: Sat | null = null;
+    const spawnSat = () => {
+      const fromLeft = Math.random() > 0.5;
+      satellite = {
+        x: fromLeft ? -30 : w + 30,
+        y: h * (0.08 + Math.random() * 0.32),
+        vx: (fromLeft ? 1 : -1) * (1.1 + Math.random() * 0.6),
+        vy: (Math.random() - 0.5) * 0.3,
+        blink: 0
+      };
+    };
+
     let meteorTimer = window.setTimeout(spawnMeteor, 6000 + Math.random() * 8000);
     let flockTimer = window.setTimeout(spawnFlock, 25000 + Math.random() * 30000);
+    let satTimer = window.setTimeout(spawnSat, 35000 + Math.random() * 40000);
 
     const drawBird = (x: number, y: number, wing: number) => {
       ctx.beginPath();
@@ -147,6 +183,30 @@ export function CinematicBackground() {
         ctx.fill();
       }
 
+      // Matrix data streams
+      if (!reduced) {
+        ctx.textBaseline = "top";
+        for (const st of streams) {
+          st.y += st.speed;
+          if (st.y - st.chars.length * st.size > h) {
+            st.y = -Math.random() * h * 0.5;
+            st.x = Math.random() * w;
+          }
+          ctx.font = `${st.size}px ui-monospace, monospace`;
+          for (let i = 0; i < st.chars.length; i++) {
+            const cy = st.y - i * st.size;
+            if (cy < -st.size || cy > h) continue;
+            const a = i === 0 ? 0.5 : 0.18 * (1 - i / st.chars.length);
+            ctx.fillStyle = `rgba(0,240,255,${a})`;
+            ctx.fillText(st.chars[i], st.x, cy);
+          }
+          if (Math.random() < 0.04) {
+            st.chars[Math.floor(Math.random() * st.chars.length)] =
+              STREAM_GLYPHS[Math.floor(Math.random() * STREAM_GLYPHS.length)];
+          }
+        }
+      }
+
       if (!reduced) {
         // Meteor
         if (meteor) {
@@ -182,6 +242,31 @@ export function CinematicBackground() {
             flockTimer = window.setTimeout(spawnFlock, 45000 + Math.random() * 40000);
           }
         }
+
+        // Orbiting satellite
+        if (satellite) {
+          satellite.x += satellite.vx;
+          satellite.y += satellite.vy;
+          satellite.blink += 0.12;
+          ctx.strokeStyle = "rgba(120,160,220,0.6)";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(satellite.x - 7, satellite.y);
+          ctx.lineTo(satellite.x + 7, satellite.y);
+          ctx.stroke();
+          ctx.fillStyle = "rgba(210,225,255,0.9)";
+          ctx.fillRect(satellite.x - 2, satellite.y - 1.5, 4, 3);
+          if (Math.sin(satellite.blink) > 0) {
+            ctx.fillStyle = "rgba(255,0,85,0.9)";
+            ctx.beginPath();
+            ctx.arc(satellite.x, satellite.y - 3, 1.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          if (satellite.x > w + 40 || satellite.x < -40) {
+            satellite = null;
+            satTimer = window.setTimeout(spawnSat, 40000 + Math.random() * 50000);
+          }
+        }
       }
 
       if (!reduced && !document.hidden) {
@@ -203,6 +288,7 @@ export function CinematicBackground() {
       cancelAnimationFrame(raf);
       clearTimeout(meteorTimer);
       clearTimeout(flockTimer);
+      clearTimeout(satTimer);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", onVisibility);

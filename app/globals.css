@@ -286,3 +286,135 @@ body {
   transform: scale(1);
   animation: pulse-ring 1.6s ease-out infinite;
 }
+/* contact icon "transforms into a holographic symbol" on hover */
+.energy-icon svg {
+  transition: filter 0.3s ease;
+}
+.energy-icon:hover svg {
+  animation: holo-flip 0.6s ease 1;
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.8));
+}
+@keyframes holo-flip {
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+/* ---- Section "AI construction" reveal ---- */
+.section-reveal {
+  position: relative;
+}
+.sr-bracket {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  opacity: 0;
+  transition: opacity 0.7s ease 0.25s;
+  pointer-events: none;
+  z-index: 2;
+}
+.section-reveal.revealed .sr-bracket { opacity: 1; }
+.sr-tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
+.sr-tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
+.sr-bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
+.sr-br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
+.sr-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.14) 50%, transparent);
+  background-size: 100% 170px;
+  background-repeat: no-repeat;
+  background-position: 0 -170px;
+}
+.section-reveal.revealed .sr-scan { animation: sr-sweep 1.5s ease-out 1; }
+@keyframes sr-sweep {
+  0%   { opacity: 0; background-position: 0 -170px; }
+  12%  { opacity: 1; }
+  100% { opacity: 0; background-position: 0 120%; }
+}
+
+/* ---- Project-row holographic sheen + index glitch ---- */
+.row-holo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    320px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(0, 240, 255, 0.08),
+    transparent 60%
+  );
+}
+.row-holo:hover::before { opacity: 1; }
+.glitch-num[data-glitch="true"] {
+  text-shadow: 0.04em 0 rgba(255, 0, 85, 0.8), -0.04em 0 rgba(0, 240, 255, 0.8);
+  animation: name-jolt 0.4s steps(3) 1;
+}
+
+/* ---- Rare full-page drone scan ---- */
+.drone-scan {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.drone-scan.active { opacity: 1; }
+.drone-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 170px;
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0.1), transparent);
+  border-top: 1.5px solid rgba(0, 240, 255, 0.85);
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.5);
+  transform: translateY(-170px);
+}
+.drone-scan.active .drone-line { animation: drone-sweep 2.4s ease-in-out 1; }
+@keyframes drone-sweep {
+  from { transform: translateY(-170px); }
+  to   { transform: translateY(100vh); }
+}
+
+/* ---- Floating HUD telemetry panel ---- */
+.hud-panel {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 40;
+  pointer-events: none;
+}
+@keyframes hud-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+.hud-blink { animation: hud-blink 1.4s ease-in-out infinite; }
+@keyframes hud-bar {
+  0% { width: 18%; }
+  50% { width: 86%; }
+  100% { width: 42%; }
+}
+.hud-bar-fill { animation: hud-bar 3.2s ease-in-out infinite; }
+
+/* ---- Hero lens flare / volumetric drift ---- */
+.lens-flare {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  left: 15%;
+  top: 6%;
+  pointer-events: none;
+  background: radial-gradient(circle at 35% 35%, rgba(0, 240, 255, 0.1), transparent 55%);
+  mix-blend-mode: screen;
+  filter: blur(10px);
+  animation: flare-drift 16s ease-in-out infinite;
+}
+@keyframes flare-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.55; }
+  50%      { transform: translate(6%, 4%) scale(1.12); opacity: 0.85; }
+}

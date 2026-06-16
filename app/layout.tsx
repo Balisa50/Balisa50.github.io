@@ -7,6 +7,8 @@ import { ConsoleGreeting } from "@/components/ConsoleGreeting";
 import { KonamiEasterEgg } from "@/components/KonamiEasterEgg";
 import { FloatingCTA } from "@/components/FloatingCTA";
 import { CinematicBackground } from "@/components/CinematicBackground";
+import { DroneScan } from "@/components/DroneScan";
+import { HudPanel } from "@/components/HudPanel";
 import { PROFILE } from "@/lib/projects";
 
 const description =
@@ -81,6 +83,8 @@ export default function RootLayout({
         <ConsoleGreeting />
         {children}
         <FloatingCTA />
+        <DroneScan />
+        <HudPanel />
         <KonamiEasterEgg />
 
         {/* Register the service worker (progressive enhancement) */}

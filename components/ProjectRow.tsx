@@ -1,11 +1,45 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowUpRight, BookOpen, FileText, Github } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { CASE_STUDIES } from "@/lib/case-studies";
 import { cn } from "@/lib/utils";
+
+/** Sets the radial-sheen position CSS vars on the hovered row. */
+function trackSheen(e: React.MouseEvent<HTMLElement>) {
+  const el = e.currentTarget;
+  const r = el.getBoundingClientRect();
+  el.style.setProperty("--mx", `${((e.clientX - r.left) / r.width) * 100}%`);
+  el.style.setProperty("--my", `${((e.clientY - r.top) / r.height) * 100}%`);
+}
+
+/** Occasionally fires a brief glitch flag (for the index number). */
+function useOccasionalGlitch(enabled: boolean) {
+  const [glitch, setGlitch] = useState(false);
+  useEffect(() => {
+    if (!enabled || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let off: ReturnType<typeof setTimeout>;
+    let on: ReturnType<typeof setTimeout>;
+    const loop = () => {
+      on = setTimeout(() => {
+        if (!document.hidden) {
+          setGlitch(true);
+          off = setTimeout(() => setGlitch(false), 420);
+        }
+        loop();
+      }, 7000 + Math.random() * 11000);
+    };
+    loop();
+    return () => {
+      clearTimeout(on);
+      clearTimeout(off);
+    };
+  }, [enabled]);
+  return glitch;
+}
 
 /* ----------------------------------------------------------------- */
 /*  Link resolution (shared with the old card, kept self-contained)  */
@@ -125,6 +159,7 @@ function TechTags({ tech }: { tech: string[] }) {
 export function ProjectRow({ project, index, variant }: Props) {
   const num = String(index + 1).padStart(2, "0");
   const href = primaryHref(project);
+  const numGlitch = useOccasionalGlitch(variant === "featured");
 
   /* -------------------------------------------------- Featured */
   if (variant === "featured") {
@@ -134,7 +169,8 @@ export function ProjectRow({ project, index, variant }: Props) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="group relative border-t border-white/10 py-10 md:py-14"
+        onMouseMove={trackSheen}
+        className="group relative row-holo border-t border-white/10 py-10 md:py-14"
       >
         {/* hover accent bar */}
         <span
@@ -148,7 +184,10 @@ export function ProjectRow({ project, index, variant }: Props) {
         <div className="grid grid-cols-1 gap-x-10 gap-y-5 md:grid-cols-[auto_1fr]">
           {/* index */}
           <div className="flex items-baseline gap-4 md:block">
-            <span className="font-mono text-3xl font-semibold text-white/15 md:text-5xl">
+            <span
+              className="glitch-num font-mono text-3xl font-semibold text-white/15 md:text-5xl"
+              data-glitch={numGlitch || undefined}
+            >
               {num}
             </span>
           </div>
@@ -214,7 +253,8 @@ export function ProjectRow({ project, index, variant }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="group relative border-t border-white/10 py-6"
+      onMouseMove={trackSheen}
+      className="group relative row-holo border-t border-white/10 py-6"
     >
       <span
         aria-hidden="true"

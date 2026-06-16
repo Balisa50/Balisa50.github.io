@@ -9,6 +9,7 @@ import { Education } from "@/components/Education";
 import { Certifications } from "@/components/Certifications";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { SectionReveal } from "@/components/SectionReveal";
 
 // Lazy-load the heavier projects grid (stars fetch + many motion nodes).
 const ProjectsGrid = dynamic(
@@ -23,13 +24,27 @@ export default function HomePage() {
       <main id="main" className="relative flex flex-col">
         <Hero />
         <Metrics />
-        <ProjectsGrid />
-        <Skills />
-        <About />
-        <Experience />
-        <Education />
-        <Certifications />
-        <Contact />
+        <SectionReveal>
+          <ProjectsGrid />
+        </SectionReveal>
+        <SectionReveal>
+          <Skills />
+        </SectionReveal>
+        <SectionReveal>
+          <About />
+        </SectionReveal>
+        <SectionReveal>
+          <Experience />
+        </SectionReveal>
+        <SectionReveal>
+          <Education />
+        </SectionReveal>
+        <SectionReveal>
+          <Certifications />
+        </SectionReveal>
+        <SectionReveal>
+          <Contact />
+        </SectionReveal>
         <Footer />
       </main>
     </>
