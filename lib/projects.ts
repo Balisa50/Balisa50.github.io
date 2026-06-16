@@ -20,9 +20,28 @@ export interface Project {
   metric?: string;
   accent: "cyan" | "pink" | "violet";
   fallbackStars: number;
+  /** Lead entries get the full case-study row treatment in the editorial layout. */
+  featured?: boolean;
 }
 
 export const PROJECTS: Project[] = [
+  {
+    slug: "forge",
+    title: "FORGE",
+    tagline: "Mentor-driven learning platform with proof-of-work verification",
+    description:
+      "A structured platform that pairs every self-taught learner 1:1 with a real human mentor and runs them through one of 9 hand-curated career roadmaps (Data Science, AI Engineering, Cybersecurity, Full-Stack and more), 17 to 43 weeks each with 10 mastery checkpoints a week and over 1,100 verified video resources. The proof-of-work engine checks your progress against your real GitHub commits and deployed projects before a week counts, no self-reporting. Mentors release each week, control the pace, and sign off only when you've truly learned it; finishers earn a cryptographically signed, employer-verifiable certificate. Includes a custom Actuarial Exam P & FM mastery engine that auto-generates tiered, non-repeating SOA-style questions with interactive diagrams.",
+    tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "KaTeX"],
+    github: "https://github.com/Balisa50/forge",
+    githubRepo: "Balisa50/forge",
+    demo: "https://forge-ab.vercel.app",
+    status: "in-progress",
+    progress: 90,
+    metric: "9 roadmaps · 1,100+ resources · 1:1 mentors · proof-of-work",
+    accent: "cyan",
+    fallbackStars: 0,
+    featured: true
+  },
   {
     slug: "hireiq",
     title: "HireIQ",
@@ -38,7 +57,8 @@ export const PROJECTS: Project[] = [
     launchLabel: "95%, shipping soon",
     metric: "AI interviews · ranked scoring · PDF reports",
     accent: "violet",
-    fallbackStars: 0
+    fallbackStars: 0,
+    featured: true
   },
   {
     slug: "ayat",
@@ -53,7 +73,8 @@ export const PROJECTS: Project[] = [
     status: "live",
     metric: "6,236 verses, live 3D semantic search",
     accent: "violet",
-    fallbackStars: 0
+    fallbackStars: 0,
+    featured: true
   },
   {
     slug: "ayat-v2",
@@ -115,22 +136,6 @@ export const PROJECTS: Project[] = [
     status: "live",
     metric: "Live Dalasi forecast",
     accent: "pink",
-    fallbackStars: 0
-  },
-  {
-    slug: "forge",
-    title: "FORGE",
-    tagline: "Accountability OS for self-taught learners",
-    description:
-      "Daily lock-screen app that refuses to let you in until you have logged real progress. An AI interrogator grills you on what you built; only a convincing answer unlocks the machine. Streaks, PIN-locked settings, and consequence mechanisms make skipping painful.",
-    tech: ["Next.js", "Prisma", "NextAuth", "OpenRouter", "TypeScript"],
-    github: "https://github.com/Balisa50/forge",
-    githubRepo: "Balisa50/forge",
-    demo: "https://forge-ab.vercel.app",
-    status: "in-progress",
-    progress: 90,
-    metric: "AI interrogation · streak engine · anti-cheat",
-    accent: "cyan",
     fallbackStars: 0
   },
   {
