@@ -1,10 +1,12 @@
 "use client";
 
+import { Constellation } from "./Constellation";
+
 /**
  * The profile picture suspended in a zero-g orbital system: concentric
  * rings, data nodes orbiting at different radii/speeds, expanding pulse
- * waves, and a faint HUD reticle. All motion is CSS keyframes, so the
- * global prefers-reduced-motion rule freezes it into a clean static badge.
+ * waves, a constellation that connects and dissolves, and a faint HUD
+ * reticle. The CSS motion freezes cleanly under prefers-reduced-motion.
  */
 
 interface NodeDef {
@@ -32,6 +34,9 @@ export function OrbitalAvatar() {
       style={{ width: "min(58vw, 260px)", height: "min(58vw, 260px)" }}
       aria-hidden="true"
     >
+      {/* Constellation lines connecting drifting points */}
+      <Constellation />
+
       {/* Expanding pulse waves */}
       {[0, 1].map((i) => (
         <span

@@ -9,6 +9,7 @@ import { FloatingCTA } from "@/components/FloatingCTA";
 import { CinematicBackground } from "@/components/CinematicBackground";
 import { DroneScan } from "@/components/DroneScan";
 import { HudPanel } from "@/components/HudPanel";
+import { WarpNav } from "@/components/WarpNav";
 import { PROFILE } from "@/lib/projects";
 
 const description =
@@ -85,6 +86,7 @@ export default function RootLayout({
         <FloatingCTA />
         <DroneScan />
         <HudPanel />
+        <WarpNav />
         <KonamiEasterEgg />
 
         {/* Register the service worker (progressive enhancement) */}

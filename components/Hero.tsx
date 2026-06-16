@@ -128,6 +128,16 @@ const ROTATING_WORDS = [
   "shipping things",
 ];
 
+const QUANTUM_DOTS = [
+  { left: "18%", top: "30%", delay: "0s" },
+  { left: "78%", top: "24%", delay: "1.4s" },
+  { left: "30%", top: "68%", delay: "2.7s" },
+  { left: "66%", top: "72%", delay: "3.9s" },
+  { left: "50%", top: "18%", delay: "5.1s" },
+  { left: "12%", top: "55%", delay: "2.1s" },
+  { left: "88%", top: "60%", delay: "4.4s" }
+];
+
 export function Hero() {
   const gpu = useGPUTier();
   const [wordIndex, setWordIndex] = useState(0);
@@ -150,7 +160,7 @@ export function Hero() {
       aria-label="Hero"
     >
       {/* Background visual: WebGL particle brain (desktop only) or SVG fallback */}
-      <div className="pointer-events-none absolute inset-0 z-0">
+      <div className="rack-focus pointer-events-none absolute inset-0 z-0">
         {useWebGL ? (
           <ErrorBoundary
             fallback={
@@ -173,6 +183,16 @@ export function Hero() {
 
         {/* Volumetric lens flare drifting through the scene */}
         <div className="lens-flare" aria-hidden="true" />
+
+        {/* Quantum particles flickering in and out of existence */}
+        {QUANTUM_DOTS.map((q, i) => (
+          <span
+            key={i}
+            className="quantum-dot"
+            style={{ left: q.left, top: q.top, animationDelay: q.delay }}
+            aria-hidden="true"
+          />
+        ))}
 
         {/* Vignette for text contrast */}
         <div
