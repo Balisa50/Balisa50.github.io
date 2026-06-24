@@ -10,7 +10,7 @@ import Link from "next/link";
 import { ArrowLeft, Github, FileText } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "The Gambia in 2074 — an independent population projection | Abdoulie Balisa",
+  title: "The Gambia in 2074: an independent population projection | Abdoulie Balisa",
   description:
     "Built on the 2024 census and the UN's own methods, an independent projection puts The Gambia at 4.66 million by 2074 (4.35 to 4.98 million), about 13% below the official figure. The findings, the charts, and what they mean.",
 };

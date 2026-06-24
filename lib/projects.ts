@@ -407,7 +407,7 @@ export const EXPERIENCE: Experience[] = [
     location: "Remote",
     bullets: [
       "Building production AI products end to end: ingestion, modelling, orchestration, and the UIs on top.",
-      "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT — six production products end to end spanning AI agents, forecasting, and RAG systems.",
+      "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT. Six production products built end to end, spanning AI agents, forecasting, and RAG systems.",
       "Open-sourcing tooling around RAG, agentic pipelines, and forecasting on the Dalasi."
     ]
   },
