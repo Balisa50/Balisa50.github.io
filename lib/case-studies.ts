@@ -185,7 +185,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Manual labelling of 200 articles is harder than it sounds. Ambiguous tone, sarcasm, headlines that read positive but cover a negative event, all require careful judgement. Built a labelling rubric (positive = the event/decision is good for The Gambia; negative = bad for The Gambia; neutral = factual reporting with no clear valence) and applied it consistently. Inter-rater consistency would be the next step if I had a labelling team.",
     ],
     outcome: [
-      "End-to-end pipeline scaffolded: scraper → preprocessor → features → sentiment → topics → weekly PRI",
+      "End-to-end pipeline scaffolded: scraper, then preprocessor, then features, then sentiment, then topics, then weekly PRI",
       "9 Jupyter notebooks documenting every step with markdown explanations",
       "FastAPI service with three endpoints (/analyze, /risk-index, /risk-index/current)",
       "Next.js + Recharts dashboard with PRI line chart, current score, and analyse-text widget",
@@ -335,7 +335,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
-      "Initially tried building a full hierarchical taxonomy of every verse → topic → sub-topic. Two weeks in, the tree was unmaintainable and I'd tagged 400 verses out of 6,236. Killed it. Switched to the keyword-expansion approach where I curate 8-15 verses per topic and the matcher does the rest. Shipped in 2 days. The lesson: when the surface area is too large for human work, design a system where humans do the irreplaceable part and code does the rest.",
+      "Initially tried building a full hierarchical taxonomy of every verse, then topic, then sub-topic. Two weeks in, the tree was unmaintainable and I'd tagged 400 verses out of 6,236. Killed it. Switched to the keyword-expansion approach where I curate 8-15 verses per topic and the matcher does the rest. Shipped in 2 days. The lesson: when the surface area is too large for human work, design a system where humans do the irreplaceable part and code does the rest.",
       "First version of the journey transition screen had labels like 'Next stop' and 'Tap to continue'. User feedback (a single test reader) said they wanted to screenshot the connector phrase as a clean quote. Stripped all the UI hints, just the centered italic text on tap-anywhere-to-skip. Cleaner snap, cleaner UX. Sometimes the best feature is removing UI.",
       "React #310 (the hooks-after-early-return error) crashed the app on every sign-in for two days. The bug was a single `useState(maxH)` declared after `if (!user) return <a>Sign in</a>` in ProfileMenu. The fix was moving all useState calls above any conditional return. I'd never hit React's rules-of-hooks violation that hard before. Wrote a comment in the file explaining why hook order matters so future-me doesn't repeat it.",
       "Built ElevenLabs audio narration for the AI tafsir. Worked, but didn't add value next to the actual qari recitations. Removed it after a week of having it live. 'Recitation by 18 qualified qaris is the audio experience' (commit e08b946). Killed a feature I was proud of because it competed with a better one.",
@@ -363,7 +363,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Graceful 'AI is paused' state when Anthropic credits exhaust, user-side trust preserved",
     ],
     regret:
-      "Should have written end-to-end tests for the auth + RLS flow earlier. The React #310 bug crashed sign-in for two days because no automated test was watching it. I shipped fast and trusted manual QA. With Playwright tests guarding the sign-in → verse-open → reflection-save flow, I'd have caught it on commit. Adding them next.",
+      "Should have written end-to-end tests for the auth + RLS flow earlier. The React #310 bug crashed sign-in for two days because no automated test was watching it. I shipped fast and trusted manual QA. With Playwright tests guarding the sign-in, then verse-open, then reflection-save flow, I'd have caught it on commit. Adding them next.",
     takeaway:
       "When the corpus is fixed, do the expensive work once and ship the artefact. When the corpus is unbounded (user data, AI calls), make every fetch click-gated. When a feature competes with a better one already in the app, kill the worse one, even if you were proud of it. Removing software is harder and more honest than adding it.",
   },
@@ -426,13 +426,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     pivots: [
       "First version stored articles forever. Quickly the feed had 800 articles and the page took 4 seconds to load. Added the /api/expire route to delete >48h. Then ran out of credits, disabled deletion. The feed now persists historic articles intentionally, context as a feature.",
-      "Pipeline timeout was a recurring battle. First attempt with full prompt at 4000 tokens timed out. Trimmed prompt → still timed out. Switched Haiku → fitted. Then added Reddit + HN sub-pipelines → timed out again. Dropped them. Final: lean RSS-only ingestion, 2500 tokens, Haiku, fits 60s. Half the iterations were 'add capability, blow timeout, remove capability'.",
+      "Pipeline timeout was a recurring battle. First attempt with full prompt at 4000 tokens timed out. Trimmed prompt, then still timed out. Switched Haiku, then fitted. Then added Reddit + HN sub-pipelines, then timed out again. Dropped them. Final: lean RSS-only ingestion, 2500 tokens, Haiku, fits 60s. Half the iterations were 'add capability, blow timeout, remove capability'.",
       "NEXT_PUBLIC_SITE_URL was hardcoded to a stale Vercel auto-URL (`vantage-three-chi.vercel.app`) that broke after a project rename. The chain-of-regions silently died because `fetch().catch(() => {})` swallowed the DNS error. No alarm fired; the feed just stopped updating regional content. Took me weeks to notice because global was still working. Lesson: silent fire-and-forget + free-tier observability = bugs that hide for weeks.",
       "Found a stray `OneDrive/Desktop/FORGE/` folder accidentally committed inside the vantage repo (probably a Windows OneDrive sync mishap). Vercel build failed with a TypeScript error pointing into FORGE's `prisma.config.ts`. Removed the folder, added it to .gitignore. Cross-project filesystem leakage is a real Windows-specific hazard.",
     ],
     weaknesses: [
       "I didn't fully understand SSE streaming when I started. Vercel Edge has different streaming semantics than Node. Spent a day debugging why chunks were buffering instead of arriving incrementally. Fix was using `controller.enqueue(encoder.encode(chunk))` instead of trying to write to the response body directly.",
-      "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch → JSON parse → embedding lookup → Claude call → DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) was a forcing function.",
+      "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch, then JSON parse, then embedding lookup, then Claude call, then DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) was a forcing function.",
       "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns OpenAI/Anthropic news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global to escape NewsAPI's relevancy bias.",
     ],
     outcome: [
@@ -488,7 +488,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "TF-IDF ranking + topic anchors + low temperature, layered.",
         reason:
-          "Pure semantic search returned the chunks closest in meaning to the query. But legal queries often involve specific terms that semantic search smooths over (e.g. 'section 130' as a phrase). I added TF-IDF ranking on top to surface chunks containing the rare terms, plus topic anchors (hand-curated keyword maps like `unfair dismissal → [Sections 130, 132, 139, 140 of Labour Act]`) to force-include sections that had to be in scope. Low temperature (0.1-0.2) eliminated the model's tendency to creatively combine unrelated chunks. Three orthogonal lenses, layered (commit 88d0e72).",
+          "Pure semantic search returned the chunks closest in meaning to the query. But legal queries often involve specific terms that semantic search smooths over (e.g. 'section 130' as a phrase). I added TF-IDF ranking on top to surface chunks containing the rare terms, plus topic anchors (hand-curated keyword maps like `unfair dismissal, then [Sections 130, 132, 139, 140 of Labour Act]`) to force-include sections that had to be in scope. Low temperature (0.1-0.2) eliminated the model's tendency to creatively combine unrelated chunks. Three orthogonal lenses, layered (commit 88d0e72).",
       },
       {
         call: "Multi-word anchor filtering when building the SQL OR clause.",
@@ -552,7 +552,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Remittances are ~20% of The Gambia's GDP. Every Gambian family has someone abroad sending money home. The Central Bank of The Gambia has internal forecasts of FX rates and remittance inflows; ordinary Gambians don't. There is no public-facing forecast of what the Dalasi will do next month, no dashboard showing diaspora corridors, no calculator for 'what will £100 be worth when I receive it'. I built the citizens' version: a public dashboard that shows what the Dalasi is doing, where remittances are coming from, and what the next six months look like, so a family deciding when to send or receive can plan instead of guess.",
     research: [
       "Read the Central Bank of The Gambia's annual reports (2019-2024) to understand which currencies matter for the Dalasi's stability (USD, EUR, GBP, CHF, JPY) and how seasonality plays in (remittance peaks during Ramadan, Eid, school-year start in September).",
-      "Read World Bank KNOMAD methodology on bilateral remittance estimation. The data is corridor-level: UK→GM, US→GM, ES→GM, DE→GM, etc. Knowing the methodology was crucial because it's mostly imputed from migration stocks + sender-country incomes, not from actual transaction data.",
+      "Read World Bank KNOMAD methodology on bilateral remittance estimation. The data is corridor-level: UK to GM, US to GM, ES to GM, DE to GM, and so on. Knowing the methodology was crucial because it's mostly imputed from migration stocks + sender-country incomes, not from actual transaction data.",
       "Studied Prophet's underlying Bayesian framework (Taylor & Letham 2017) before using it. Prophet handles seasonality + holidays elegantly, which is what I needed for Ramadan/Eid effects. Compared with SARIMA: Prophet better at multi-period seasonality, SARIMA better at short cyclicality. Used both, ensemble.",
       "Reverse-engineered the Central Bank of The Gambia website's network behaviour by opening their FX rates page in Chrome devtools. Saw an undocumented JSON endpoint at `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates. Authoritative, free, no key required. Confirmed it worked across all major currencies before betting the project on it.",
       "Read GitHub Actions cron syntax + storage limits. Decided to refresh forecasts daily via Actions instead of Vercel cron, Vercel's Hobby cron wakes the function once per day at a non-customisable schedule. Actions gave me precise scheduling and a free workflow log.",
@@ -583,7 +583,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Daily GitHub Actions refresh + auto-commit, not Vercel cron.",
         reason:
-          "Vercel Hobby cron runs once per day but at a server-determined time. Actions cron runs at a precise schedule, has free unlimited minutes for public repos, and produces a visible workflow log. The Actions job: fetch CBG rates → recompute Prophet/SARIMA → commit `data/processed/*.csv` → push → Vercel auto-deploys the updated build. The ~25 commits visible in `git log` (`Refresh forecasts 2026-04-12`, `2026-04-13`, …) are this loop running on autopilot.",
+          "Vercel Hobby cron runs once per day but at a server-determined time. Actions cron runs at a precise schedule, has free unlimited minutes for public repos, and produces a visible workflow log. The Actions job: fetch CBG rates, then recompute Prophet/SARIMA, then commit `data/processed/*.csv`, then push, then Vercel auto-deploys the updated build. The ~25 commits visible in `git log` (`Refresh forecasts 2026-04-12`, `2026-04-13`, …) are this loop running on autopilot.",
       },
       {
         call: "Bypass Next.js fetch cache + use browser-like headers when querying CBG.",
@@ -617,7 +617,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Live FX dashboard for Dalasi vs USD, EUR, GBP, CHF, JPY",
       "25 years of daily CBG rates",
       "6-month-horizon forecasts with confidence intervals (Prophet + SARIMA ensemble)",
-      "Bilateral remittance corridor breakdown (UK/US/Spain/Germany → GM)",
+      "Bilateral remittance corridor breakdown (UK, US, Spain and Germany to GM)",
       "'£100 next month' calculator for diaspora users",
       "60-day daily forecasts + monthly sending calendar",
       "Plain-language interpretation paragraph",
@@ -695,7 +695,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Initially required sign-up for every visit. Added a guest/demo mode (commit 12cdb83), users can try the interrogator without creating an account, the data is wiped on tab close. Lowered the activation barrier to 'click try', 10x more people actually use it once.",
     ],
     weaknesses: [
-      "I had not built a NextAuth v5 app before. Spent days on the new auth.config / middleware patterns. NextAuth v4 → v5 is a breaking redesign. Had to rebuild the whole auth surface around the new useSession hook + edge-friendly middleware.",
+      "I had not built a NextAuth v5 app before. Spent days on the new auth.config / middleware patterns. NextAuth v4, then v5 is a breaking redesign. Had to rebuild the whole auth surface around the new useSession hook + edge-friendly middleware.",
       "I underestimated how aggressive my own willpower-bypass instincts would be. Built features assuming users would respect them; tested on myself; immediately broke them by uninstalling and reinstalling. Hardened them against my own future self. The PIN lock is there because I tried to disable it on day 3.",
       "Prompt engineering for 'be skeptical without being cruel' is a delicate calibration. Overshoot and the app feels mean and people uninstall. Undershoot and it accepts anything. Eventually settled on a tone that's like a respectful old coach: 'I hear you. Tell me more. What was the actual bug you hit?'",
       "Cron jobs on Vercel free tier max at one per day. I needed multiple, one for daily check-ins, one for streak-loss notifications, one for digest emails. Worked around it by triggering downstream crons from the daily one (chain pattern, same as VANTAGE).",
@@ -793,7 +793,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Scoring rubric design is a research field I had not entered. First scoring prompt produced inconsistent results because I was asking the model to score on multiple dimensions simultaneously without clear weight. Studied multi-criteria decision-analysis literature, rewrote scoring as per-criterion 1-5 with explicit anchors, then aggregated.",
     ],
     outcome: [
-      "Full pipeline: job posting → adaptive interview → scored report → PDF",
+      "Full pipeline: job posting, then adaptive interview, then scored report, then PDF",
       "Gemini Flash 2.0 powering question generation (cost-engineered)",
       "Groq fallback for resilience",
       "Supabase + RLS for candidate data",
@@ -816,7 +816,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Cold outreach works but is brutally tedious, find leads, research them, write personalised emails, follow up, track replies, retry the bouncers. Most tools automate one step and call it done. I wanted an agent that ran the whole pipeline autonomously, with three levels of human oversight depending on how much you trust it. Especially for someone in The Gambia trying to land remote tech roles or B2B clients in the US/EU, the cost of doing this manually is prohibitive, and the cost of doing it sloppily is your domain blacklisted in days.",
     research: [
       "Read about email deliverability, SPF/DKIM/DMARC, RFC 2822 threading. Spam filters score every send on dozens of signals, sender reputation, content patterns, threading consistency, send rate. Sloppy cold-email automation is how domains get burned.",
-      "Studied IP/domain warm-up patterns from Lemlist, Instantly, Smartlead. The schedule: 5 → 10 → 20 → 35 → 50 emails/day over 3 weeks, with random spacing. Mimics human behaviour closely enough that filters don't flag you as a bot.",
+      "Studied IP/domain warm-up patterns from Lemlist, Instantly, Smartlead. The schedule: 5, then 10, then 20, then 35, then 50 emails/day over 3 weeks, with random spacing. Mimics human behaviour closely enough that filters don't flag you as a bot.",
       "Read Hunter.io, Apollo, RocketReach API docs to understand contact discovery. Hunter has the cleanest free tier (25 searches/month). Tavily for company research (1000 free searches/month). Groq for LLM-as-email-writer (generous free tier).",
       "Studied SMTP error codes carefully (4xx soft bounce vs 5xx hard bounce). Auto-marking a prospect as bounced on 4xx is wrong, those are temporary. Hard bounces (5xx) are permanent failures that should pause outreach to that address.",
       "Read about IMAP reply detection. SMTP only handles outbound. To know if someone replied, you need to poll an IMAP inbox, parse threads, match by Message-ID. Built that as a separate service.",
@@ -842,7 +842,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Warm-up schedule baked into the scheduler, not optional.",
         reason:
-          "New domain sending 50 emails on day 1 = blacklist guaranteed. The scheduler enforces a graduated send rate: 5 → 10 → 20 → 35 → 50 over 3 weeks, with 45-120s random spacing between sends. Users can't override this. Saving the user from themselves is the whole point of automation that respects deliverability.",
+          "New domain sending 50 emails on day 1 = blacklist guaranteed. The scheduler enforces a graduated send rate: 5, then 10, then 20, then 35, then 50 over 3 weeks, with 45-120s random spacing between sends. Users can't override this. Saving the user from themselves is the whole point of automation that respects deliverability.",
       },
       {
         call: "RFC 2822 email threading via In-Reply-To headers.",
@@ -883,17 +883,17 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "IPv4 vs IPv6 connection issues in cloud-to-cloud database connections is one of those things you only learn the hard way. Now I default to forcing IPv4 in production stacks.",
       "Prompt-engineering an email that doesn't sound AI-written took many iterations. The pattern that worked: explicit banned-phrase list + length-fits-content + no template structure. The model converges on human voice when it can't fall back to known cliches.",
       "Scaling a multi-user system with per-user SMTP credentials introduces auth-storage complexity. Used Supabase encrypted columns for SMTP passwords. Could've used a secrets manager but the cost wasn't worth it for the user count.",
-      "SSE streaming through a proxy (Render frontend → Render backend → user) buffered chunks initially. Fix was setting `X-Accel-Buffering: no` and forcing the proxy to forward chunks immediately (commit a2bbe53).",
+      "SSE streaming through a proxy (Render frontend, then Render backend, then user) buffered chunks initially. Fix was setting `X-Accel-Buffering: no` and forcing the proxy to forward chunks immediately (commit a2bbe53).",
     ],
     outcome: [
       "32 endpoints across 5 routers (campaigns, prospects, emails, activity, stats)",
       "Hunter mode (B2B outreach) + Seeker mode (job hunting)",
       "Three autonomy levels: Copilot (approve each), Supervised (auto-send with live SSE pause), Full Auto",
       "RFC 2822 email threading for compliant follow-ups",
-      "Warm-up schedule (5 → 50 over 3 weeks, random 45-120s spacing)",
+      "Warm-up schedule (5, then 50 over 3 weeks, random 45-120s spacing)",
       "Bounce detection (5xx auto-mark)",
       "IMAP reply detection (separate scheduler job, 15-min cadence)",
-      "Multi-model fallback (Groq 70B → 8B → gemma2)",
+      "Multi-model fallback (Groq 70B, then 8B, then gemma2)",
       "Per-user SMTP credentials (reputation isolation)",
       "Built on free-tier APIs end-to-end",
     ],
@@ -911,7 +911,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     research: [
       "Studied Playwright vs Selenium vs Puppeteer in detail. Selenium can't reliably see ATS iframes. Puppeteer handles iframes but is Chromium-only. Playwright handles iframes natively, supports cross-browser, and has better debugging. Picked Playwright.",
       "Read how Workday and Greenhouse render forms (both heavy iframe + React-based field rendering). Observed: standard CSS selectors fail on React Select; you need accessible-name selectors or DOM traversal.",
-      "Read Groq's docs on speed/cost. For semantic field matching ('Academic Background' → my education list), Llama 3.3 70B at sub-second is fine. Quality only matters at the edges (ambiguous labels), and a fallback chain handles those.",
+      "Read Groq's docs on speed/cost. For semantic field matching ('Academic Background', then my education list), Llama 3.3 70B at sub-second is fine. Quality only matters at the edges (ambiguous labels), and a fallback chain handles those.",
       "Studied browser automation anti-detection. Some sites detect headless browsers via user-agent, missing webdriver attributes, etc. Made Playwright presents as a normal Chromium with `headless: 'new'` mode, real viewport size, normal user-agent.",
       "Read SQLite's WAL mode + concurrent access patterns. Forms generate writes constantly (every gap question saves a profile field). WAL mode handles concurrent writes without locking the read path.",
     ],
@@ -976,7 +976,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I had not used Playwright before this project. Spent a week learning its model (Page, Frame, Locator, .fill() vs .type() vs .pressSequentially()). The locator model is much better than CSS selectors but takes time to internalise.",
       "Iframe handling broke things I'd never seen on regular web pages. Workday's apply form is an iframe inside an iframe. Had to use `page.frameLocator()` chains to even reach the form fields.",
       "Docker layer caching is harder than the docs imply. Multiple times I'd ship a fix and the deploy would still serve old code. Eventually moved to explicit cache-bust statements and a separate `playwright-base` image to stop fighting the build.",
-      "Groq fallback chain design was iterative. Naive 'retry on error' burned my quota when the same input kept producing the same garbage. The right pattern: retry on a DIFFERENT model (70B → 8B → gemma2), not the same one.",
+      "Groq fallback chain design was iterative. Naive 'retry on error' burned my quota when the same input kept producing the same garbage. The right pattern: retry on a DIFFERENT model (70B, then 8B, then gemma2), not the same one.",
       "SSRF protection was almost an afterthought. Realised users could paste a URL like `http://localhost:6379` to probe my own backend. Added URL allowlist + private-IP rejection before Playwright opens any URL (commit 89611bd).",
     ],
     outcome: [
@@ -1061,7 +1061,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     weaknesses: [
       "I had not implemented WoE/IV from scratch before. Read Siddiqi's book chapter twice, then implemented `compute_all_woe_iv` and `woe_transform` myself. The implementation taught me what every formula in the book actually meant.",
       "Population Stability Index was new. The intuition, comparing two distributions via a sum of `(actual - expected) * ln(actual/expected)`, wasn't obvious at first. Built it on a synthetic test where I manually shifted the distribution and watched PSI track the shift.",
-      "Synthetic data generation is more art than science. My first generator produced loans where every feature was uniformly distributed; the model learned nothing because there was no real signal. Re-built the generator with realistic correlations: higher income → lower default, longer term → higher default, group lending → lower default. Then the model could actually learn.",
+      "Synthetic data generation is more art than science. My first generator produced loans where every feature was uniformly distributed; the model learned nothing because there was no real signal. Re-built the generator with realistic correlations: higher income, then lower default, longer term, then higher default, group lending, then lower default. Then the model could actually learn.",
       "Capital-requirement math (RWA, capital floor) is in the Basel II framework but I'm only at the PD layer. I know what LGD and EAD are; haven't implemented them. Honest about the scope limit.",
     ],
     outcome: [
