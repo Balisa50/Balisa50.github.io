@@ -138,7 +138,7 @@ export default function GambiaCaseStudy() {
  <main className="min-h-screen bg-background text-white">
  {/* Top nav */}
  <div className="border-b border-white/5">
- <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
+ <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
  <Link href="/" className="text-sm text-white/60 hover:text-white">
  ← Back to portfolio
  </Link>
@@ -155,7 +155,7 @@ export default function GambiaCaseStudy() {
  </div>
  </div>
 
- <article className="max-w-3xl mx-auto px-6 py-16">
+ <article className="max-w-5xl mx-auto px-6 py-16">
  {/* Hero */}
  <header className="mb-12">
  <p className="text-xs uppercase tracking-[0.25em] text-emerald-400/80 mb-4">

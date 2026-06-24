@@ -1,11 +1,12 @@
 /**
  * Engineering case study, generated from PROJECTS metadata + the
- * CASE_STUDIES data file. Each project gets a tight 90-second read:
- * problem, constraints, key decisions, pivots, outcome, regret,
- * takeaway. Writing is first-person, owned trade-offs.
+ * CASE_STUDIES data file. First-person, owned trade-offs.
  *
- * The Gambia Health & Development project has its own bespoke long-form
- * page at /projects/gambia/, so this dynamic route excludes that slug.
+ * Wide editorial layout: full-width header, then a sticky contents rail and a
+ * main column, so the page fills the screen instead of a narrow centred column.
+ *
+ * The Gambia Health & Development project has its own bespoke long-form page at
+ * /projects/gambia/, so this dynamic route excludes that slug.
  */
 
 import type { Metadata } from "next";
@@ -46,243 +47,208 @@ export default async function CaseStudyPage({
     notFound();
   }
 
+  // Contents rail: only list sections that actually render.
+  const toc: Array<[string, string]> = [
+    ["problem", "The problem"],
+    ["research", "What I read"],
+    ["constraints", "Constraints"],
+    ["decisions", "Decisions"],
+    ...(study.pivots.length ? ([["pivots", "What broke"]] as Array<[string, string]>) : []),
+    ...(study.weaknesses.length ? ([["weaknesses", "What I learned"]] as Array<[string, string]>) : []),
+    ["outcome", "What shipped"],
+    ["next", "What's next"],
+    ["takeaway", "The takeaway"],
+  ];
+
   return (
     <main className="relative min-h-screen bg-background text-text-primary">
-      {/* Back to portfolio */}
       <Link
         href="/#projects"
-        className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-black/40 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary backdrop-blur-md transition hover:border-white/30 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+        className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-white"
       >
         <ArrowLeft className="h-3 w-3" />
         Back to work
       </Link>
 
-      <article className="mx-auto max-w-3xl px-6 pt-24 pb-24 md:pt-28 md:pb-32">
-        {/* ── Header ─────────────────────────────────────────── */}
-        <header className="mb-12 border-b border-white/8 pb-10">
+      <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 md:pt-28">
+        {/* Header — full width */}
+        <header className="border-b border-white/10 pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">
             ~/projects/{project.slug}
           </p>
-          <h1 className="mt-4 text-balance text-[clamp(2.25rem,6vw,4rem)] font-semibold leading-[1.05] tracking-tight">
+          <h1 className="mt-4 max-w-[20ch] text-balance text-[clamp(2.25rem,6vw,4.25rem)] font-semibold leading-[1.04] tracking-tight">
             {project.title}
           </h1>
-          <p className="mt-4 text-pretty text-lg italic text-text-secondary">
+          <p className="mt-4 max-w-[60ch] text-pretty text-lg italic text-text-secondary">
             {project.tagline}
           </p>
 
-          {/* Tech chips */}
-          <ul className="mt-6 flex flex-wrap gap-1.5">
+          <ul className="mt-6 flex flex-wrap gap-x-4 gap-y-1.5">
             {project.tech.map((t) => (
-              <li
-                key={t}
-                className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-text-secondary"
-              >
+              <li key={t} className="font-mono text-[11px] uppercase tracking-wider text-text-secondary">
                 {t}
               </li>
             ))}
           </ul>
 
-          {/* Live + GitHub */}
-          <div className="mt-6 flex flex-wrap items-center gap-3">
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
             {project.demo && (
-              <a
-                href={project.demo}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full bg-cyan px-4 py-2 text-xs font-medium text-background shadow-glow-cyan transition hover:shadow-glow-cyan-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Open the live app
+              <a href={project.demo} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-cyan transition hover:text-white">
+                <ExternalLink className="h-3.5 w-3.5" /> Open the live app
               </a>
             )}
             {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-              >
-                <Github className="h-3.5 w-3.5" />
-                Source on GitHub
+              <a href={project.github} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-white">
+                <Github className="h-3.5 w-3.5" /> Source on GitHub
               </a>
             )}
             {project.articleUrl && (
-              <a
-                href={project.articleUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="inline-flex min-h-[40px] items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                Read the article
+              <a href={project.articleUrl} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-white">
+                <ExternalLink className="h-3.5 w-3.5" /> Read the article
               </a>
             )}
           </div>
         </header>
 
-        {/* ── Problem ────────────────────────────────────────── */}
-        <Section label="01" title="The problem">
-          <p className="text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
-            {study.problem}
-          </p>
-        </Section>
+        {/* Body: sticky contents rail + main column */}
+        <div className="mt-4 lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-14">
+          <nav aria-label="Contents" className="hidden lg:block">
+            <div className="sticky top-24">
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-secondary">Contents</p>
+              <ol className="mt-4 space-y-2.5">
+                {toc.map(([id, label], i) => (
+                  <li key={id}>
+                    <a href={`#${id}`} className="block text-[13px] leading-snug text-text-secondary transition hover:text-cyan">
+                      <span className="font-mono text-white/30">{String(i + 1).padStart(2, "0")}</span> {label}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </nav>
 
-        {/* ── Research ───────────────────────────────────────── */}
-        <Section label="02" title="What I read before writing code">
-          <ul className="space-y-3">
-            {study.research.map((r, i) => (
-              <li
-                key={i}
-                className="flex gap-3 text-[15px] leading-relaxed text-text-secondary"
-              >
-                <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-violet-400/60" />
-                <span>{r}</span>
-              </li>
-            ))}
-          </ul>
-        </Section>
+          <article className="min-w-0">
+            <Section id="problem" label="01" title="The problem">
+              <p className="max-w-[68ch] text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
+                {study.problem}
+              </p>
+            </Section>
 
-        {/* ── Constraints ────────────────────────────────────── */}
-        <Section label="03" title="What I couldn't do">
-          <ul className="space-y-2">
-            {study.constraints.map((c, i) => (
-              <li
-                key={i}
-                className="flex gap-3 text-base leading-relaxed text-text-secondary"
-              >
-                <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-cyan/60" />
-                <span>{c}</span>
-              </li>
-            ))}
-          </ul>
-        </Section>
+            <Section id="research" label="02" title="What I read before writing code">
+              <ul className="max-w-[72ch] space-y-3">
+                {study.research.map((r, i) => (
+                  <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-text-secondary">
+                    <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-violet-400/60" />
+                    <span>{r}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
 
-        {/* ── Decisions ──────────────────────────────────────── */}
-        <Section label="04" title="The decisions that shaped it">
-          <ol className="space-y-7">
-            {study.decisions.map((d, i) => (
-              <li
-                key={i}
-                className="border-l-2 border-cyan/25 pl-5 md:pl-6"
-              >
-                <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-cyan/85">
-                  Decision {String(i + 1).padStart(2, "0")}
-                </p>
-                <h3 className="mt-1.5 text-lg font-semibold leading-snug text-white md:text-xl">
-                  {d.call}
-                </h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-text-secondary">
-                  {d.reason}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </Section>
+            <Section id="constraints" label="03" title="What I couldn't do">
+              <ul className="max-w-[72ch] space-y-2">
+                {study.constraints.map((c, i) => (
+                  <li key={i} className="flex gap-3 text-base leading-relaxed text-text-secondary">
+                    <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-cyan/60" />
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
 
-        {/* ── Pivots ─────────────────────────────────────────── */}
-        {study.pivots.length > 0 && (
-          <Section label="05" title="What broke and how I changed course">
-            <ul className="space-y-4">
-              {study.pivots.map((p, i) => (
-                <li
-                  key={i}
-                  className="border-l-2 border-pink/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary"
-                >
-                  {p}
-                </li>
-              ))}
-            </ul>
-          </Section>
-        )}
+            <Section id="decisions" label="04" title="The decisions that shaped it">
+              <ol className="max-w-[72ch] space-y-7">
+                {study.decisions.map((d, i) => (
+                  <li key={i} className="border-l-2 border-cyan/25 pl-5 md:pl-6">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-cyan/85">
+                      Decision {String(i + 1).padStart(2, "0")}
+                    </p>
+                    <h3 className="mt-1.5 text-lg font-semibold leading-snug text-white md:text-xl">{d.call}</h3>
+                    <p className="mt-3 text-[15px] leading-relaxed text-text-secondary">{d.reason}</p>
+                  </li>
+                ))}
+              </ol>
+            </Section>
 
-        {/* ── Weaknesses ─────────────────────────────────────── */}
-        {study.weaknesses.length > 0 && (
-          <Section label="06" title="What I didn't know, and how I learned">
-            <ul className="space-y-4">
-              {study.weaknesses.map((w, i) => (
-                <li
-                  key={i}
-                  className="border-l-2 border-violet-400/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary"
-                >
-                  {w}
-                </li>
-              ))}
-            </ul>
-          </Section>
-        )}
+            {study.pivots.length > 0 && (
+              <Section id="pivots" label="05" title="What broke and how I changed course">
+                <ul className="max-w-[72ch] space-y-4">
+                  {study.pivots.map((p, i) => (
+                    <li key={i} className="border-l-2 border-pink/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary">
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
 
-        {/* ── Outcome ────────────────────────────────────────── */}
-        <Section label="07" title="What shipped">
-          <ul className="space-y-2">
-            {study.outcome.map((o, i) => (
-              <li
-                key={i}
-                className="flex gap-3 text-base leading-relaxed text-text-secondary"
-              >
-                <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-cyan/80" />
-                <span>{o}</span>
-              </li>
-            ))}
-          </ul>
-        </Section>
+            {study.weaknesses.length > 0 && (
+              <Section id="weaknesses" label="06" title="What I didn't know, and how I learned">
+                <ul className="max-w-[72ch] space-y-4">
+                  {study.weaknesses.map((w, i) => (
+                    <li key={i} className="border-l-2 border-violet-400/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary">
+                      {w}
+                    </li>
+                  ))}
+                </ul>
+              </Section>
+            )}
 
-        {/* ── What's next ────────────────────────────────────── */}
-        <Section label="08" title="What's next">
-          <p className="text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
-            {study.regret}
-          </p>
-        </Section>
+            <Section id="outcome" label="07" title="What shipped">
+              <ul className="max-w-[72ch] space-y-2">
+                {study.outcome.map((o, i) => (
+                  <li key={i} className="flex gap-3 text-base leading-relaxed text-text-secondary">
+                    <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-cyan/80" />
+                    <span>{o}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
 
-        {/* ── Takeaway ───────────────────────────────────────── */}
-        <section className="mt-16 border-l-2 border-cyan/40 pl-6 md:pl-8">
-          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">
-            What I learned
-          </p>
-          <p className="mt-3 text-balance text-xl font-medium leading-snug text-white md:text-2xl">
-            {study.takeaway}
-          </p>
-        </section>
+            <Section id="next" label="08" title="What's next">
+              <p className="max-w-[68ch] text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
+                {study.regret}
+              </p>
+            </Section>
 
-        {/* ── Footer nav ─────────────────────────────────────── */}
-        <nav className="mt-16 flex flex-col gap-3 border-t border-white/8 pt-8 sm:flex-row sm:items-center sm:justify-between">
-          <Link
-            href="/#projects"
-            className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white"
-          >
-            <ArrowLeft className="h-3 w-3" />
-            All projects
-          </Link>
-          <a
-            href="mailto:[redacted, use the contact form]"
-            className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white"
-          >
-            Talk to me about this
-            <ArrowRight className="h-3 w-3" />
-          </a>
-        </nav>
-      </article>
+            <section id="takeaway" className="mt-16 scroll-mt-24 border-l-2 border-cyan/40 pl-6 md:pl-8">
+              <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">What I learned</p>
+              <p className="mt-3 max-w-[60ch] text-balance text-xl font-medium leading-snug text-white md:text-2xl">
+                {study.takeaway}
+              </p>
+            </section>
+
+            <nav className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+              <Link href="/#projects" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white">
+                <ArrowLeft className="h-3 w-3" /> All projects
+              </Link>
+              <a href="mailto:[redacted, use the contact form]" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white">
+                Talk to me about this <ArrowRight className="h-3 w-3" />
+              </a>
+            </nav>
+          </article>
+        </div>
+      </div>
     </main>
   );
 }
 
 function Section({
+  id,
   label,
   title,
   children,
 }: {
+  id: string;
   label: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-12 md:mt-16">
+    <section id={id} className="mt-14 scroll-mt-24 first:mt-0">
       <header className="mb-5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">
-          {label}
-        </p>
-        <h2 className="mt-1.5 text-2xl font-semibold tracking-tight text-white md:text-3xl">
-          {title}
-        </h2>
+        <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">{label}</p>
+        <h2 className="mt-1.5 text-2xl font-semibold tracking-tight text-white md:text-3xl">{title}</h2>
       </header>
       {children}
     </section>
