@@ -28,15 +28,15 @@ export const PROJECTS: Project[] = [
   {
     slug: "gambia-population-projection",
     title: "The Gambia 2074",
-    tagline: "Bayesian mortality & population projection to 2074",
+    tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "An independent, fully-reproducible projection of The Gambia's population to 2074, re-based on the country's first 2024 digital census. Implements the Lee–Carter mortality model three ways — classical SVD, a Bayesian Poisson version sampled by MCMC in PyMC, and the Li–Lee coherent extension that borrows strength from a West-African reference group — then feeds the forecasts through a cohort-component (Leslie) projection validated to within 1% of the UN's own output. The headline: the population reaches 4.66M by 2074 (95% credible interval 4.35–4.98M), about 0.7M below the UN figure because the new census shows World Population Prospects has been overcounting by ~13%. It surfaces the demographic-dividend window (dependency ratio 77 → 49) and the tripling of old-age dependency. The same methodology family the UN Population Division uses for World Population Prospects, built solo on open data.",
+      "My final-year thesis. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the dependency ratio drops from 77 to 49 even as the number of older people triples. All of it is open, and anyone can reproduce it from public data.",
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
     articleUrl: "https://balisa50.github.io/research/gambia-2074",
     status: "live",
-    metric: "2074: 4.66M [4.35–4.98M] · validated <1% vs UN WPP",
+    metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
     accent: "violet",
     fallbackStars: 0,
     featured: true
