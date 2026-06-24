@@ -34,6 +34,7 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
+    articleUrl: "https://balisa50.github.io/research/gambia-2074",
     status: "live",
     metric: "2074: 4.66M [4.35–4.98M] · validated <1% vs UN WPP",
     accent: "violet",

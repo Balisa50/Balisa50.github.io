@@ -163,7 +163,7 @@ export default async function CaseStudyPage({
             {study.decisions.map((d, i) => (
               <li
                 key={i}
-                className="rounded-2xl border border-white/8 bg-white/[0.02] p-5 md:p-6"
+                className="border-l-2 border-cyan/25 pl-5 md:pl-6"
               >
                 <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-cyan/85">
                   Decision {String(i + 1).padStart(2, "0")}
@@ -186,7 +186,7 @@ export default async function CaseStudyPage({
               {study.pivots.map((p, i) => (
                 <li
                   key={i}
-                  className="rounded-xl border-l-2 border-pink/40 bg-white/[0.015] py-3 pl-5 pr-4 text-[15px] leading-relaxed text-text-secondary"
+                  className="border-l-2 border-pink/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary"
                 >
                   {p}
                 </li>
@@ -202,7 +202,7 @@ export default async function CaseStudyPage({
               {study.weaknesses.map((w, i) => (
                 <li
                   key={i}
-                  className="rounded-xl border-l-2 border-violet-400/40 bg-white/[0.015] py-3 pl-5 pr-4 text-[15px] leading-relaxed text-text-secondary"
+                  className="border-l-2 border-violet-400/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary"
                 >
                   {w}
                 </li>
@@ -234,7 +234,7 @@ export default async function CaseStudyPage({
         </Section>
 
         {/* ── Takeaway ───────────────────────────────────────── */}
-        <section className="mt-16 rounded-3xl border border-cyan/25 bg-gradient-to-br from-cyan/[0.06] to-transparent p-7 md:p-9">
+        <section className="mt-16 border-l-2 border-cyan/40 pl-6 md:pl-8">
           <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">
             What I learned
           </p>

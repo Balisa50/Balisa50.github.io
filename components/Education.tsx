@@ -39,12 +39,12 @@ export function Education() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.5, delay: i * 0.08 }}
-            className="flex flex-col gap-3 rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm"
+            className="flex flex-col gap-3 border-l-2 border-cyan/30 pl-6"
           >
             <div className="flex items-center gap-3">
               <span
                 aria-hidden="true"
-                className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan/30 bg-cyan/10"
+                className="flex h-10 w-10 items-center justify-center text-cyan"
               >
                 <GraduationCap className="h-5 w-5 text-cyan" />
               </span>
@@ -66,7 +66,7 @@ export function Education() {
                 {ed.coursework.map((c) => (
                   <span
                     key={c}
-                    className="rounded-md border border-white/10 bg-white/5 px-2 py-0.5 text-[11px] text-text-secondary"
+                    className="text-[11px] text-text-secondary after:mx-1.5 after:text-white/20 after:content-['·'] last:after:hidden"
                   >
                     {c}
                   </span>

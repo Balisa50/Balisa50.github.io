@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { PROJECTS } from "@/lib/projects";
-import { TiltCard } from "./TiltCard";
 import { CountUp } from "./CountUp";
 
 /**
@@ -26,7 +25,7 @@ export function Metrics() {
       aria-label="Live metrics"
       className="relative mx-auto w-full max-w-7xl px-6 pb-6 pt-2"
     >
-      <ul className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <ul className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4 md:gap-0 md:divide-x md:divide-white/10">
         {items.map((it, i) => (
           <motion.li
             key={it.label}
@@ -34,18 +33,17 @@ export function Metrics() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, delay: 0.08 * i }}
+            className="flex flex-col gap-1 md:px-7 md:first:pl-0"
           >
-            <TiltCard className="flex h-full flex-col gap-1 rounded-2xl border border-white/10 bg-black/40 px-4 py-4 backdrop-blur-sm md:px-5 md:py-5">
-              <CountUp
-                to={it.to}
-                suffix={it.suffix}
-                durationMs={it.durationMs}
-                className="font-mono text-2xl font-semibold tabular-nums text-white md:text-3xl"
-              />
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-secondary">
-                {it.label}
-              </span>
-            </TiltCard>
+            <CountUp
+              to={it.to}
+              suffix={it.suffix}
+              durationMs={it.durationMs}
+              className="font-mono text-3xl font-semibold tabular-nums text-white md:text-4xl"
+            />
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-text-secondary">
+              {it.label}
+            </span>
           </motion.li>
         ))}
       </ul>

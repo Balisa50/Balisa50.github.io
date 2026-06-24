@@ -52,7 +52,7 @@ export function Certifications() {
         </p>
       </motion.div>
 
-      <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-x-10 md:grid-cols-2 lg:grid-cols-3">
         {CERTIFICATES.map((cert, i) => {
           const hasUrl = Boolean(cert.credentialUrl);
           const Tag = hasUrl ? "a" : "div";
@@ -75,15 +75,14 @@ export function Certifications() {
               <Tag
                 {...props}
                 className={cn(
-                  "group flex h-full items-start gap-3 rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-sm transition",
-                  hasUrl &&
-                    "hover:border-cyan/40 hover:bg-black/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+                  "group flex h-full items-start gap-3 border-b border-white/[0.08] py-4 transition",
+                  hasUrl && "focus-visible:outline-none"
                 )}
               >
                 <div
                   className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border",
-                    CATEGORY_ACCENT[cert.category]
+                    "flex h-7 w-7 shrink-0 items-center justify-center",
+                    CATEGORY_ACCENT[cert.category].split(" ")[0]
                   )}
                   aria-hidden="true"
                 >
@@ -108,8 +107,8 @@ export function Certifications() {
                   </p>
                   <span
                     className={cn(
-                      "mt-2 inline-block rounded-full border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider",
-                      CATEGORY_ACCENT[cert.category]
+                      "mt-2 inline-block text-[10px] font-semibold uppercase tracking-wider",
+                      CATEGORY_ACCENT[cert.category].split(" ")[0]
                     )}
                   >
                     {CATEGORY_LABELS[cert.category]}
