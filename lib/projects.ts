@@ -26,6 +26,21 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "gambia-population-projection",
+    title: "The Gambia 2074",
+    tagline: "Bayesian mortality & population projection to 2074",
+    description:
+      "An independent, fully-reproducible projection of The Gambia's population to 2074, re-based on the country's first 2024 digital census. Implements the Lee–Carter mortality model three ways — classical SVD, a Bayesian Poisson version sampled by MCMC in PyMC, and the Li–Lee coherent extension that borrows strength from a West-African reference group — then feeds the forecasts through a cohort-component (Leslie) projection validated to within 1% of the UN's own output. The headline: the population reaches 4.66M by 2074 (95% credible interval 4.35–4.98M), about 0.7M below the UN figure because the new census shows World Population Prospects has been overcounting by ~13%. It surfaces the demographic-dividend window (dependency ratio 77 → 49) and the tripling of old-age dependency. The same methodology family the UN Population Division uses for World Population Prospects, built solo on open data.",
+    tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
+    github: "https://github.com/Balisa50/gambia-population-projection",
+    githubRepo: "Balisa50/gambia-population-projection",
+    status: "live",
+    metric: "2074: 4.66M [4.35–4.98M] · validated <1% vs UN WPP",
+    accent: "violet",
+    fallbackStars: 0,
+    featured: true
+  },
+  {
     slug: "forge",
     title: "FORGE",
     tagline: "Mentor-driven learning platform with proof-of-work verification",

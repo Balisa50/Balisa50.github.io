@@ -32,6 +32,80 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   // ─────────────────────────────────────────────────────────────────
+  "gambia-population-projection": {
+    slug: "gambia-population-projection",
+    problem:
+      "The Gambia has no complete civil registration. Deaths go largely unrecorded, so there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, the standard input for mortality forecasting. Yet every long-range public decision, how many classrooms to build, how large the future labour force and pension bill will be, how many clinics to staff, runs on population projections. The only figures available are the UN's, and those were finalised before The Gambia's first-ever digital census in 2024. I wanted to build an independent, census-based, uncertainty-quantified projection that a Gambian could actually verify and a planner could actually use, using the same methodology family the UN Population Division uses, but rebuilt from scratch on open data.",
+    research: [
+      "Read Lee & Carter's 1992 original paper before writing any model. The single-index log-bilinear structure (log m(x,t) = a_x + b_x k_t) is the backbone of every mortality forecast the UN publishes, so I implemented the classical SVD version first as a transparent baseline.",
+      "Read Brouhns, Denuit & Vermunt (2002) on the Poisson log-bilinear approach. The standard SVD assumes homoskedastic Gaussian errors on log-rates, which is wrong where death counts are small and noisy, exactly The Gambia's case. Poisson-on-deaths is the principled fix and the basis for the Bayesian version.",
+      "Read Li & Lee (2005) on coherent forecasting. A single small-population forecast can drift to implausible long-run mortality; the coherent extension forecasts a country jointly with a reference group so it can't diverge. That paper is the reason I fetched seven West-African neighbours, not just The Gambia.",
+      "Read Raftery et al. (2012, PNAS), the Bayesian hierarchical method the UN actually adopted for WPP in 2015. I needed to understand it to benchmark against WPP honestly rather than just cite it.",
+      "Read Preston, Heuveline & Guillot's 'Demography' Ch. 6 for the cohort-component method, survivorship ratios from life tables, Leslie-matrix accounting, the open-age interval.",
+      "Checked the Human Mortality Database (Gambia absent) and then found the thing that made the project feasible: the Farafenni Health & Demographic Surveillance System has run since 1981 and Basse since 2007, rare multi-decade empirical mortality data for a sub-Saharan country.",
+    ],
+    constraints: [
+      "No civil registration, no national age-specific death-rate series, The Gambia is absent from the HMD. Any model runs on reconstructed or surveillance data, and pretending otherwise would be indefensible to an examiner.",
+      "The UN WPP data portal's /data API is token-gated (returns 401 without a generated bearer token), so the obvious programmatic route was closed.",
+      "Mid-project the machine's C: drive hit ~50 MB free. The PyMC conda environment, which pulls a multi-GB compiler toolchain, could not install.",
+      "PyMC on Windows had no C++ compiler available, so PyTensor fell back to its slow no-compiler mode.",
+      "Examiner-grade accuracy: every figure had to regenerate from public data, and I refused to invent any number I couldn't source (I left the exact census total flagged for verification rather than guess).",
+    ],
+    decisions: [
+      {
+        call: "Make the data-scarcity limitation the research question, not a footnote.",
+        reason:
+          "The naive version of this project, fit Lee–Carter to whatever series you can find and publish a point estimate, is exactly the thing a sharp examiner sinks. So I reframed: how do you build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage? That framing turned the biggest weakness into the contribution.",
+      },
+      {
+        call: "Pin the data to the UN team's open R package, not the token-gated API.",
+        reason:
+          "When the /data API returned 401, I found that the UN Population Division's own `PPgp/wpp2024` R package publishes the WPP series as plain text in its data-raw directory. I pinned to a specific commit SHA, streamed each (sometimes 50 MB) file, kept only The Gambia's rows, and wrote a checksummed manifest. The result is more reproducible than the API would have been, no token, exact version, and it sidestepped the disk limit because the full multi-country files never touch disk.",
+      },
+      {
+        call: "Bayesian Poisson Lee–Carter with a_x fixed and b ~ Dirichlet(1).",
+        reason:
+          "Estimating a_x, b_x and k_t jointly creates the classic Lee–Carter identifiability ridge, and NUTS would not mix (r-hat ~1.02). Fixing a_x at the empirical mean log-rate (which is literally how Lee & Carter define it) and constraining b to the simplex via a Dirichlet removed the ridge and let the chains converge, while still propagating full parameter and forecast uncertainty into life expectancy.",
+      },
+      {
+        call: "Validate the projection engine against WPP before trusting it with my own inputs.",
+        reason:
+          "A cohort-component engine has a hundred places to get an index or a survivorship ratio subtly wrong. So I fed it WPP's own mortality, fertility, sex-ratio and migration and checked it reproduced WPP's published projection. It matched to within 0.3–0.9% through 2074. Only then did I swap in the census base and my own mortality. An engine that can't reconstruct the benchmark has no business carrying novel inputs.",
+      },
+      {
+        call: "Re-base the whole projection on the 2024 census, and vectorise it over 1,000 simulations.",
+        reason:
+          "WPP's 2023 population is ~13% above the new census, so starting from WPP would bake in the overcount. I reconciled the base to the census total and its broad age structure, then ran the cohort-component model over 1,000 simulated mortality and fertility futures, carrying the population as an (age × simulation) matrix so the whole thing vectorises and produces honest credible intervals, not a single line.",
+      },
+    ],
+    pivots: [
+      "The UN WPP /data API returned 401 across every variant I tried. Instead of chasing a token, I reverse-engineered the download site, found it builds file URLs from a runtime manifest, and then discovered the cleaner source entirely: the UN team's `PPgp/wpp2024` package on GitHub. Pinned a commit, streamed and filtered to Gambia. A blocker became a more citable, more reproducible pipeline.",
+      "The PyMC conda environment failed mid-install with 'No space left on device', the disk was at 50 MB. I cleared regenerable caches, confirmed system Python already had numpy/scipy/pandas, and installed PyMC lean via pip into system Python rather than the multi-GB conda toolchain. The Bayesian model that 'needed' conda ran fine on a 200-line pip install.",
+      "The first Bayesian fit would not converge. The 101-dimensional Dirichlet plus a free a_x left a ridge in the posterior. Fixing a_x at the empirical mean (the classical definition) dropped max r-hat from ~1.02 to 1.010 and lifted the effective sample size into the thousands for the parameters that matter.",
+      "Halfway through I noticed WPP's 2023 population (2,728,905) sits ~13% above the 2024 census (~2.42M), and exceeds every historical Gambian census. That isn't a bug, it's the headline. WPP was finalised before the census. I rebuilt the projection on the census base, and the gap became the single most policy-relevant result.",
+    ],
+    weaknesses: [
+      "This was my first time fitting Lee–Carter in a fully Bayesian framework. I learned why the identifiability constraints (sum of b = 1, sum of k = 0) exist the hard way, by watching chains refuse to mix until I imposed them properly.",
+      "PyMC sampled without a C compiler, so a single 4-chain run took ~8 minutes. I learned to validate the model on a short run (and on synthetic data with known parameters) before committing to longer ones, and to background the long runs.",
+      "The open-ended 100+ age group in the Leslie matrix is genuinely fiddly. Rather than fake precision I used a one-year survival approximation for the open group and confirmed it doesn't move the national totals or dependency ratios, because almost no one is over 100.",
+    ],
+    outcome: [
+      "Eleven reproducible modules: data fetch → life tables → EDA → classical LC → Bayesian LC (PyMC) → Li–Lee coherent → projection engine → independent projection → validation",
+      "Life table reproduces WPP's published e0(2023) = 65.86 exactly",
+      "Lee–Carter backtest (fit ≤2010, predict 2011–2023): 0.65-year mean error, 95% interval coverage in 100% of held-out years",
+      "Three mortality methods (classical, Bayesian, coherent) agree on e0(2074) within ~0.8 years, all far tighter than WPP's interval, a finding about structural uncertainty",
+      "Cohort-component engine validated to within 1% of WPP's published projection",
+      "Headline: population reaches 4.66M by 2074 (95% CI 4.35–4.98M), ~0.7M below WPP because re-based on the census",
+      "Demographic-dividend window quantified: total dependency ratio 77 → 49; old-age dependency triples",
+      "Full research report plus a plain-language policy brief written for Gambian media and planners",
+    ],
+    regret:
+      "I haven't yet digitised the Farafenni and Basse HDSS published life tables or run a GBD cross-check. Both would turn the validation chapter from 'validated against the UN's reconstruction' into 'validated against independent empirical Gambian data', which is the strongest claim I could make. I flagged them honestly as remaining data tasks rather than inventing numbers. I'd also fit the Bayesian model sex-specifically for the projection and add the UN's own bayesPop as a fourth benchmark.",
+    takeaway:
+      "Research quality is capped by data quality. For a country with no death registration, the honest move isn't to hide the gap behind a confident point estimate, it's to make the gap the question and quantify the uncertainty everywhere. The most important result, that the prevailing UN figure overcounts The Gambia by about 13%, fell straight out of simply taking the new census seriously and validating every step against a benchmark before trusting it.",
+  },
+
+  // ─────────────────────────────────────────────────────────────────
   "gambia-political-risk": {
     slug: "gambia-political-risk",
     problem:
