@@ -155,6 +155,20 @@ export const PROJECTS: Project[] = [
     fallbackStars: 0
   },
   {
+    slug: "bs-real-estate",
+    title: "BS Real Estate",
+    tagline: "Website and admin CMS for a Gambian property firm",
+    description:
+      "A real estate site I built for a client in The Gambia, with a private admin dashboard the team uses to manage their own listings without needing a developer. Next.js 16 and Prisma 7, a blue and gold brand, admin-only login, and real data throughout rather than placeholder content. I handled it end to end, from the design to the listings dashboard to deployment.",
+    tech: ["Next.js 16", "Prisma 7", "TypeScript", "Tailwind"],
+    github: "https://github.com/Balisa50/bs-real-estate",
+    githubRepo: "Balisa50/bs-real-estate",
+    status: "live",
+    metric: "Client site with a self-serve admin CMS",
+    accent: "cyan",
+    fallbackStars: 0
+  },
+  {
     slug: "coldpilot",
     title: "ColdPilot",
     tagline: "Autonomous cold-outreach agent",
@@ -409,6 +423,17 @@ export const EXPERIENCE: Experience[] = [
       "Building production AI products end to end: ingestion, modelling, orchestration, and the UIs on top.",
       "Shipped VANTAGE, Gambia Legal Aid, Dalasi Pulse, FORGE, ColdPilot, and AYAT. Six production products built end to end, spanning AI agents, forecasting, and RAG systems.",
       "Open-sourcing tooling around RAG, agentic pipelines, and forecasting on the Dalasi."
+    ]
+  },
+  {
+    company: "BS Real Estate",
+    role: "Freelance Web Developer",
+    period: "Jun 2026 · contract",
+    location: "The Gambia",
+    bullets: [
+      "Built a real estate website with a private admin dashboard for a property firm in The Gambia, so the team manages their own listings without touching code.",
+      "Next.js 16 and Prisma 7, a blue and gold brand, admin-only login, and real data throughout, no placeholder content.",
+      "Delivered the whole thing end to end: the design, the listings dashboard, and the deployment."
     ]
   },
   {

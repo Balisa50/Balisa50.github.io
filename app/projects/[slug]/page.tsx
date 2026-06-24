@@ -54,10 +54,10 @@ export default async function CaseStudyPage({
     ["constraints", "Constraints"],
     ["decisions", "Decisions"],
     ...(study.pivots.length ? ([["pivots", "What broke"]] as Array<[string, string]>) : []),
-    ...(study.weaknesses.length ? ([["weaknesses", "What I learned"]] as Array<[string, string]>) : []),
+    ...(study.weaknesses.length ? ([["weaknesses", "What I didn't know"]] as Array<[string, string]>) : []),
     ["outcome", "What shipped"],
     ["next", "What's next"],
-    ["takeaway", "The takeaway"],
+    ["takeaway", "What I learned"],
   ];
 
   return (
