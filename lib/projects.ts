@@ -163,6 +163,7 @@ export const PROJECTS: Project[] = [
     tech: ["Next.js 16", "Prisma 7", "TypeScript", "Tailwind"],
     github: "https://github.com/Balisa50/bs-real-estate",
     githubRepo: "Balisa50/bs-real-estate",
+    demo: "https://bs-real-estate-fawn.vercel.app/",
     status: "live",
     metric: "Client site with a self-serve admin CMS",
     accent: "cyan",
