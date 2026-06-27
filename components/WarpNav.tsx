@@ -6,7 +6,7 @@ import { useEffect, useRef } from "react";
  * Wormhole transition for in-page navigation. Intercepts clicks on hash
  * links, plays a brief radial warp (light streaks rushing outward from
  * centre) and smooth-scrolls to the target mid-warp. Reduced-motion users
- * are left untouched — links behave normally.
+ * are left untouched, links behave normally.
  */
 export function WarpNav() {
   const ref = useRef<HTMLCanvasElement>(null);

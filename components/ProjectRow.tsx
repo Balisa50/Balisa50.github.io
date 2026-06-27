@@ -203,7 +203,7 @@ export function ProjectRow({ project, index, variant }: Props) {
               target="_blank"
               rel="noreferrer noopener"
               className="focus-visible:outline-none"
-              aria-label={`${project.title} — open`}
+              aria-label={`${project.title}, open`}
             >
               <h3
                 className={cn(
@@ -273,7 +273,7 @@ export function ProjectRow({ project, index, variant }: Props) {
               target="_blank"
               rel="noreferrer noopener"
               className="focus-visible:outline-none"
-              aria-label={`${project.title} — open`}
+              aria-label={`${project.title}, open`}
             >
               <h3
                 className={cn(

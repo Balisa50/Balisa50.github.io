@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 
 /**
  * Constellation of drifting points around the avatar. Lines form and dissolve
- * between points as they pass near each other — the classic "constellation
+ * between points as they pass near each other, the classic "constellation
  * connecting" effect. Sizes to its parent; reduced-motion paints one static
  * frame; the loop pauses while the tab is hidden.
  */

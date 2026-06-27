@@ -7,7 +7,7 @@ import { ProjectRow } from "./ProjectRow";
 /**
  * Editorial / terminal-dev index of work.
  * Featured builds get full case-study rows; the rest become a compact,
- * scannable index. No cards, no grid — thin rules and mono numbering.
+ * scannable index. No cards, no grid, thin rules and mono numbering.
  */
 export function ProjectsGrid() {
   const featured = PROJECTS.filter((p) => p.featured);
@@ -54,14 +54,14 @@ export function ProjectsGrid() {
         </p>
       </motion.div>
 
-      {/* Featured — full case-study rows */}
+      {/* Featured, full case-study rows */}
       <div>
         {featured.map((p, i) => (
           <ProjectRow key={p.slug} project={p} index={i} variant="featured" />
         ))}
       </div>
 
-      {/* The rest — compact index */}
+      {/* The rest, compact index */}
       {rest.length > 0 && (
         <div className="mt-20">
           <motion.div

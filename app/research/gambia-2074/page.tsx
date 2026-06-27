@@ -3,7 +3,7 @@
  * The readable companion to the code and the engineering case study: the actual
  * findings, written plainly for a journalist, planner or examiner, with the
  * charts inline. Wide editorial layout (sticky contents rail + main column),
- * flat — no cards.
+ * flat, no cards.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -65,7 +65,7 @@ export default function GambiaResearchArticle() {
       </Link>
 
       <div className="mx-auto max-w-6xl px-6 pb-28 pt-24 md:pt-28">
-        {/* Header — full width */}
+        {/* Header, full width */}
         <header className="border-b border-white/10 pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">~/research/gambia-2074</p>
           <h1 className="mt-4 max-w-[18ch] text-balance text-[clamp(2.5rem,7vw,5rem)] font-semibold leading-[1.02] tracking-tight">
@@ -81,7 +81,7 @@ export default function GambiaResearchArticle() {
           </p>
         </header>
 
-        {/* Key numbers — full-width strip */}
+        {/* Key numbers, full-width strip */}
         <dl className="grid grid-cols-2 gap-y-7 border-b border-white/10 py-9 md:grid-cols-4 md:gap-0 md:divide-x md:divide-white/10">
           {[
             { v: "4.66M", l: "people by 2074 (range 4.35 to 4.98M)" },

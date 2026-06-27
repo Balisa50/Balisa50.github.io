@@ -71,7 +71,7 @@ export default async function CaseStudyPage({
       </Link>
 
       <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 md:pt-28">
-        {/* Header — full width */}
+        {/* Header, full width */}
         <header className="border-b border-white/10 pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">
             ~/projects/{project.slug}

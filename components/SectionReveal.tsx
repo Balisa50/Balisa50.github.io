@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Wraps a section so that, the first time it scrolls into view, a scan line
- * sweeps down it and HUD corner brackets fade in — as if an AI is
+ * sweeps down it and HUD corner brackets fade in, as if an AI is
  * constructing the panel. Decorative only (doesn't touch child layout);
  * reduced-motion simply shows the brackets with no sweep.
  */

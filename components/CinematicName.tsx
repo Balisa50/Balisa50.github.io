@@ -6,7 +6,7 @@ const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&@><*/+=";
 
 /**
  * The name as a holographic readout. A shimmer + scan line run continuously
- * (CSS), and every 9–18s the letters briefly "reconstruct" — scrambling
+ * (CSS), and every 9–18s the letters briefly "reconstruct", scrambling
  * through glyphs with an RGB-split glitch before locking back in.
  * Reduced-motion renders the plain shimmering name with no scramble.
  */
