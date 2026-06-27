@@ -32,6 +32,78 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   // ─────────────────────────────────────────────────────────────────
+  "nova": {
+    slug: "nova",
+    problem:
+      "Financial institutions across West Africa hold the data that could power local AI, loan books, transaction histories, credit records, and they cannot share it. Privacy law, customer trust, and plain competitive advantage keep it on bank servers. Startups, researchers, and students have almost nothing to build on. But the deeper problem is worse than 'cannot share': for most of the populations that matter here, rural borrowers, the informal economy, understudied regions, the data does not exist anywhere to begin with. So I did not want to build yet another model that copies an existing dataset. I wanted a system that does two things, learn a real dataset when you have one, and generate realistic data from domain knowledge alone when you do not, privacy-safe in both cases and honestly validated rather than asserted.",
+    research: [
+      "Read the CTGAN paper (Xu et al., 2019) closely before writing any of the model. The two ideas that make tabular GANs work, mode-specific normalisation for multimodal continuous columns and conditional training-by-sampling for imbalanced categoricals, are not obvious, and I wanted to implement them from the paper rather than inherit them from a library.",
+      "Read the synthetic-data survey (Jordon et al., 2022) to place the work, and the SDMetrics scoring conventions for evaluation. That reading is what later told me my first validation run was measuring the wrong thing: a KS p-value is meaningless at n=10,000, the field scores the KS statistic (the effect size) instead.",
+      "Studied WGAN-GP (Gulrajani et al., 2017). Plain GAN training on tabular data is unstable; the gradient penalty is what keeps the critic honest, and PacGAN packing is a cheap defence against mode collapse.",
+      "Read TimeGAN (Yoon et al., 2019) for sequential data. I did not end up building time series, the transactions here are tabular, but it is the right next step for real fraud data and I wanted to understand the gap before claiming the domain.",
+      "Researched what West African microfinance actually looks like: loan sizes around 50 to 2,000 USD, APRs of 8 to 30 percent, microfinance default rates of 20 to 30 percent, group-lending dynamics that lower default risk, and the rural/urban split where rural borrowers skew agricultural and urban borrowers skew trading. The architecture papers tell you none of this, and without it the ground-truth data would be a fantasy.",
+    ],
+    constraints: [
+      "I could not get real financial data. Banks do not hand loan books to students, and the compliance burden makes it a non-starter even when someone is willing. Every number in the project had to be either synthetic-by-design or sourced, never invented and passed off as real.",
+      "I could not honestly train on a generic set like German Credit or a Kaggle loan dump. They do not reflect West African dynamics, group lending, sector-specific default, the informal economy, so a model trained on them would learn the wrong structure and I would not be able to defend it.",
+      "No GPU. Everything trains on a CPU laptop, so the architecture and the training budget had to stay CPU-feasible, which ruled out the largest networks and forced real choices about width and epochs.",
+      "The deployment target is a 512 MB machine. PyTorch plus a RandomForest validation pass is heavy, so the backend had to fit a tight memory and image-size budget, which shaped the Docker build and how much I generate per request.",
+    ],
+    decisions: [
+      {
+        call: "Build CTGAN from scratch in PyTorch, not on top of SDV.",
+        reason:
+          "The Synthetic Data Vault ships a perfectly good CTGAN. Using it would have been a black box. I needed to understand and be able to explain every piece, mode-specific normalisation, the conditional generator and its cross-entropy term, the gradient penalty, the training-by-sampling loop, so I implemented all of it from the paper with no sdv or ctgan import. That is also what later let me add a second generation mode the library could never have given me.",
+      },
+      {
+        call: "Build the ground truth as a structural-causal model, not independent draws.",
+        reason:
+          "If you sample every column independently and then force a correlation matrix on top, you get incoherent data, and validating that a GAN preserves correlations becomes meaningless. So I injected the relationships through shared latent drivers, education and age load onto income, income onto loan size, risk drivers onto a calibrated default logit, so income really does drive loan size. The generator verifies all ten target correlations and seven integrity constraints (nested default flags, you cannot default more loans than you took, valid ranges) on every run and fails loudly if a change breaks them.",
+      },
+      {
+        call: "Validate four ways, and pick the metric that tells the truth over the one that flatters.",
+        reason:
+          "Most GAN write-ups report one number. I scored statistical similarity, correlation preservation, train-on-synthetic-test-on-real utility, and privacy, because they measure genuinely different things: shape, relationships, usefulness, safety. Twice I changed the metric itself rather than the result, effect size instead of KS p-values, and distance-to-closest-record instead of a real-versus-synthetic detector, because the convenient metric was lying.",
+      },
+      {
+        call: "Make NOVA two modes, and refuse to brute-force the second one with seven more GANs.",
+        reason:
+          "Copying a real dataset is only half the problem; the harder, more useful half is generating data for populations where none exists, and that is not a GAN job, it needs a rule engine. So I built a criteria engine: define columns, distributions, and domain rules, and it generates from nothing. When the brief later asked for seven separate CTGANs, one per financial domain, I did not train them, roughly a day of CPU, seven model files, and a weaker create-from-nothing story. The seven domains became presets of the criteria engine instead, which is strictly more flexible: a user can define an eighth domain, or rural-Gambia student records, themselves.",
+      },
+      {
+        call: "Ship a deployed web app on a real backend, not a notebook.",
+        reason:
+          "A notebook is for an analyst; an app is for a user. The model is served by a FastAPI backend behind a Next.js studio, upload a CSV and copy it, or pick a domain and create from rules. Getting it live meant solving the unglamorous parts, a CPU-only torch image, a checkpoint that only unpickles under the right library versions, that decide whether a thing actually runs in production or just on my machine.",
+      },
+    ],
+    pivots: [
+      "My first validation run reported a 4 percent statistical pass rate, which looked like failure. It was the metric, not the model: at n=10,000 a KS p-value collapses to near zero for differences too small to matter. I switched to effect size, mean column-shape similarity, which is sample-size independent and the SDMetrics convention, and kept the p-values only as context. The real fidelity is 0.94.",
+      "The CTGAN over-produced defaulters, 41 percent against a real 25. The cause was the log-frequency conditioning I used to help rare categories during training, it taught the generator a more balanced default base rate than reality. I switched to true-frequency conditioning and added conditional generation so a user can also dial the rate directly. The marginal snapped back to real, and TSTR rose from about 0.82 to 0.92.",
+      "I had generated interest_rate_apr and interest_rate_daily as independent columns, but daily is just apr divided by 36,500, a deterministic identity the GAN had no reason to respect. I added a post-processing step that re-imposes known identities, so the synthetic data is internally consistent rather than subtly contradictory.",
+      "My first privacy metric was a real-versus-synthetic detector, and it scored about 0.99, which I almost reported as a privacy failure. It is not a privacy metric at all, it measures distinguishability, and a model that simply memorised the training data would be undetectable yet maximally unsafe. I switched to distance-to-closest-record, are synthetic rows abnormally close to real training rows, ratio 1.10 with only 1.1 percent near-duplicates, and kept the detector on as a fidelity diagnostic.",
+      "The first Docker build was heading for 2.5 GB because the default PyTorch wheel bundles CUDA I never use on a CPU box; installing the CPU-only wheel cut the image to 367 MB. Then the container crashed on boot, the checkpoint was pickled under NumPy 2.x and scikit-learn 1.7, and pinning the older versions the brief suggested raised 'No module named numpy._core'. Matching the library majors fixed it and the model loaded on the first clean try.",
+    ],
+    weaknesses: [
+      "I did not appreciate how much of this is domain knowledge rather than architecture. The CTGAN paper gives you the network; it does not tell you that microfinance default sits at 20 to 30 percent, that group lending lowers it, or that rural and urban borrowers borrow for different things. I had to go and learn the domain before the data meant anything.",
+      "I did not realise conditional sampling was the lever for utility. My first train-on-synthetic score was 0.81 and I assumed the model was under-trained. It was not, I was generating wrong, sampling the target freely instead of conditioning on the reference prevalence. The same checkpoint jumped to 0.92 once I used it properly.",
+      "I learned, by watching them disagree, that the four metrics are not redundant. A model can match every marginal and still break the correlations; it can be useful for prediction and still sit too close to a real row. Only seeing them point in different directions made me stop hunting for one number.",
+      "I started out thinking synthetic data meant copying, and building the criteria engine is what changed my mind. The more valuable thing is generating data that should exist but does not, a different problem with a different tool, and I would not have seen that if I had stopped at the GAN.",
+    ],
+    outcome: [
+      "A structural-causal ground-truth set, 10,000 rows by 29 columns of realistic West African microfinance data, with all ten correlations and seven integrity constraints verified on every generation",
+      "A CTGAN implemented from scratch in PyTorch, mode-specific normalisation, PacGAN critic, WGAN-GP, conditional training-by-sampling, early stopping, with no SDV or ctgan import",
+      "All four validation metrics pass, honestly: statistical similarity 0.94, correlation L1 0.05, TSTR 0.92 (AUC ratio 0.94), and distance-to-closest-record privacy 1.10 with 1.1 percent near-duplicates",
+      "A criteria engine that generates data from columns, distributions, and domain rules with no source dataset, behind a whitelist expression evaluator so user-supplied rules cannot inject code",
+      "Seven financial-domain presets for create-mode: banking, payments and fraud, insurance, remittances, macro indicators, wealth, and corporate statements",
+      "A FastAPI backend serving both copy and create endpoints, live on Fly.io, and a Next.js studio with a Create/Copy toggle, live on Vercel, all open source",
+    ],
+    regret:
+      "The honest gaps are at the edges. The backend currently runs on Fly's no-card trial, so the machine sleeps after five minutes and cold-starts on the next request, making it always-on is a card away, and 512 MB is tight for the heavier copy-mode validation. DCR shows no memorisation empirically, but it is not a formal guarantee; I would add a differentially-private training option for the strong claim. Transaction data here is tabular whereas real fraud is sequential, which is why I read TimeGAN, extending both modes to time series is the obvious next build. And I would push TSTR across all seven domains rather than mainly loans, and add a third mode that blends a handful of real rows with domain rules, for the user who has a little data and a lot of knowledge.",
+    takeaway:
+      "Synthetic data is not about copying; it is about producing data that is safe, useful, and sometimes never existed. The hard part was never the GAN, it was the validation and the honesty: proving the data is good enough to trust, and being willing to throw out a metric that flatters the model for one that tells the truth. The model is the easy part. The trust is the hard part.",
+  },
+
+  // ─────────────────────────────────────────────────────────────────
   "gambia-population-projection": {
     slug: "gambia-population-projection",
     problem:

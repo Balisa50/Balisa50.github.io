@@ -42,6 +42,22 @@ export const PROJECTS: Project[] = [
     featured: true
   },
   {
+    slug: "nova",
+    title: "NOVA",
+    tagline: "A synthetic-data engine for finance, from domain rules or from real data",
+    description:
+      "Financial institutions in West Africa hold the data that could power local AI and cannot share it; for the populations that matter most, rural borrowers and the informal economy, it often does not exist at all. NOVA answers both. In Create mode you define columns, distributions, and domain rules, rural schools score lower, a new account making a large international transfer is likely fraud, and it generates realistic data from nothing, with seven financial-domain presets or your own, behind a whitelist evaluator so user-supplied rules cannot inject code. In Copy mode a Conditional Tabular GAN I implemented from scratch in PyTorch, no SDV, learns a real dataset and generates statistically identical, privacy-safe rows. Every batch is validated four ways and the numbers are reported honestly: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record privacy 1.10 with only 1.1 percent near-duplicates. Served by a FastAPI backend on Fly.io behind a Next.js studio on Vercel.",
+    tech: ["Python", "PyTorch", "CTGAN", "FastAPI", "Next.js 16", "scikit-learn"],
+    github: "https://github.com/Balisa50/nova",
+    githubRepo: "Balisa50/nova",
+    demo: "https://nova-gamma-eight.vercel.app",
+    status: "live",
+    metric: "4 metrics pass · TSTR 0.92 · 7 domains, zero-data generation",
+    accent: "pink",
+    fallbackStars: 0,
+    featured: true
+  },
+  {
     slug: "forge",
     title: "FORGE",
     tagline: "Mentor-driven learning platform with proof-of-work verification",
