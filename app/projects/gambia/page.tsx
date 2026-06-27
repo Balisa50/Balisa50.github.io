@@ -11,6 +11,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { StandaloneMode, StandaloneFooter } from "@/components/StandaloneMode";
 
 export const metadata: Metadata = {
  title: "The Gambia: 65 Years in Numbers, Abdoulie Balisa",
@@ -136,8 +137,9 @@ function Figure({ src, alt, caption }: { src: string; alt: string; caption: stri
 export default function GambiaCaseStudy() {
  return (
  <main className="min-h-screen bg-background text-white">
+ <StandaloneMode />
  {/* Top nav */}
- <div className="border-b border-white/5">
+ <div className="cs-chrome border-b border-white/5">
  <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
  <Link href="/" className="text-sm text-white/60 hover:text-white">
  ← Back to portfolio
@@ -398,6 +400,8 @@ export default function GambiaCaseStudy() {
  </p>
  </section>
  </article>
+
+ <StandaloneFooter />
  </main>
  );
 }

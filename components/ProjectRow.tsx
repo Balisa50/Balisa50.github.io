@@ -52,7 +52,9 @@ function caseStudyHref(p: Project): string | null {
   else if (CASE_STUDIES[p.slug]) href = `/projects/${p.slug}`;
   if (!href) return null;
   if (p.demo === href) return null;
-  return href;
+  // Open case studies in standalone/share mode (no site chrome), so the link
+  // is a clean shareable artifact for professors, recruiters, and committees.
+  return `${href}/?standalone=true`;
 }
 
 /** Where the title links to: live demo > repo > article. */

@@ -15,6 +15,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Github, ExternalLink } from "lucide-react";
 import { PROJECTS } from "@/lib/projects";
 import { CASE_STUDIES, getCaseStudy } from "@/lib/case-studies";
+import { StandaloneMode, StandaloneFooter } from "@/components/StandaloneMode";
 
 export function generateStaticParams() {
   return Object.keys(CASE_STUDIES).map((slug) => ({ slug }));
@@ -28,9 +29,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = PROJECTS.find((p) => p.slug === slug);
   if (!project) return { title: "Case study not found" };
+  const title = `${project.title}, case study, Abdoulie Balisa`;
+  const description = `How and why I built ${project.title}. ${project.tagline}.`;
   return {
-    title: `${project.title}, case study, Abdoulie Balisa`,
-    description: `How and why I built ${project.title}. ${project.tagline}.`,
+    title,
+    description,
+    openGraph: {
+      type: "article",
+      url: `/projects/${slug}`,
+      title: `${project.title} — Case study`,
+      description: `${project.tagline}.`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} — Case study`,
+      description: `${project.tagline}.`,
+    },
   };
 }
 
@@ -62,9 +76,10 @@ export default async function CaseStudyPage({
 
   return (
     <main className="relative min-h-screen bg-background text-text-primary">
+      <StandaloneMode />
       <Link
         href="/#projects"
-        className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-white"
+        className="cs-chrome fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-white"
       >
         <ArrowLeft className="h-3 w-3" />
         Back to work
@@ -91,7 +106,7 @@ export default async function CaseStudyPage({
             ))}
           </ul>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
+          <div className="cs-chrome mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
             {project.demo && (
               <a href={project.demo} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-cyan transition hover:text-white">
                 <ExternalLink className="h-3.5 w-3.5" /> Open the live app
@@ -218,7 +233,7 @@ export default async function CaseStudyPage({
               </p>
             </section>
 
-            <nav className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <nav className="cs-chrome mt-16 flex flex-col gap-3 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
               <Link href="/#projects" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white">
                 <ArrowLeft className="h-3 w-3" /> All projects
               </Link>
@@ -229,6 +244,8 @@ export default async function CaseStudyPage({
           </article>
         </div>
       </div>
+
+      <StandaloneFooter />
     </main>
   );
 }
