@@ -50,7 +50,7 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "PyTorch", "CTGAN", "FastAPI", "Next.js 16", "scikit-learn"],
     github: "https://github.com/Balisa50/nova",
     githubRepo: "Balisa50/nova",
-    demo: "https://nova-gamma-eight.vercel.app",
+    demo: "https://nova-fin.vercel.app",
     status: "live",
     metric: "4 metrics pass · TSTR 0.92 · 7 domains, zero-data generation",
     accent: "pink",
