@@ -47,14 +47,11 @@ function useOccasionalGlitch(enabled: boolean) {
 
 /** Per-project case-study URL, or null when there is no distinct page. */
 function caseStudyHref(p: Project): string | null {
-  let href: string | null = null;
-  if (p.slug === "gambia-health-dashboard") href = "/projects/gambia";
-  else if (CASE_STUDIES[p.slug]) href = `/projects/${p.slug}`;
-  if (!href) return null;
-  if (p.demo === href) return null;
-  // Open case studies in standalone/share mode (no site chrome), so the link
-  // is a clean shareable artifact for professors, recruiters, and committees.
-  return `${href}/?standalone=true`;
+  // Case studies open at their clean, chrome-free standalone route, so the link
+  // is a shareable artifact for professors, recruiters, and committees.
+  if (p.slug === "gambia-health-dashboard") return "/case-studies/gambia/";
+  if (CASE_STUDIES[p.slug]) return `/case-studies/${p.slug}/`;
+  return null;
 }
 
 /** Where the title links to: live demo > repo > article. */

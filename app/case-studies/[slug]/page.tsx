@@ -1,12 +1,10 @@
 /**
- * Engineering case study, generated from PROJECTS metadata + the
- * CASE_STUDIES data file. First-person, owned trade-offs.
+ * Standalone, shareable case study at /case-studies/[slug].
  *
- * This is the in-portfolio view (full navigation). The clean, shareable
- * standalone version of every case study lives at /case-studies/[slug].
- *
- * The Gambia Health & Development project has its own bespoke long-form page at
- * /projects/gambia/, so this dynamic route excludes that slug.
+ * Identical content to /projects/[slug], but rendered with no portfolio
+ * chrome — no "Back to work", no live/repo buttons, no bottom nav — so the
+ * link is a clean artifact to send to professors, recruiters, and committees.
+ * It is a separate static route, not a query-param toggle.
  */
 
 import type { Metadata } from "next";
@@ -27,13 +25,26 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = PROJECTS.find((p) => p.slug === slug);
   if (!project) return { title: "Case study not found" };
+  const title = `${project.title} — Case study`;
+  const description = `${project.tagline}.`;
   return {
-    title: `${project.title}, case study, Abdoulie Balisa`,
-    description: `How and why I built ${project.title}. ${project.tagline}.`,
+    title,
+    description,
+    openGraph: {
+      type: "article",
+      url: `/case-studies/${slug}`,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
   };
 }
 
-export default async function CaseStudyPage({
+export default async function StandaloneCaseStudyPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -46,5 +57,5 @@ export default async function CaseStudyPage({
     notFound();
   }
 
-  return <CaseStudyView project={project} study={study} standalone={false} />;
+  return <CaseStudyView project={project} study={study} standalone={true} />;
 }

@@ -460,11 +460,3 @@ body {
   transition: opacity 0.2s ease;
 }
 .warp-overlay.active { opacity: 1; }
-
-/* ---- Standalone / share mode for case studies ----
-   StandaloneController (and the inline guard) set html[data-standalone="true"]
-   when the URL carries ?standalone=true. Site chrome tagged .cs-chrome is then
-   hidden and the minimal .cs-standalone-footer credit is revealed. */
-.cs-standalone-footer { display: none; }
-html[data-standalone="true"] .cs-chrome { display: none !important; }
-html[data-standalone="true"] .cs-standalone-footer { display: block; }

@@ -39,7 +39,7 @@ export function FloatingCTA() {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 10, scale: 0.98 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="cs-chrome fixed bottom-5 right-5 z-[80] flex items-center gap-2 rounded-full border border-cyan/40 bg-black/80 pl-5 pr-2 py-2 shadow-glow-cyan backdrop-blur-md"
+          className="fixed bottom-5 right-5 z-[80] flex items-center gap-2 rounded-full border border-cyan/40 bg-black/80 pl-5 pr-2 py-2 shadow-glow-cyan backdrop-blur-md"
         >
           <MessageCircle className="h-4 w-4 text-cyan" aria-hidden="true" />
           <a
