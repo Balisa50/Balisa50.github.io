@@ -250,7 +250,7 @@ export function StandaloneCredit() {
     <footer className="mx-auto max-w-6xl px-6 pb-20">
       <div className="border-t border-white/10 pt-8 text-center">
         <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-secondary">
-          Built by <span className="text-white">{PROFILE.fullName}</span>
+          Built by <span className="text-white">{PROFILE.name}</span>
         </p>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <a href={PROFILE.linkedin} target="_blank" rel="noreferrer noopener" className={link}>
