@@ -1,5 +1,5 @@
 /**
- * The Gambia: 65 Years in Numbers — standalone, shareable view.
+ * The Gambia: 65 Years in Numbers, standalone, shareable view.
  * Same content as /projects/gambia, but with no portfolio chrome.
  */
 

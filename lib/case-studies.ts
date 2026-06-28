@@ -220,7 +220,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "Lexicon vs transformer is a classic comparison. VADER is fast, instant, no GPU. distilBERT is more contextual but trained on movie reviews, so transfer to news is uncertain. Rather than guess which works better, I label 200 random articles by hand and let the F1 score decide. The winner drives the PRI; the loser becomes a sanity-check baseline.",
       },
       {
-        call: "Stream Anthropic / HuggingFace responses chunked, but validate AFTER, not during.",
+        call: "Stream the LLM provider / HuggingFace responses chunked, but validate AFTER, not during.",
         reason:
           "Same lesson as Gambia Legal Aid. If a sentiment label appears mid-stream and turns out to be wrong on validation, the user already saw it. I generate the full response, validate (label is in the SST-2 binary set, score is in [0,1]), then return. Trust over speed.",
       },
@@ -287,7 +287,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     constraints: [
       "Free tier on everything. No GPU, no managed vector DB, no paid embeddings API. If a feature required a paid service I had to either find a free path or skip it.",
       "Static export hosted on Vercel free tier. No long-running server I'd have to pay for when I left the laptop closed.",
-      "Anthropic spend had to stay near zero. Every uncached AI call cost real money I didn't have, so caching had to be aggressive from the first deploy.",
+      "LLM spend had to stay near zero. Every uncached AI call cost real money I didn't have, so caching had to be aggressive from the first deploy.",
       "Had to render 6,236 particles smoothly on a Tecno or Infinix Android phone. Those are the devices my actual users would have. iPhone-only WebGL was unacceptable.",
       "Audio for 18 reciters had to load progressively without choking 3G connections, a single Hafs recitation of the full Qur'an is ~2GB.",
     ],
@@ -310,7 +310,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "AI tafsir cached per verse globally, not per user.",
         reason:
-          "Once Claude has analysed verse 2:255, that analysis is the same for every user. I cache it server-side keyed on `surah:ayah`, so the second user pays nothing. With ~6,236 verses, the entire tafsir corpus costs about $30 to generate once, then is free forever. The caching layer is the difference between a hobby project and a sustainable one.",
+          "Once the model has analysed verse 2:255, that analysis is the same for every user. I cache it server-side keyed on `surah:ayah`, so the second user pays nothing. With ~6,236 verses, the entire tafsir corpus costs about $30 to generate once, then is free forever. The caching layer is the difference between a hobby project and a sustainable one.",
       },
       {
         call: "Custom pill dropdown for reciter selection, not native <select>.",
@@ -325,7 +325,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     pivots: [
       "First version did the embedding + clustering at request time on Vercel Edge. It worked but took 8 seconds on cold start. Moved everything to a one-shot Python pipeline that writes the static file at build time. Cold start is now instant. Documented in commit 9520c55: galaxy physics, video reset, debounce, shooting stars all stabilised together.",
-      "Originally fetched the AI analysis on every verse open. Realised most users skim, so I made it click-to-reveal, the analysis only fetches when the user explicitly asks for it. Cut my Anthropic spend by ~70%. This pattern became the default for every AI feature in v2.",
+      "Originally fetched the AI analysis on every verse open. Realised most users skim, so I made it click-to-reveal, the analysis only fetches when the user explicitly asks for it. Cut my LLM spend by ~70%. This pattern became the default for every AI feature in v2.",
       "First tour implementation had a race condition where the next step would fire before the previous step's animation finished. Caused card overlap on mobile (commit 0309957). Fixed by holding tour state in a state machine with explicit transitions instead of setTimeout chains.",
       "Theme search was originally just keyword matching. Got too many false positives, 'mercy' would match every verse with 'merciful' which is most of the Qur'an. Added synonym expansion + PCA-64 semantic boost, narrowing matches to verses that are actually about mercy as a theme.",
     ],
@@ -360,12 +360,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Studied Capacitor vs React Native vs Expo. Capacitor wraps an existing web app as native iOS + Android with no rebuild. React Native means rewriting the UI. Expo is React Native plus tooling. Picked Capacitor because I had 8 months of polished web UI I refused to throw away. Researched Apple's App Store review trends, pure WebView apps are sometimes scrutinised, but Capacitor's native-plugin integration (Filesystem, Local Notifications, Share, Status Bar, Splash) is enough to satisfy reviewers.",
       "Read the React 19 release notes carefully before adopting it for v2. The new Activity component, the Suspense improvements, and useActionState changed how I structured the verse card's optimistic states.",
       "Studied Supabase Row-Level Security (RLS) patterns. Wrote my own schema with RLS policies before deploying, every user can only read their own trail, reflections, asks. Without RLS, a single misconfigured query exposes everyone's data.",
-      "Read how Linear, Notion, and Stripe handle the 'AI is unavailable' state. None of them say 'error'. They all reframe the missing capability as the rest of the app being intact. That informed my 'AI commentary is paused' copy when Anthropic credits ran out.",
+      "Read how Linear, Notion, and Stripe handle the 'AI is unavailable' state. None of them say 'error'. They all reframe the missing capability as the rest of the app being intact. That informed my 'AI commentary is paused' copy when LLM credits ran out.",
     ],
     constraints: [
       "Same free-tier stance as v1, no paid infra, no paid AI service running per-user.",
       "Couldn't manually tag all 6,236 verses for every topic. That would take months. I had weeks.",
-      "Anthropic spend had to stay flat even with new AI features (Chat With The Verse, scholar comparisons).",
+      "LLM spend had to stay flat even with new AI features (Chat With The Verse, scholar comparisons).",
       "Native app launch target is Ramadan 2027, meaning everything has to also work inside a Capacitor WebView with no rebuild.",
       "Every interaction has to feel contemplative, never gamified. Religious software that feels like Duolingo is offensive to the audience.",
     ],
@@ -396,14 +396,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "I already had a polished Next.js web app with Three.js, framer-motion, custom shaders. Throwing it out to learn React Native would cost months. Capacitor wraps the same code as iOS + Android with native plugin bridges (Local Notifications, Share, Filesystem for offline downloads, Status Bar, Splash). I get App Store and Play Store presence without rewriting any UI. The iOS + Android shells took 2 days to scaffold.",
       },
       {
-        call: "Stream Claude's responses sentence-by-sentence, not all-at-once.",
+        call: "Stream the model's responses sentence-by-sentence, not all-at-once.",
         reason:
           "When the user asks Chat With The Verse a question, the answer can take 4-8 seconds at full quality. Waiting in silence breaks the contemplative tone. I switched to SSE streaming, chunks arrive as they're generated, the UI types them out word-by-word at human reading speed. Same wait time, completely different feel. Ship the bytes you have, don't queue them.",
       },
       {
-        call: "Detect Anthropic credit-exhaustion specifically, surface a warm 'AI is paused' state.",
+        call: "Detect LLM credit-exhaustion specifically, surface a warm 'AI is paused' state.",
         reason:
-          "When credits ran out mid-development I noticed every AI feature was just throwing 502s and showing 'something went wrong'. That breaks user trust silently. I sniff the upstream Anthropic 400 body for `credit balance` / `authentication_error` patterns, propagate `{paused: true}` through the route, and the client renders a warm bordered message: 'AI commentary is paused, between API top-ups. The verse, recitation, and the rest of the app are working normally.' Honest, doesn't break the brand, and when I top up credits it lights back up automatically with zero code change.",
+          "When credits ran out mid-development I noticed every AI feature was just throwing 502s and showing 'something went wrong'. That breaks user trust silently. I sniff the upstream the API 400 body for `credit balance` / `authentication_error` patterns, propagate `{paused: true}` through the route, and the client renders a warm bordered message: 'AI commentary is paused, between API top-ups. The verse, recitation, and the rest of the app are working normally.' Honest, doesn't break the brand, and when I top up credits it lights back up automatically with zero code change.",
       },
     ],
     pivots: [
@@ -432,7 +432,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "iOS + Android Capacitor shells with native plugins (Share, Filesystem, Notifications, Status Bar, Splash)",
       "Streak pill ('nights kept') derived from verse_visits, contemplative tone",
       "Service worker cache-versioned, never serves stale HTML",
-      "Graceful 'AI is paused' state when Anthropic credits exhaust, user-side trust preserved",
+      "Graceful 'AI is paused' state when LLM credits exhaust, user-side trust preserved",
     ],
     regret:
       "Should have written end-to-end tests for the auth + RLS flow earlier. The React #310 bug crashed sign-in for two days because no automated test was watching it. I shipped fast and trusted manual QA. With Playwright tests guarding the sign-in, then verse-open, then reflection-save flow, I'd have caught it on commit. Adding them next.",
@@ -449,14 +449,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Read 100+ Stratechery articles to internalise Ben Thompson's structure: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. Translated this into an explicit system prompt with banned phrases ('In a move that…', 'It's worth noting…') and required structures.",
       "Studied NewsAPI's free tier limits in detail before architecting anything. 100 requests/day, language=en filter, 10 articles per query. That number determined the entire pipeline: I couldn't fan-out to all six regions in parallel, I had to chain them through a single daily run.",
       "Read Vercel's Hobby plan limits carefully. Crons run once per day max. Edge function timeout is 60s. These two constraints shaped everything: chain-of-regions through a single cron, every region fits inside 60s, drop the slowest sub-pipelines.",
-      "Studied Anthropic's pricing tiers across model families. Sonnet is 3x the cost of Haiku. For a synthesise-and-score pipeline running unattended, Haiku's quality at one-third the cost was the right trade, I lost subtle nuance, kept the editorial voice via the strict prompt.",
+      "Studied the provider's pricing tiers across model families. Sonnet is 3x the cost of Haiku. For a synthesise-and-score pipeline running unattended, Haiku's quality at one-third the cost was the right trade, I lost subtle nuance, kept the editorial voice via the strict prompt.",
       "Studied RFC 5005 / RSS specs while building the regional sources. Most regional tech publications still publish RSS even if their websites are bad. Africa especially, TechCabal, Disrupt Africa, Iwacu, etc. RSS was the cheapest way in.",
     ],
     constraints: [
       "Free Vercel Hobby plan, one cron per day max, edge functions timeout in 60 seconds.",
       "Free NewsAPI tier, 100 requests/day total across the whole pipeline.",
       "Free Supabase tier, 500 MB DB, no concurrent connection pooling.",
-      "Anthropic budget: tight. Every article generated had to be cheap or the system breaks at scale.",
+      "LLM budget: tight. Every article generated had to be cheap or the system breaks at scale.",
       "Editorial voice has to be consistent, no boring summaries, no generic AI prose.",
     ],
     decisions: [
@@ -468,12 +468,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Slug-based de-duplication BEFORE the AI call.",
         reason:
-          "NewsAPI returns the same headline from multiple sources (Reuters, AP, then 30 outlets quoting them). I slugify the title and check Supabase first, if the slug exists, skip Claude entirely. Saves an Anthropic call per duplicate, which is ~70% of what's returned. The cheapest call is the one you don't make.",
+          "NewsAPI returns the same headline from multiple sources (Reuters, AP, then 30 outlets quoting them). I slugify the title and check Supabase first, if the slug exists, skip the model entirely. Saves an the LLM provider call per duplicate, which is ~70% of what's returned. The cheapest call is the one you don't make.",
       },
       {
-        call: "Edge runtime + direct fetch to Anthropic, no SDK.",
+        call: "Edge runtime + direct fetch to the LLM provider, no SDK.",
         reason:
-          "The Anthropic Node SDK pulls in dependencies that don't run on Vercel Edge. I wrote a 30-line direct fetch to `api.anthropic.com/v1/messages` instead. Edge runtime keeps cold starts under 100ms (vs ~800ms for Node runtime), which matters when six chained route calls are racing the 60-second timeout. Also cuts deployment size.",
+          "The an LLM Node SDK pulls in dependencies that don't run on Vercel Edge. I wrote a 30-line direct fetch to `the provider's messages endpoint` instead. Edge runtime keeps cold starts under 100ms (vs ~800ms for Node runtime), which matters when six chained route calls are racing the 60-second timeout. Also cuts deployment size.",
       },
       {
         call: "Strict editorial system prompt with explicit banned phrases.",
@@ -493,7 +493,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Disable article deletion when credits run out, even though it bloats the feed.",
         reason:
-          "Originally a nightly /api/expire cron deleted articles older than 48 hours to keep the feed fresh. When Anthropic credits exhausted, regeneration stopped, but expiration kept running. I'd wake up to a half-empty feed with no way to refill it. Disabled the expire cron + neutered the route to return `{disabled: true}` even on manual trigger. Better to show old articles than to show nothing.",
+          "Originally a nightly /api/expire cron deleted articles older than 48 hours to keep the feed fresh. When LLM credits exhausted, regeneration stopped, but expiration kept running. I'd wake up to a half-empty feed with no way to refill it. Disabled the expire cron + neutered the route to return `{disabled: true}` even on manual trigger. Better to show old articles than to show nothing.",
       },
     ],
     pivots: [
@@ -504,8 +504,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     weaknesses: [
       "I didn't fully understand SSE streaming when I started. Vercel Edge has different streaming semantics than Node. Spent a day debugging why chunks were buffering instead of arriving incrementally. Fix was using `controller.enqueue(encoder.encode(chunk))` instead of trying to write to the response body directly.",
-      "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch, then JSON parse, then embedding lookup, then Claude call, then DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) was a forcing function.",
-      "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns OpenAI/Anthropic news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global to escape NewsAPI's relevancy bias.",
+      "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch, then JSON parse, then embedding lookup, then the model call, then DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) was a forcing function.",
+      "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns major AI labs news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global to escape NewsAPI's relevancy bias.",
     ],
     outcome: [
       "6 regions × 6 categories = 36 distinct content streams",
@@ -513,7 +513,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Articles scored 1-100 by signal strength",
       "Each article structured: headline (verdict), what happened, why it matters, who wins/loses, what to watch (with falsifiable prediction)",
       "Slug-based de-duplication before any AI call",
-      "Edge runtime + direct Anthropic fetch (no SDK overhead)",
+      "Edge runtime + direct the LLM provider fetch (no SDK overhead)",
       "Graceful degradation: when credits exhaust, articles persist instead of dying silently",
     ],
     regret:
@@ -530,7 +530,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     research: [
       "Read every Act we ingested (Constitution, Criminal Code, Labour Act, Children's Act, Sexual Offences Act, Domestic Violence Act, Immigration Act, Rent Act 2014/2017/2024, etc.) end-to-end before writing the system prompt. Could not enforce grounding without knowing what grounded actually meant.",
       "Studied how Westlaw and LexisNexis structure citations. They cite by section number, sub-section, and Act. Realised my retrieval had to surface those exact metadata pieces or the citations would be unverifiable.",
-      "Read the OpenAI 'Constitutional AI' paper and Anthropic's RAG literature. The pattern that stuck: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry, don't ship and apologise.",
+      "Read the OpenAI 'Constitutional AI' paper and the provider's RAG literature. The pattern that stuck: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry, don't ship and apologise.",
       "Studied curly-quote vs straight-quote behaviour across browsers and PDFs because the model would generate the curly version of \"section 14\" when the source text had the straight version, and my substring validator initially missed this and let hallucinations through.",
       "Read Gambian legal cases on unfair dismissal, domestic violence prosecutions, and immigration appeals to make sure the topic anchors I was building actually retrieved the sections that mattered to real disputes.",
     ],
@@ -543,7 +543,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     decisions: [
       {
-        call: "Groq Llama 3.3 70B as the generation model, not Claude or GPT-4.",
+        call: "Groq Llama 3.3 70B as the generation model, not the model or GPT-4.",
         reason:
           "Legal Q&A is high-volume (every Gambian who has the link uses it for free) and the cost math has to work. Groq's Llama 3.3 70B is fast (sub-second first token), generous on free tier, and quality is high enough for the format I need (one tight paragraph with citations). The strict system prompt + multi-layer hallucination guard does the heavy lifting; the model itself just needs to be coherent and follow instructions. Cost-engineered for a public-good product.",
       },
@@ -733,7 +733,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "If you can disable the app from inside the app, you will when willpower runs out at 11 PM after a bad day. Settings live behind a PIN you set up sober, can't change without re-entering. Same logic as ScreenTime parental controls, restrict your future self. The PIN is checked server-side; clearing app cache or reinstalling doesn't help.",
       },
       {
-        call: "OpenRouter, not OpenAI/Anthropic direct.",
+        call: "OpenRouter, not major AI labs direct.",
         reason:
           "OpenRouter routes to whatever model is cheapest while meeting quality bar. For a daily 200-token interrogation, GPT-4o-mini or Llama 3.3 70B is fine. I save 10x vs hardcoding to a single provider, and if one provider goes down the app keeps working. Provider neutrality is the right architecture for high-volume low-stakes calls.",
       },
@@ -760,7 +760,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     pivots: [
       "Original interrogator was too soft, accepted 'I studied for 2 hours' without follow-up. Tightened the system prompt: 'Reject any claim that lacks specifics. Ask for what was built, what failed, what was learned.' Pass rate dropped 40%, which was the point. Iteratively rewrote the prompt 6+ times to get the right level of skepticism.",
-      "First model was Claude Sonnet, which was overkill and expensive for daily check-ins. Moved to OpenRouter with cheaper routing (Llama / Gemma / Mixtral, picked by cost-quality bid). Quality stayed identical, cost dropped 90%.",
+      "First model was the model Sonnet, which was overkill and expensive for daily check-ins. Moved to OpenRouter with cheaper routing (Llama / Gemma / Mixtral, picked by cost-quality bid). Quality stayed identical, cost dropped 90%.",
       "Tried camera-based proctoring, make the user appear on camera during interrogation to make lying harder. Removed it (commit b032662). Reasons: too invasive for the religious / privacy-conscious users I cared about, and it didn't actually prevent lying about what was DONE, only proved you were physically there. Wrong layer of accountability.",
       "Added a leaderboard of streaks. Removed it (commit b032662). Public ranking turned the system into a competition and produced the wrong incentive: people gaming streak length over real work. Built it, lived with it, deleted it. Some features look good in mockups and bad in production.",
       "Re-entry flow: when a user broke their streak, the original UX showed them a sad face and 'streak: 0'. Felt punishing in a demoralising way, not a productive way. Rewrote the re-entry as 'day 1 again, what's the first specific thing you'll build?' Reframes the failure as a fresh start without sugar-coating it (commit 7fbcdb2).",
@@ -810,7 +810,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     decisions: [
       {
-        call: "Gemini Flash 2.0, not GPT-4 or Claude.",
+        call: "Gemini Flash 2.0, not GPT-4 or the model.",
         reason:
           "Conversational interviewing is high-volume, low-stakes-per-token (the report is where reasoning matters, not the question generation). Flash is sub-second, 10x cheaper than GPT-4, and quality is fine for structured Q&A. Saving budget for scoring, where quality actually matters.",
       },

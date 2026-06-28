@@ -97,8 +97,8 @@ export const PROJECTS: Project[] = [
     title: "AYAT",
     tagline: "6,236 Qur'anic verses as a semantic galaxy",
     description:
-      "Every verse of the Qur'an embedded with sentence-transformers, projected to 3D with UMAP, clustered with HDBSCAN, and rendered as a live particle galaxy in Three.js. Colour-codes Meccan vs Medinan revelation, surfaces semantic neighbours, and pulls Claude-generated historical context for any ayah you click.",
-    tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "Next.js 16", "Three.js", "Claude API"],
+      "Every verse of the Qur'an embedded with sentence-transformers, projected to 3D with UMAP, clustered with HDBSCAN, and rendered as a live particle galaxy in Three.js. Colour-codes Meccan vs Medinan revelation, surfaces semantic neighbours, and pulls LLM-generated historical context for any ayah you click.",
+    tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "Next.js 16", "Three.js", "LLM API"],
     github: "https://github.com/Balisa50/ayat",
     githubRepo: "Balisa50/ayat",
     demo: "https://ayat-ab.vercel.app/",
@@ -114,7 +114,7 @@ export const PROJECTS: Project[] = [
     tagline: "The galaxy becomes a companion",
     description:
       "v2 turns AYAT into a contemplative companion you live inside. Five-dimensional learning system: 80+ hand-curated Journeys (themes, prophets, places, people), an Atlas of Qur'anic geography, a 45-event Asbab al-Nuzul Timeline in revelation order, 19 Arabic Roots with derivative webs, and a People index. Personal Trail Constellation (every verse you open glows softly, building your unique star map over months). Click-to-reveal AI tafsir grounded strictly in Ibn Kathir, Tabari, Qurtubi, and Jalalayn. Detective semantic search, Chat With The Verse follow-ups, Recall for memorisation, private + community reflections, Year in AYAT recap, time-sensitive modes (Ramadan / Friday / Tahajjud / Dawn), verse share cards, magic-link auth, Capacitor-wrapped for iOS + Android.",
-    tech: ["Next.js 16", "React 19", "Three.js", "Supabase", "Claude Sonnet 4.5", "Capacitor", "TypeScript"],
+    tech: ["Next.js 16", "React 19", "Three.js", "Supabase", "a hosted LLM", "Capacitor", "TypeScript"],
     github: "https://github.com/Balisa50/ayat-v2",
     githubRepo: "Balisa50/ayat-v2",
     demo: "https://ayat-v2-ab.vercel.app/",

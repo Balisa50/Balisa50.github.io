@@ -2,7 +2,7 @@
  * Standalone, shareable case study at /case-studies/[slug].
  *
  * Identical content to /projects/[slug], but rendered with no portfolio
- * chrome — no "Back to work", no live/repo buttons, no bottom nav — so the
+ * chrome: no "Back to work", no live/repo buttons, no bottom nav: so the
  * link is a clean artifact to send to professors, recruiters, and committees.
  * It is a separate static route, not a query-param toggle.
  */
@@ -25,7 +25,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = PROJECTS.find((p) => p.slug === slug);
   if (!project) return { title: "Case study not found" };
-  const title = `${project.title} — Case study`;
+  const title = `${project.title}: Case study`;
   const description = `${project.tagline}.`;
   return {
     title,

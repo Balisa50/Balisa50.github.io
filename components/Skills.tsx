@@ -7,7 +7,7 @@ const STACK: { label: string; items: string[] }[] = [
     label: "AI / ML",
     items: [
       "LangChain", "HuggingFace", "PyTorch", "TensorFlow", "scikit-learn",
-      "Anthropic SDK", "OpenAI SDK", "Groq", "Pinecone", "ChromaDB"
+      "LLM APIs", "OpenAI SDK", "Groq", "Pinecone", "ChromaDB"
     ]
   },
   {

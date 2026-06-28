@@ -1,5 +1,5 @@
 /**
- * The Gambia: 65 Years in Numbers — in-portfolio view (full navigation).
+ * The Gambia: 65 Years in Numbers, in-portfolio view (full navigation).
  * The clean, shareable standalone version lives at /case-studies/gambia.
  */
 
