@@ -4,9 +4,6 @@
  *
  * This is the in-portfolio view (full navigation). The clean, shareable
  * standalone version of every case study lives at /case-studies/[slug].
- *
- * The Gambia Health & Development project has its own bespoke long-form page at
- * /projects/gambia/, so this dynamic route excludes that slug.
  */
 
 import type { Metadata } from "next";
