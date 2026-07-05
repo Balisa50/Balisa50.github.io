@@ -98,7 +98,7 @@ export function About() {
           </a>
           <a
             href="/cv/Abdoulie-Balisa-CV.pdf"
-            download
+            download="Abdoulie Balisa CV.pdf"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cyan/40 bg-cyan/[0.06] px-5 py-2.5 text-sm font-medium text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             aria-label="Download Abdoulie Balisa CV (PDF)"
           >
