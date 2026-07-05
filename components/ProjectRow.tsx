@@ -49,7 +49,6 @@ function useOccasionalGlitch(enabled: boolean) {
 function caseStudyHref(p: Project): string | null {
   // Case studies open at their clean, chrome-free standalone route, so the link
   // is a shareable artifact for professors, recruiters, and committees.
-  if (p.slug === "gambia-health-dashboard") return "/case-studies/gambia/";
   if (CASE_STUDIES[p.slug]) return `/case-studies/${p.slug}/`;
   return null;
 }

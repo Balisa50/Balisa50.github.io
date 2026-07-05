@@ -1235,67 +1235,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "You learn actuarial science by writing the math. The textbook tells you Gompertz-Makeham; doing the gradient descent yourself shows you why the second term matters in the data you actually have. When the assumptions are violated (proportional hazards, no interaction), the model tells you with a low C-index, listen to it.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
-  "global-restaurant-analytics": {
-    slug: "global-restaurant-analytics",
-    problem:
-      "I had access to a global restaurant dataset with 21 variables (cuisine, price, ratings, reviews, location, hours, services) and wanted to know what actually drives customer satisfaction across cultures. Not 'food quality is important', that's obvious, but specifically what the data could prove versus what people assume. Most restaurant-data writeups jump to a model and miss what the data shows just by looking. I wanted the analysis to be readable by a restaurant owner, not just by an analyst.",
-    research: [
-      "Read 'Storytelling with Data' (Cole Nussbaumer Knaflic) before writing the article. The visualisation lessons changed how I presented every chart: pre-attentive attributes, eliminating chartjunk, choosing the right encoding for the comparison.",
-      "Studied multicollinearity diagnostics, specifically Variance Inflation Factor. With 21 correlated variables (price tier and reviews count are correlated; cuisine type and location are correlated), naive multiple regression coefficients become uninterpretable. VIF > 5 is the standard 'this is problem' threshold.",
-      "Read about cultural dimensions of customer satisfaction (Hofstede's framework, Service Recovery Paradox literature). Pre-empted the obvious 'food quality drives satisfaction' angle by checking cultural moderators.",
-      "Studied the difference between rating (1-5 scalar) and satisfaction (multi-construct: revisit intent, recommend likelihood, complaint rate). They correlate but aren't the same. Most analyses conflate them.",
-    ],
-    constraints: [
-      "Single dataset, no time series, only cross-sectional. Can show correlations, can't establish causation.",
-      "No external panel data to validate findings.",
-      "Wanted findings that would survive a critical reader, not Insta-quote bullet points.",
-      "Audience is restaurant owners + curious readers, not data scientists.",
-    ],
-    decisions: [
-      {
-        call: "Visualisation-first, modelling second.",
-        reason:
-          "Most restaurant-data writeups jump to a regression and miss what the data shows just by looking. I spent the first week on plots, distribution of ratings by region, by price tier, by cuisine. The model came later, mostly to formalise what the visuals already implied. The lesson: if your visuals already tell the story, your model is confirming, not discovering.",
-      },
-      {
-        call: "Don't conflate satisfaction with rating.",
-        reason:
-          "Rating is a 1-5 scalar. Satisfaction is multi-construct (revisit intent, recommend likelihood, complaint rate). The data has both. Most analyses treat them as the same and lose half the signal. Kept them separate and showed where they diverge, the gap between them is itself a finding.",
-      },
-      {
-        call: "VIF check before multiple regression, dropped to 7 variables from 21.",
-        reason:
-          "Initial regression with all 21 variables had R² of 0.78, looked great. But multicollinearity made coefficients meaningless: 'price tier' had a coefficient of -0.4 that was statistically insignificant despite being one of the most relevant features. Dropped to 7 variables that survived VIF < 5. R² fell to 0.62, but the coefficients were finally interpretable. Honest interpretability over flattering R².",
-      },
-      {
-        call: "Write the findings as a Medium article, not a Jupyter notebook.",
-        reason:
-          "Notebooks are for analysts. The audience for this is anyone who runs a restaurant or thinks about food service, they don't read .ipynb files. Wrote it as a 1,500-word article with embedded charts, structured around findings, not code. Reach > rigour-display when the goal is impact, not credentials.",
-      },
-    ],
-    pivots: [
-      "Initial model was a kitchen-sink regression with all 21 variables. R² looked great, but multicollinearity made the coefficients meaningless. Dropped to 7 variables that survived a VIF check. Lower R², but the coefficients were finally interpretable.",
-      "Originally led the article with 'price drives satisfaction' (the cliché finding). Re-read my own data and realised: price's effect was conditional on cuisine type. Different cuisines had different price-satisfaction relationships. Restructured the article around 'cuisine moderates everything else' which was the actual finding.",
-    ],
-    weaknesses: [
-      "I had not used VIF in practice before this project. Read about it in textbooks, never had a dataset where it mattered. The 21-variable kitchen-sink regression was the lesson, I needed to feel the bad coefficients before VIF made intuitive sense.",
-      "Cross-sectional data is genuinely limiting. Without time, you can't establish what changes when prices change, only what's correlated when prices differ. Had to be explicit about this in the article, wrote a 'what this analysis cannot tell you' paragraph.",
-      "Visualisation as discipline (not just 'plot something') took me time. My first charts were Matplotlib defaults, gridlines, dark backgrounds, default colors. Read Knaflic, rewrote everything in clean Seaborn with thoughtful encoding. Charts went from 'data shown' to 'finding implied'.",
-    ],
-    outcome: [
-      "Comprehensive EDA across 21 variables",
-      "Predictive models for restaurant performance (post-VIF: 7 variables, R² 0.62)",
-      "Published Medium article with embedded visualisations",
-      "Finding: cuisine type moderates the effect of every other variable",
-      "Honest framing: cross-sectional data, no causation claims",
-    ],
-    regret:
-      "I'd have liked to layer this with time-series data, same restaurants over multiple periods. Cross-sectional data only takes you so far. Without time, causation is locked behind a door I can't open. Would also love to add cultural-context variables (Hofstede's dimensions per country) to test whether the cuisine-moderates-everything finding is itself culturally moderated.",
-    takeaway:
-      "Eyes before models. The interesting findings show up in plots before they show up in regressions. If your model is surprising you, your EDA was lazy. Honest interpretability beats flattering R²: a model with low R² and clean coefficients teaches more than a model with high R² and meaningless coefficients.",
-  },
 };
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {
