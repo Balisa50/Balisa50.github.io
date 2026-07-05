@@ -8,7 +8,6 @@ import { KonamiEasterEgg } from "@/components/KonamiEasterEgg";
 import { FloatingCTA } from "@/components/FloatingCTA";
 import { CinematicBackground } from "@/components/CinematicBackground";
 import { DroneScan } from "@/components/DroneScan";
-import { HudPanel } from "@/components/HudPanel";
 import { WarpNav } from "@/components/WarpNav";
 import { PROFILE } from "@/lib/projects";
 
@@ -85,7 +84,6 @@ export default function RootLayout({
         {children}
         <FloatingCTA />
         <DroneScan />
-        <HudPanel />
         <WarpNav />
         <KonamiEasterEgg />
 

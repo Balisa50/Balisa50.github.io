@@ -385,23 +385,6 @@ body {
   to   { transform: translateY(100vh); }
 }
 
-/* ---- Floating HUD telemetry panel ---- */
-.hud-panel {
-  position: fixed;
-  left: 16px;
-  bottom: 16px;
-  z-index: 40;
-  pointer-events: none;
-}
-@keyframes hud-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-.hud-blink { animation: hud-blink 1.4s ease-in-out infinite; }
-@keyframes hud-bar {
-  0% { width: 18%; }
-  50% { width: 86%; }
-  100% { width: 42%; }
-}
-.hud-bar-fill { animation: hud-bar 3.2s ease-in-out infinite; }
-
 /* ---- Hero lens flare / volumetric drift ---- */
 .lens-flare {
   position: absolute;
