@@ -79,8 +79,8 @@ export const PROJECTS: Project[] = [
     title: "HireIQ",
     tagline: "AI-powered hiring platform",
     description:
-      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate gets interviewed by Gemini; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
-    tech: ["Python", "FastAPI", "Gemini Flash 2.0", "Next.js 14", "Supabase", "WeasyPrint"],
+      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate is interviewed by an AI agent (Groq LLaMA 3.3 70B) that follows up on weak answers; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
+    tech: ["Python", "FastAPI", "Groq / LLaMA 3.3 70B", "Next.js 14", "Supabase", "WeasyPrint"],
     github: "https://github.com/Balisa50/hireiq",
     githubRepo: "Balisa50/hireiq",
     demo: "https://hireiq-ab.vercel.app",

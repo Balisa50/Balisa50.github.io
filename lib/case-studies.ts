@@ -775,8 +775,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     outcome: [
       "Full pipeline: job posting, then adaptive interview, then scored report, then PDF",
-      "Gemini Flash 2.0 powering question generation (cost-engineered)",
-      "Groq fallback for resilience",
+      "Now runs entirely on Groq (LLaMA 3.3 70B for one-shot tasks, 3.1 8B Instant for the live stream) after the Gemini rate-limit pivot",
       "Supabase + RLS for candidate data",
       "WeasyPrint PDF reports for hiring teams",
       "LocalStorage session resume, candidates can refresh / lose connection without losing the interview",
