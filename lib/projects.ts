@@ -42,11 +42,25 @@ export const PROJECTS: Project[] = [
     featured: true
   },
   {
+    slug: "wingman",
+    title: "Wingman",
+    tagline: "An AI texting coach that reads the room and replies in your voice",
+    description:
+      "Paste a conversation and Wingman reads the situation itself, early dating, a cooling situationship, a work chat, a real apology, then hands you three replies you can send as-is, each a different strategy: a playful callback, one that moves it forward, and a curveball. It is the anti-Rizz. Instead of generic copy-paste pickup lines, an elite prompt with a hard self-check bans cringe and greeting-card lines, anchors every reply to what was actually said, and matches your own texting voice from a sample of your messages. The model runs server-side so the API key never reaches the browser, behind a resilient model chain with per-call timeouts and fallback so a slow model degrades instead of failing.",
+    tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Server routes"],
+    demo: "https://trywingman.vercel.app",
+    status: "live",
+    metric: "Reads the situation · 3 strategies · style-matched replies",
+    accent: "cyan",
+    fallbackStars: 0,
+    featured: true
+  },
+  {
     slug: "nova",
     title: "NOVA",
     tagline: "A synthetic-data engine for finance, from domain rules or from real data",
     description:
-      "Financial institutions in West Africa hold the data that could power local AI and cannot share it; for the populations that matter most, rural borrowers and the informal economy, it often does not exist at all. NOVA answers both. In Create mode you define columns, distributions, and domain rules, rural schools score lower, a new account making a large international transfer is likely fraud, and it generates realistic data from nothing, with seven financial-domain presets or your own, behind a whitelist evaluator so user-supplied rules cannot inject code. In Copy mode a Conditional Tabular GAN I implemented from scratch in PyTorch, no SDV, learns a real dataset and generates statistically identical, privacy-safe rows. Every batch is validated four ways and the numbers are reported honestly: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record privacy 1.10 with only 1.1 percent near-duplicates. Served by a FastAPI backend on Fly.io behind a Next.js studio on Vercel.",
+      "Financial institutions in West Africa hold the data that could power local AI and cannot share it; for the populations that matter most, rural borrowers and the informal economy, it often does not exist at all. NOVA answers both. In Create mode you define columns, distributions, and domain rules, rural schools score lower, a new account making a large international transfer is likely fraud, and it generates realistic data from nothing, with seven financial-domain presets or your own, behind a whitelist evaluator so user-supplied rules cannot inject code. In Copy mode a Conditional Tabular GAN I implemented from scratch in PyTorch, no SDV, learns a real dataset and generates statistically identical, privacy-safe rows. Every batch is validated four ways and the numbers are reported honestly: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record privacy 1.10 with only 1.1 percent near-duplicates. Served by a FastAPI backend on Hugging Face Spaces behind a Next.js studio on Vercel.",
     tech: ["Python", "PyTorch", "CTGAN", "FastAPI", "Next.js 16", "scikit-learn"],
     github: "https://github.com/Balisa50/nova",
     githubRepo: "Balisa50/nova",
@@ -79,8 +93,8 @@ export const PROJECTS: Project[] = [
     title: "HireIQ",
     tagline: "AI-powered hiring platform",
     description:
-      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate is interviewed by an AI agent (Groq LLaMA 3.3 70B) that follows up on weak answers; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
-    tech: ["Python", "FastAPI", "Groq / LLaMA 3.3 70B", "Next.js 14", "Supabase", "WeasyPrint"],
+      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate is interviewed by an AI agent (NVIDIA-hosted open models) that follows up on weak answers; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
+    tech: ["Python", "FastAPI", "NVIDIA NIM", "Next.js 14", "Supabase", "WeasyPrint"],
     github: "https://github.com/Balisa50/hireiq",
     githubRepo: "Balisa50/hireiq",
     demo: "https://hireiq-ab.vercel.app",
@@ -173,8 +187,8 @@ export const PROJECTS: Project[] = [
     title: "ColdPilot",
     tagline: "Autonomous cold-outreach agent",
     description:
-      "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline, contact discovery via Hunter.io, Tavily company research, Groq-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
-    tech: ["Python", "FastAPI", "Groq", "Hunter.io", "Tavily", "APScheduler", "SMTP", "Next.js 16"],
+      "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline, contact discovery via Hunter.io, Tavily company research, LLM-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
+    tech: ["Python", "FastAPI", "NVIDIA NIM", "Hunter.io", "Tavily", "NVIDIA NIM", "APScheduler", "Next.js 16"],
     github: "https://github.com/Balisa50/coldpilot",
     githubRepo: "Balisa50/coldpilot",
     demo: "https://coldpilot-ab.vercel.app",
