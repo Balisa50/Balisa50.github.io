@@ -32,6 +32,7 @@ export interface CaseStudy {
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
   wingman: {
+    slug: "wingman",
     problem:
       "Wingman started as a real-time voice coaching app that whispered tips through your earbud, and it was dead. The AI ran on an Anthropic key that had run out of credits, so every tip came back empty. Underneath that, the whole premise was wrong for how people actually want help with a conversation, and it looked and worked like every other app in a crowded space.",
     research: [
