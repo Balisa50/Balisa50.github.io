@@ -31,6 +31,63 @@ export interface CaseStudy {
 }
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
+  wingman: {
+    problem:
+      "Wingman started as a real-time voice coaching app that whispered tips through your earbud, and it was dead. The AI ran on an Anthropic key that had run out of credits, so every tip came back empty. Underneath that, the whole premise was wrong for how people actually want help with a conversation, and it looked and worked like every other app in a crowded space.",
+    research: [
+      "Rizz, the market leader, has around 10 million users, mostly 18 to 25. You screenshot a chat, it hands you three replies. I read what its own users complain about most.",
+      "The complaints are consistent: the replies are generic, cringe, and copy-paste, the same pickup lines recycled, and anyone with social awareness can tell. It falls apart in emotionally serious conversations, and most of it sits behind a paywall.",
+      "That told me the gap was not more features. It was replies that sound like a real, specific person, and like the actual user, in a situation the app understood without being told.",
+    ],
+    constraints: [
+      "Zero budget. The model had to run on a free endpoint, which rate-limits and, as it turned out, sometimes hangs.",
+      "On the web there is no screenshot OCR without heavy setup, so the input is paste, which has to feel effortless.",
+      "Any key shipped to the browser is extractable, so a serious version cannot put the key in the client.",
+    ],
+    decisions: [
+      {
+        call: "Kill the mode pickers. The AI reads the situation itself.",
+        reason:
+          "The first version made you choose a context and a vibe before every message. That is friction, and it is exactly what Rizz does. I removed both and rebuilt the prompt to infer the situation, early dating, a cooling situationship, work, a real apology, from the conversation itself. One input, one tap.",
+      },
+      {
+        call: "Three replies are three different weapons, not three rewordings.",
+        reason:
+          "Each reply is a distinct strategy with a label: a playful callback, one that moves it forward, and a curveball. The variety earns its place, instead of four modes that all produce similar lines.",
+      },
+      {
+        call: "Write an elite prompt with a hard self-check, and match the user's voice.",
+        reason:
+          "The prompt bans the specific failure modes Rizz users hate, pickup-line cliches, greeting-card lines, a question every time, and forces the model to reject any reply that could be sent to anyone else before it answers. Given a sample of the user's own texts, it matches their casing, punctuation, and slang, so the reply sounds like them.",
+      },
+      {
+        call: "Run the model server-side.",
+        reason:
+          "The web version calls the model from a server route, so the key never reaches the browser. That fixes the key-exposure problem the mobile version could not avoid, and it is the honest reason to prefer web here.",
+      },
+      {
+        call: "Treat the free endpoint as unreliable and design for it.",
+        reason:
+          "The default free model hung and timed the function out. I put a chain behind every call, a fast working model first then a fallback, with a per-call timeout so a slow model aborts and drops to the next instead of failing the request.",
+      },
+    ],
+    pivots: [
+      "The whole app was live-audio, mic to transcription to a spoken tip. I ripped all of it out, transcription, audio playback, the session and debrief screens, and rebuilt it as a text reply generator. The audio was never what made it useful.",
+      "The first deploy of the reply engine returned a 504. The cause was the free endpoint's default model hanging on every call. I measured the alternatives with the live key and switched to the one that answered fast and clean.",
+    ],
+    weaknesses: [
+      "I did not know how unreliable a free model endpoint could be until it took the app down. Now every call has a timeout and a fallback, and the model choice is a one-line change when one goes down.",
+      "The working model runs 10 to 17 seconds under load. It answers, but it is not instant, and I know why: the fix is a faster model when one frees up, not more code.",
+    ],
+    outcome: [
+      "Live at trywingman.vercel.app. Paste a conversation and it returns a read of the situation plus three labelled, sendable replies.",
+      "Tested on a real opening message, it detected the intent correctly, gave three genuinely different lines, and matched a lowercase, no-emoji texting style with zero configuration.",
+    ],
+    regret:
+      "No screenshot input yet. Paste works, but Rizz's real advantage is that you can screenshot a chat and it just reads it. Adding image understanding is the obvious next step to make the input as frictionless as the output.",
+    takeaway:
+      "The way to beat a crowded product was not to add features, it was to remove them. Reading the situation for the user, so they never pick a mode, made it smoother and smarter at once. The best version of a tool often does more by asking less.",
+  },
   // ─────────────────────────────────────────────────────────────────
   "nova": {
     slug: "nova",
