@@ -34,60 +34,70 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   wingman: {
     slug: "wingman",
     problem:
-      "Wingman started as a real-time voice coaching app that whispered tips through your earbud, and it was dead. The AI ran on an Anthropic key that had run out of credits, so every tip came back empty. Underneath that, the whole premise was wrong for how people actually want help with a conversation, and it looked and worked like every other app in a crowded space.",
+      "Wingman started as a dead voice-coaching app and became a question I could not put down: why does every AI texting assistant sound like an AI? Rizz has ten million users and its replies are still generic, cringe, and recognisably machine-made, and pasting a chat into ChatGPT gets you a paragraph that no human would ever send. The model is not the problem, the same model writes both the cringe and the killer line. The prompt is the product. So the real project became engineering one system prompt good enough that a free model reads a real conversation, screenshot or live off the page, and hands back messages a sharp, emotionally fluent human would actually send, in the user's own voice, across every register a life contains: flirting, grief, a client pushing back on price, an apology at 3am.",
     research: [
-      "Rizz, the market leader, has around 10 million users, mostly 18 to 25. You screenshot a chat, it hands you three replies. I read what its own users complain about most.",
-      "The complaints are consistent: the replies are generic, cringe, and copy-paste, the same pickup lines recycled, and anyone with social awareness can tell. It falls apart in emotionally serious conversations, and most of it sits behind a paywall.",
-      "That told me the gap was not more features. It was replies that sound like a real, specific person, and like the actual user, in a situation the app understood without being told.",
+      "Rizz first: around 10 million users, 18 to 25, screenshot in, three replies out. Its own users' complaints are consistent, generic copy-paste lines, falls apart in emotionally serious conversations, paywalled. The gap was never features, it was that the output smells like AI.",
+      "So I studied the smell itself. AI text has fingerprints people now detect instantly: hedged balance ('it's not just X, it's Y'), customer-support warmth ('I hear you, I'm here for you'), three-part lists, symmetrical clauses, tidy life-lesson endings, words nobody texts. I catalogued every tell and made the prompt hunt its own output for them.",
+      "Then the harder domain: what actually lands in human conversation. How real people text when they flirt, fight, apologise, comfort grief, negotiate, hold a line with a client. What negging reads as (insecurity), why presence beats solutions when someone is hurting, why one word can outperform a paragraph. The prompt encodes a register map of all of it.",
+      "For the extension I read how seven messaging apps structure their DOM. WhatsApp labels bubbles in and out, Instagram and Messenger obfuscate classes so you classify by which side of centre a bubble sits, LinkedIn stacks everything left and marks the other person with a modifier class, Discord has no own-message marker at all so you match each author against the logged-in username.",
     ],
     constraints: [
-      "Zero budget. The model had to run on a free endpoint, which rate-limits and, as it turned out, sometimes hangs.",
-      "On the web there is no screenshot OCR without heavy setup, so the input is paste, which has to feel effortless.",
-      "Any key shipped to the browser is extractable, so a serious version cannot put the key in the client.",
+      "Zero budget, permanently. Free NVIDIA endpoint for both the text model and the vision model, free hosting, no accounts, no backend database. Memory and voice-learning had to live entirely in the browser's own storage.",
+      "Any key shipped to a client is extractable, so both the web app and the extension had to route every model call through one server route that holds the key.",
+      "A browser extension runs inside pages that fight it: host CSS clobbers injected UI, page CSP blocks fetches, and Chrome does not reliably give content scripts storage access. Each of those broke something real.",
+      "The prompt had to do all the intelligence work, because the free model is mid-tier. No fine-tuning, no retrieval, one system prompt.",
     ],
     decisions: [
       {
-        call: "Kill the mode pickers. The AI reads the situation itself.",
+        call: "Treat the system prompt as the core engineering artifact of the product.",
         reason:
-          "The first version made you choose a context and a vibe before every message. That is friction, and it is exactly what Rizz does. I removed both and rebuilt the prompt to infer the situation, early dating, a cooling situationship, work, a real apology, from the conversation itself. One input, one tap.",
+          "It is structured like a spec, not a vibe. Rule Zero is an explicit kill-list of AI fingerprints the model must hunt down in its own drafts, with a litmus: if the line could be a brand caption or sent to anyone else, delete it. Then a subtext pass before writing, a register map covering flirting, love, intimacy, banter, conflict, grief, professional, negotiation, family, and faith, each with its own move, and a final-cut self-check. Same model, unrecognisably better output. That gap is the whole discipline.",
       },
       {
-        call: "Three replies are three different weapons, not three rewordings.",
+        call: "Force three genuinely different tones, and pin one to sincerity.",
         reason:
-          "Each reply is a distinct strategy with a label: a playful callback, one that moves it forward, and a curveball. The variety earns its place, instead of four modes that all produce similar lines.",
+          "Early versions returned three flavours of the same cocky joke, and when a girl texted 'I love you' the app negged her three ways. Real feedback, real fix: the three replies must span playful, direct, and sincere, and exactly one must contain no joke, tease, or reframe at all. Banning negging and requiring an honest option taught me more about prompt design than any success did.",
       },
       {
-        call: "Write an elite prompt with a hard self-check, and match the user's voice.",
+        call: "Pin conversational orientation explicitly, because the model will flip roles.",
         reason:
-          "The prompt bans the specific failure modes Rizz users hate, pickup-line cliches, greeting-card lines, a question every time, and forces the model to reject any reply that could be sent to anyone else before it answers. Given a sample of the user's own texts, it matches their casing, punctuation, and slang, so the reply sounds like them.",
+          "With ME and THEM labels in the transcript, the model still sometimes answered the user's own message as if the other person had sent it, apologising for things the user said. Probabilistic, so it passed casual testing. The fix is an orientation block that makes the model silently confirm who said what and whose side it writes for before composing. Subtle, and the difference between a tool and a liability.",
       },
       {
-        call: "Run the model server-side.",
+        call: "Read the chat straight off the page with per-site adapters, generic fallback behind them.",
         reason:
-          "The web version calls the model from a server route, so the key never reaches the browser. That fixes the key-exposure problem the mobile version could not avoid, and it is the honest reason to prefer web here.",
+          "The extension scrapes the open conversation using each app's real DOM structure, seven adapters, WhatsApp, Instagram, X, LinkedIn, Messenger, Telegram, Discord, each labelling who said what by whatever signal that app actually exposes, with an alignment-based generic scraper as the fallback. Screenshot friction gone entirely on desktop.",
       },
       {
-        call: "Treat the free endpoint as unreliable and design for it.",
+        call: "One server route serves the web app and the extension.",
         reason:
-          "The default free model hung and timed the function out. I put a chain behind every call, a fast working model first then a fallback, with a per-call timeout so a slow model aborts and drops to the next instead of failing the request.",
+          "The extension does not talk to the model, it messages its service worker, which calls the same CORS-enabled Vercel route the web app uses. One key, server-side only, zero new infrastructure, and the extension's settings live in the worker too because content scripts turned out not to get chrome.storage at all.",
+      },
+      {
+        call: "Memory and context as user-set state, not guesswork.",
+        reason:
+          "Named chats remember the whole thread and every reply you actually send teaches it your voice, all in localStorage. Per chat you set who this is, dating, work, boss, making up, and what you want, and the server derives tone and length from that. The same incoming message gets a 60-character flirt or a 250-character professional answer depending on one pill.",
       },
     ],
     pivots: [
-      "The whole app was live-audio, mic to transcription to a spoken tip. I ripped all of it out, transcription, audio playback, the session and debrief screens, and rebuilt it as a text reply generator. The audio was never what made it useful.",
-      "The first deploy of the reply engine returned a 504. The cause was the free endpoint's default model hanging on every call. I measured the alternatives with the live key and switched to the one that answered fast and clean.",
+      "Audio to text: ripped out the entire mic-to-transcription-to-spoken-tip pipeline and rebuilt as a reply engine. Then paste to screenshot: a free vision model transcribes chat screenshots with speaker labels. Then screenshot to live page-reading via the extension. Each step existed to delete friction the previous version still had.",
+      "The prompt itself pivoted three times on real user disgust: from mode-pickers to auto-detection, from one-note cocky wit to enforced tonal range, and finally to the full anti-AI-smell rewrite when the replies still felt machine-made. The last rewrite was the one that mattered.",
+      "The extension's first real-world run crashed on chrome.storage being undefined in content scripts, and the WhatsApp adapter silently fell back to the generic scraper, which flipped who said what and made the AI answer the user's own messages. Fixed by moving settings into the service worker and hardening the adapter with WhatsApp's data-id fallback.",
     ],
     weaknesses: [
-      "I did not know how unreliable a free model endpoint could be until it took the app down. Now every call has a timeout and a fallback, and the model choice is a one-line change when one goes down.",
-      "The working model runs 10 to 17 seconds under load. It answers, but it is not instant, and I know why: the fix is a faster model when one frees up, not more code.",
+      "I shipped the scraper on mock DOMs that matched my assumptions and called it tested. Real WhatsApp broke it in two ways in ten minutes. Now there is a 33-test harness that runs the real adapter code in a real browser engine, and the honest knowledge that selector-based scraping decays and needs the fallback behind it.",
+      "I could not reliably tell a probabilistic failure from a fixed one. The role-flip bug passed four straight tests after a fix that did not address it. I learned to rerun the exact failing scenario repeatedly and only trust zero-for-four.",
+      "The free model is a ceiling. The prompt closes most of the gap, but a stronger model behind the same prompt would be better still, and on a zero budget that trade is the design.",
     ],
     outcome: [
-      "Live at trywingman.vercel.app. Paste a conversation and it returns a read of the situation plus three labelled, sendable replies.",
-      "Tested on a real opening message, it detected the intent correctly, gave three genuinely different lines, and matched a lowercase, no-emoji texting style with zero configuration.",
+      "Live at trywingman.vercel.app: screenshot or paste a conversation, get a read of the situation plus three tonally distinct, sendable replies, with openers from dating-profile screenshots, per-chat memory, and voice-learning. No account, nothing stored server-side.",
+      "A Chrome extension (v0.3.0, Manifest V3) that injects a shadow-DOM panel into seven messaging sites, reads the open thread with per-site adapters, and drops the chosen reply into the message box. 33 for 33 on the adapter harness, verified live on real WhatsApp.",
+      "The prompt, tested across opposite registers in one run: grief got 'do you want company or do you want quiet right now, either one i'm here', a client pushing back on price got three substantive professional approaches, and friend banter got 'that movie was boring as hell and i stand by my nap'. No AI smell in any of them.",
     ],
     regret:
-      "No screenshot input yet. Paste works, but Rizz's real advantage is that you can screenshot a chat and it just reads it. Adding image understanding is the obvious next step to make the input as frictionless as the output.",
+      "The phone is where texting happens and the extension cannot reach it, phone browsers do not run extensions and native apps are sealed. The web app's screenshot flow covers it, but the real answer is a native keyboard, and that is a separate build I have not started.",
     takeaway:
-      "The way to beat a crowded product was not to add features, it was to remove them. Reading the situation for the user, so they never pick a mode, made it smoother and smarter at once. The best version of a tool often does more by asking less.",
+      "Prompt engineering is real engineering. The same free model produced cringe and produced lines indistinguishable from a sharp human, and the entire difference was a system prompt built like a spec: explicit failure modes, register maps, orientation pinning, self-checks. Model quality sets the ceiling, but the prompt decides how close you get to it, and on a zero budget the prompt is the only lever you own.",
   },
   // ─────────────────────────────────────────────────────────────────
   "nova": {

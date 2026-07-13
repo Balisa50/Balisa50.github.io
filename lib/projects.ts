@@ -44,13 +44,13 @@ export const PROJECTS: Project[] = [
   {
     slug: "wingman",
     title: "Wingman",
-    tagline: "An AI texting coach that reads the room and replies in your voice",
+    tagline: "An AI texting coach that reads the chat you're in and replies like a human, in your voice",
     description:
-      "Paste a conversation and Wingman reads the situation itself, early dating, a cooling situationship, a work chat, a real apology, then hands you three replies you can send as-is, each a different strategy: a playful callback, one that moves it forward, and a curveball. It is the anti-Rizz. Instead of generic copy-paste pickup lines, an elite prompt with a hard self-check bans cringe and greeting-card lines, anchors every reply to what was actually said, and matches your own texting voice from a sample of your messages. The model runs server-side so the API key never reaches the browser, behind a resilient model chain with per-call timeouts and fallback so a slow model degrades instead of failing.",
-    tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Server routes"],
+      "Screenshot a conversation, or let the browser extension read it straight off WhatsApp Web, Instagram, X, LinkedIn, Messenger, Telegram or Discord, and Wingman reads the situation itself then hands you three tonally distinct, sendable replies: playful, direct, and one genuinely sincere. The core artifact is the system prompt, engineered like a spec: an explicit kill-list of AI fingerprints the model must hunt out of its own drafts, a register map spanning flirting, grief, conflict, professional and family conversation, orientation pinning so it never answers your own message as the other person's, and a hard self-check. Named chats remember the person and the whole thread, every reply you send teaches it your texting voice, and a per-chat context (dating, work, boss, making up) drives tone and length, all in localStorage with no account. One server route holds the free NVIDIA key for both the web app and the Manifest V3 extension, whose seven per-site DOM adapters are covered by a 33-test real-browser harness.",
+    tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Chrome Extension (MV3)", "Vision OCR"],
     demo: "https://trywingman.vercel.app",
     status: "live",
-    metric: "Reads the situation · 3 strategies · style-matched replies",
+    metric: "Reads 7 messaging apps live · 3 real tones · sounds human, not AI",
     accent: "cyan",
     fallbackStars: 0,
     featured: true
