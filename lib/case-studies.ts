@@ -349,7 +349,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Read the original UMAP paper (McInnes, Healy 2018) before picking it over t-SNE. UMAP preserves global structure better, which is what I needed, themes have to land near each other across the whole corpus, not just locally.",
       "Studied which sentence-transformer model to use. Tried `all-mpnet-base-v2` (768-dim, slower) and `all-MiniLM-L6-v2` (384-dim, faster). Compared cluster coherence on a 200-verse sample. MiniLM lost ~3% on coherence but ran 2.5x faster on CPU. Picked MiniLM because the corpus is fixed and the speed lets me iterate on clustering parameters at no cost.",
       "Read existing Quran apps in detail before designing UX (Quran.com, Tarteel, Muslim Pro, Bayyinah). Identified what they all share: the verse list. Identified what none of them have: a spatial sense of the corpus. That gap was the whole opportunity.",
-      "Studied Three.js InstancedMesh patterns. Naive Three.js creates one DrawCall per object, fine for 50 cubes, fatal for 6,236 verses on a phone. InstancedMesh batches them into one GPU call. Read three example codebases that used it for particle systems before writing my own.",
+      "Studied Three.js batching strategies. Naive Three.js creates one DrawCall per object, fine for 50 cubes, fatal for 6,236 verses on a phone. Read three example codebases, two using InstancedMesh and one using a Points cloud, and compared what each actually costs per particle before writing my own.",
       "Read about the Meccan vs Medinan classification. Surahs were revealed in two distinct phases (Meccan: 13 years, cosmic, urgent, short; Medinan: 10 years, legislative, communal, long). Realised this was free metadata I could use for color, not just abstract clusters but a layer of meaning that a religious reader would already recognize.",
     ],
     constraints: [
@@ -366,9 +366,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "The corpus is fixed forever, 6,236 verses, never changes. So I run sentence-transformers locally, project to 3D with UMAP, cluster with HDBSCAN, then dump the result as a JSON file the frontend just downloads. No vector DB, no embedding API at runtime, zero per-user cost. This is the single decision that makes the entire app free to operate.",
       },
       {
-        call: "WebGL InstancedMesh, not HTML/SVG/canvas.",
+        call: "One WebGL point cloud, not HTML/SVG/canvas.",
         reason:
-          "6,236 DOM nodes melts a phone, sustained 60fps rotation requires GPU. Three.js with InstancedMesh draws all 6,236 particles as a single GPU call. I had to learn shader-level customisation to make individual particles glow on hover, InstancedMesh doesn't give you per-instance materials by default. Built a custom fragment shader with attribute-based color and pulse intensity.",
+          "6,236 DOM nodes melts a phone, sustained 60fps rotation requires GPU. I looked at InstancedMesh first, which is the usual answer for batching, but instanced geometry is overkill for particles that never rotate and always face the camera, it carries a full transform matrix per instance you'd never use. A single THREE.Points cloud with PointsMaterial draws all 6,236 as one call with three floats of position each. Getting per-particle behaviour out of it meant learning shader-level customisation, so I inject a custom vertex/fragment shader via onBeforeCompile with attribute-based color and a per-point size attribute driving the glow and pulse.",
       },
       {
         call: "Color verses by Meccan vs Medinan revelation, not by cluster ID.",
@@ -398,9 +398,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Theme search was originally just keyword matching. Got too many false positives, 'mercy' would match every verse with 'merciful' which is most of the Qur'an. Added synonym expansion + PCA-64 semantic boost, narrowing matches to verses that are actually about mercy as a theme.",
     ],
     weaknesses: [
-      "I had never written a fragment shader before this project. Spent two weeks learning GLSL through The Book of Shaders, then implemented per-particle glow on hover. The pulse intensity attribute I added to the InstancedMesh is the result of that struggle.",
-      "I didn't know what UMAP and HDBSCAN actually did at the math level when I started. Read the papers, ran them on toy datasets to build intuition, then on the Qur'an corpus. Tuned `min_cluster_size` and `min_samples` over many runs before the clusters mapped meaningfully to themes.",
-      "Three.js performance was a steep learning curve. My first prototype used regular Mesh objects in a loop, 4fps on a phone. Rewriting with InstancedMesh + custom shaders + reducing pixel ratio on low-end devices got it to a steady 60fps.",
+      "I had never written a fragment shader before this project. Spent two weeks learning GLSL through The Book of Shaders, then implemented per-particle glow on hover. The per-point size attribute I feed into the injected shader is the result of that struggle.",
+      "I didn't know what UMAP and HDBSCAN actually did at the math level when I started, and it cost me. I read the papers and ran both on toy datasets, but I shipped the clustering step silently broken: UMAP was correctly using cosine distance while HDBSCAN ran euclidean on the raw 384-dim embeddings, where density estimation falls apart. 78% of the corpus came back as noise with one surviving cluster of 33 verses, and I never checked the label distribution, so 'clustered with HDBSCAN' sat in my README for months while being effectively untrue. The fix is the standard one BERTopic uses, cluster on a UMAP-reduced space rather than the raw vectors, and it took noise from 78% to 1.2%. The real lesson wasn't about metrics, it was that I'd validated the visualisation by looking at it and never validated the numbers underneath it.",
+      "Three.js performance was a steep learning curve. My first prototype used regular Mesh objects in a loop, 4fps on a phone. Rewriting as a single THREE.Points cloud + custom shaders + reducing pixel ratio on low-end devices got it to a steady 60fps.",
     ],
     outcome: [
       "All 6,236 verses live in the galaxy with semantic neighbour relations",
