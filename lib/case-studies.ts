@@ -39,7 +39,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Rizz first: around 10 million users, 18 to 25, screenshot in, three replies out. Its own users' complaints are consistent, generic copy-paste lines, falls apart in emotionally serious conversations, paywalled. The gap was never features, it was that the output smells like AI.",
       "So I studied the smell itself. AI text has fingerprints people now detect instantly: hedged balance ('it's not just X, it's Y'), customer-support warmth ('I hear you, I'm here for you'), three-part lists, symmetrical clauses, tidy life-lesson endings, words nobody texts. I catalogued every tell and made the prompt hunt its own output for them.",
       "Then the harder domain: what actually lands in human conversation. How real people text when they flirt, fight, apologise, comfort grief, negotiate, hold a line with a client. What negging reads as (insecurity), why presence beats solutions when someone is hurting, why one word can outperform a paragraph. The prompt encodes a register map of all of it.",
-      "For the extension I read how seven messaging apps structure their DOM. WhatsApp labels bubbles in and out, Instagram and Messenger obfuscate classes so you classify by which side of centre a bubble sits, LinkedIn stacks everything left and marks the other person with a modifier class, Discord has no own-message marker at all so you match each author against the logged-in username.",
+      "For the extension I read how ten sites structure their DOM. WhatsApp labels bubbles in and out, Instagram and Messenger obfuscate classes so you classify by which side of centre a bubble sits, LinkedIn stacks everything left and marks the other person with a modifier class, Discord has no own-message marker at all so you match each author against the logged-in username.",
     ],
     constraints: [
       "Zero budget, permanently. Free NVIDIA endpoint for both the text model and the vision model, free hosting, no accounts, no backend database. Memory and voice-learning had to live entirely in the browser's own storage.",
@@ -85,13 +85,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The extension's first real-world run crashed on chrome.storage being undefined in content scripts, and the WhatsApp adapter silently fell back to the generic scraper, which flipped who said what and made the AI answer the user's own messages. Fixed by moving settings into the service worker and hardening the adapter with WhatsApp's data-id fallback.",
     ],
     weaknesses: [
-      "I shipped the scraper on mock DOMs that matched my assumptions and called it tested. Real WhatsApp broke it in two ways in ten minutes. Now there is a 33-test harness that runs the real adapter code in a real browser engine, and the honest knowledge that selector-based scraping decays and needs the fallback behind it.",
+      "I shipped the scraper on mock DOMs that matched my assumptions and called it tested. Real WhatsApp broke it in two ways in ten minutes. The lesson stuck: mock-DOM testing proves nothing about a selector, and selector-based scraping decays, which is why every adapter has a generic fallback behind it.",
       "I could not reliably tell a probabilistic failure from a fixed one. The role-flip bug passed four straight tests after a fix that did not address it. I learned to rerun the exact failing scenario repeatedly and only trust zero-for-four.",
       "The free model is a ceiling. The prompt closes most of the gap, but a stronger model behind the same prompt would be better still, and on a zero budget that trade is the design.",
     ],
     outcome: [
       "Live at trywingman.vercel.app: screenshot or paste a conversation, get a read of the situation plus three tonally distinct, sendable replies, with openers from dating-profile screenshots, per-chat memory, and voice-learning. No account, nothing stored server-side.",
-      "A Chrome extension (v0.3.0, Manifest V3) that injects a shadow-DOM panel into seven messaging sites, reads the open thread with per-site adapters, and drops the chosen reply into the message box. 33 for 33 on the adapter harness, verified live on real WhatsApp.",
+      "A Chrome extension (v0.11.1, Manifest V3) that injects a shadow-DOM panel into ten sites, reads the open thread with per-site adapters, and drops the chosen reply into the message box, with a generic fallback behind them. Verified live on real WhatsApp.",
       "The prompt, tested across opposite registers in one run: grief got 'do you want company or do you want quiet right now, either one i'm here', a client pushing back on price got three substantive professional approaches, and friend banter got 'that movie was boring as hell and i stand by my nap'. No AI smell in any of them.",
     ],
     regret:
@@ -868,7 +868,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     outcome: [
       "Full pipeline: job posting, then adaptive interview, then scored report, then PDF",
-      "Now runs entirely on Groq (LLaMA 3.3 70B for one-shot tasks, 3.1 8B Instant for the live stream) after the Gemini rate-limit pivot",
+      "Now runs on NVIDIA's free OpenAI-compatible endpoint (mistral-medium-3.5-128b for both the one-shot scoring and the live interview stream), after pivoting off Gemini for rate limits and then off Groq; the `groq_*` names in config are legacy",
       "Supabase + RLS for candidate data",
       "WeasyPrint PDF reports for hiring teams",
       "LocalStorage session resume, candidates can refresh / lose connection without losing the interview",
@@ -959,7 +959,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "SSE streaming through a proxy (Render frontend, then Render backend, then user) buffered chunks initially. Fix was setting `X-Accel-Buffering: no` and forcing the proxy to forward chunks immediately (commit a2bbe53).",
     ],
     outcome: [
-      "32 endpoints across 5 routers (campaigns, prospects, emails, activity, stats)",
+      "32 endpoints across 6 routers (campaigns, emails, prospects, settings, activity, tracking)",
       "Hunter mode (B2B outreach) + Seeker mode (job hunting)",
       "Three autonomy levels: Copilot (approve each), Supervised (auto-send with live SSE pause), Full Auto",
       "RFC 2822 email threading for compliant follow-ups",
@@ -1013,7 +1013,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Validation gauntlet: Gini, KS, PSI, ROC, all required to pass.",
         reason:
-          "Three different lenses on model quality: Gini (overall discrimination, want > 0.4), KS (best cutoff separation, want > 0.3), PSI (population stability over time, want < 0.1). A model that passes one and fails another is a red flag. I rejected several feature sets that had high Gini but unstable PSI before settling on the final. Final: Gini 0.56, KS 0.42, both above industry-standard thresholds.",
+          "Three different lenses on model quality: Gini (overall discrimination, want > 0.4), KS (best cutoff separation, want > 0.3), PSI (population stability over time, want < 0.1). A model that passes one and fails another is a red flag. I rejected several feature sets that had high Gini but unstable PSI before settling on the final. Final: Gini 0.29 and KS 0.23 on the time-based holdout, both short of those thresholds, with PSI 0.008 comfortably inside. The discrimination ceiling is set by the generator, not the modelling: no feature clears Strong information value (previous_defaults tops out at IV 0.13, total IV across the eight selected features is about 0.51), and a scorecard cannot separate better than its features do. I report the number the pipeline actually produces rather than the one I wanted.",
       },
       {
         call: "Time-based holdout, not random-split holdout.",
@@ -1047,8 +1047,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "12,000 synthetic West African microfinance loans, regionally-calibrated",
       "WoE/IV feature selection pipeline, optimal binning for categoricals",
       "Basel II points conversion (factor 28.85, offset 487.123)",
-      "Validation: Gini 0.56, KS 0.42, above industry thresholds",
-      "PSI < 0.1 on time-based holdout (population stable)",
+      "Validation: Gini 0.29, KS 0.23 on holdout, below industry thresholds and reported as such, capped by the synthetic generator's weak feature signal",
+      "PSI 0.008 on time-based holdout (population stable)",
       "Multi-scenario stress testing (drought, currency crisis, pandemic)",
       "Live Next.js + Recharts dashboard",
       "Explainable end-to-end: every score traceable back to feature contributions",

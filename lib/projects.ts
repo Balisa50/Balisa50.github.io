@@ -46,11 +46,11 @@ export const PROJECTS: Project[] = [
     title: "Wingman",
     tagline: "An AI texting coach that reads the chat you're in and replies like a human, in your voice",
     description:
-      "Screenshot a conversation, or let the browser extension read it straight off WhatsApp Web, Instagram, X, LinkedIn, Messenger, Telegram or Discord, and Wingman reads the situation itself then hands you three tonally distinct, sendable replies: playful, direct, and one genuinely sincere. The core artifact is the system prompt, engineered like a spec: an explicit kill-list of AI fingerprints the model must hunt out of its own drafts, a register map spanning flirting, grief, conflict, professional and family conversation, orientation pinning so it never answers your own message as the other person's, and a hard self-check. Named chats remember the person and the whole thread, every reply you send teaches it your texting voice, and a per-chat context (dating, work, boss, making up) drives tone and length, all in localStorage with no account. One server route holds the free NVIDIA key for both the web app and the Manifest V3 extension, whose seven per-site DOM adapters are covered by a 33-test real-browser harness.",
+      "Screenshot a conversation, or let the browser extension read it straight off WhatsApp Web, Instagram, X, LinkedIn, Messenger, Telegram or Discord, and Wingman reads the situation itself then hands you three tonally distinct, sendable replies: playful, direct, and one genuinely sincere. The core artifact is the system prompt, engineered like a spec: an explicit kill-list of AI fingerprints the model must hunt out of its own drafts, a register map spanning flirting, grief, conflict, professional and family conversation, orientation pinning so it never answers your own message as the other person's, and a hard self-check. Named chats remember the person and the whole thread, every reply you send teaches it your texting voice, and a per-chat context (dating, work, boss, making up) drives tone and length, all in localStorage with no account. One server route holds the free NVIDIA key for both the web app and the Manifest V3 extension, whose ten per-site DOM adapters sit in front of a generic fallback for anything else.",
     tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Chrome Extension (MV3)", "Vision OCR"],
     demo: "https://trywingman.vercel.app",
     status: "live",
-    metric: "Reads 7 messaging apps live · 3 real tones · sounds human, not AI",
+    metric: "Reads 10 sites live · 3 real tones · sounds human, not AI",
     accent: "cyan",
     fallbackStars: 0,
     featured: true
@@ -76,14 +76,14 @@ export const PROJECTS: Project[] = [
     title: "FORGE",
     tagline: "Mentor-driven learning platform with proof-of-work verification",
     description:
-      "A structured platform that pairs every self-taught learner 1:1 with a real human mentor and runs them through one of 9 hand-curated career roadmaps (Data Science, AI Engineering, Cybersecurity, Full-Stack and more), 17 to 43 weeks each with 10 mastery checkpoints a week and over 1,100 verified video resources. The proof-of-work engine checks your progress against your real GitHub commits and deployed projects before a week counts, no self-reporting. Mentors release each week, control the pace, and sign off only when you've truly learned it; finishers earn a cryptographically signed, employer-verifiable certificate. Includes a custom Actuarial Exam P & FM mastery engine that auto-generates tiered, non-repeating SOA-style questions with interactive diagrams.",
+      "A structured platform that pairs every self-taught learner 1:1 with a real human mentor and runs them through one of 13 hand-curated career roadmaps (Data Science, AI Engineering, Cybersecurity, Full-Stack and more), 12 to 43 weeks each with around 5 mastery checks a week and 385 verified video resources. The proof-of-work engine checks your progress against your real GitHub commits and deployed projects before a week counts, no self-reporting. Mentors release each week, control the pace, and sign off only when you've truly learned it; finishers earn a cryptographically signed, employer-verifiable certificate. Includes a custom Actuarial Exam P & FM mastery engine that auto-generates tiered, non-repeating SOA-style questions with interactive diagrams.",
     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "KaTeX"],
     github: "https://github.com/Balisa50/forge",
     githubRepo: "Balisa50/forge",
     demo: "https://forge-ab.vercel.app",
     status: "in-progress",
     progress: 90,
-    metric: "9 roadmaps · 1,100+ resources · 1:1 mentors · proof-of-work",
+    metric: "13 roadmaps · 385 video resources · 1:1 mentors · proof-of-work",
     accent: "cyan",
     fallbackStars: 0,
     featured: true
@@ -210,7 +210,7 @@ export const PROJECTS: Project[] = [
     githubRepo: "Balisa50/credit-risk-scorecard",
     demo: "https://credit-risk-ab.vercel.app/",
     status: "live",
-    metric: "Gini 0.56 · KS 0.42",
+    metric: "Gini 0.29 · KS 0.23 · PSI 0.008",
     accent: "pink",
     fallbackStars: 0
   },
