@@ -257,8 +257,10 @@ export default function GambiaResearchArticle() {
               find real jobs and real schooling. The window opens on its own. The dividend does not.
             </P>
             <P>
-              At the same time, a quieter shift is coming. The share of older people roughly triples over
-              the projection. The Gambia is young today and will stay young for decades, but it will need
+              At the same time, a quieter shift is coming. The number of Gambians over 65 grows more than
+              sevenfold, from about 73,000 today to roughly 550,000, and their share of the population rises
+              from 3% to about 12%. Measured against the working-age population, old-age dependency roughly
+              triples, from 5 to 18 per 100. The Gambia is young today and will stay young for decades, but it will need
               pensions and elderly healthcare it has barely begun to build, and the cheapest time to start
               building them is during the dividend years, while the working population is large and the
               elderly one is still small.
