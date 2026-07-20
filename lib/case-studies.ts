@@ -350,6 +350,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Studied which sentence-transformer model to use. Tried `all-mpnet-base-v2` (768-dim, slower) and `all-MiniLM-L6-v2` (384-dim, faster). Compared cluster coherence on a 200-verse sample. MiniLM lost ~3% on coherence but ran 2.5x faster on CPU. Picked MiniLM because the corpus is fixed and the speed lets me iterate on clustering parameters at no cost.",
       "Read existing Quran apps in detail before designing UX (Quran.com, Tarteel, Muslim Pro, Bayyinah). Identified what they all share: the verse list. Identified what none of them have: a spatial sense of the corpus. That gap was the whole opportunity.",
       "Studied Three.js batching strategies. Naive Three.js creates one DrawCall per object, fine for 50 cubes, fatal for 6,236 verses on a phone. Read three example codebases, two using InstancedMesh and one using a Points cloud, and compared what each actually costs per particle before writing my own.",
+      "Read Aupetit and Espadoto's work on user-steerable projections (arXiv 2506.15479, June 2025) before designing the query-driven layout. Their approach zero-shot-classifies every item with an LLM, then re-runs UMAP. Reported throughput is 2.4-3.6 items/sec, which for 6,236 verses is roughly half an hour per question. That number is what pushed me to steer the projection geometrically from the query vector alone and spend exactly one model call afterwards, on labelling, instead of six thousand.",
       "Read about the Meccan vs Medinan classification. Surahs were revealed in two distinct phases (Meccan: 13 years, cosmic, urgent, short; Medinan: 10 years, legislative, communal, long). Realised this was free metadata I could use for color, not just abstract clusters but a layer of meaning that a religious reader would already recognize.",
     ],
     constraints: [
@@ -376,6 +377,21 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "Cluster IDs are abstract. A religious reader looking at the galaxy needs the visualisation to mean something they already understand. Coloring by revelation period gives the cosmos an immediate readable narrative, early Meccan verses (cosmic, urgent) cluster together, late Medinan verses (legislative, communal) cluster together. The data tells a story before anyone clicks anything.",
       },
       {
+        call: "Ship the full 384-dim embeddings rather than reuse the PCA-64 already in the file.",
+        reason:
+          "The galaxy already shipped a 64-dim PCA vector per verse, so reusing it for semantic search was free and I assumed it would work. It didn't, and only measurement showed why. PCA-64 ranks fine but destroys absolute similarity calibration: projecting into a 64-dim subspace and renormalising inflates whatever component survived, so an unrelated query scores as high as a relevant one. Scored over 34 probe queries, top-10 mean cosine separates on-topic from off-topic with AUC 1.000 in 384-dim and AUC 0.480 in PCA-64, which is worse than a coin flip. So the full vectors ship, int8-quantised: 2.4 MB instead of 9.6 MB, mean cosine fidelity 0.999, 97% agreement on top-20 ranking. Absolute scores are the whole point, because they are what let the app say the Qur'an does not address something.",
+      },
+      {
+        call: "Reprojection swaps what 'home' means instead of adding an animation system.",
+        reason:
+          "The galaxy's physics loop already springs every star toward a home position each frame. So query-conditioned layout doesn't animate anything itself, it just changes what home is, and the existing spring carries the whole corpus into the new geometry at damping the galaxy was already tuned for. One prop, no second tween to keep in sync, and it composes with the pulse and shooting-star states rather than fighting them. The projection maths runs client-side in about 22ms for 6,236 verses at 384 dimensions.",
+      },
+      {
+        call: "Let an unanswerable question return nothing.",
+        reason:
+          "Every search interface returns something. Type anything into any Qur'an app and you get a confident ranked list, which quietly implies an answer exists and these are it, and that is the most common way software misleads people about scripture. Because the 384-dim scores are absolutely calibrated I can set a floor with a measured basis rather than a guess: 20 deliberately off-topic queries score 0.187 to 0.442 on their best match, 14 on-topic ones score 0.412 to 0.735. Below the floor the galaxy stays dark and the readout says the Qur'an doesn't frame it that way. Refusing to answer is a feature I had to build deliberately.",
+      },
+      {
         call: "AI tafsir cached per verse globally, not per user.",
         reason:
           "Once the model has analysed verse 2:255, that analysis is the same for every user. I cache it server-side keyed on `surah:ayah`, so the second user pays nothing. With ~6,236 verses, the entire tafsir corpus costs about $30 to generate once, then is free forever. The caching layer is the difference between a hobby project and a sustainable one.",
@@ -392,18 +408,27 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
+      "The feature I was proudest of designing did not survive measurement, and killing it was the right call. The plan was that a question would fan the matching verses into a ring of labelled arcs, so 'mercy' would separate into mercy-as-forgiveness, mercy-as-provision, mercy-as-withheld-punishment. I built a demo on synthetic vectors and it looked beautiful. Then I checked it against the actual corpus. The residual after removing the query direction is essentially one-dimensional: across five queries the first eigenvalue carries 22-33% of the variance and the second only 4-6%, indistinguishable from the third and fourth. My two-axis fan was spreading verses along one real direction and one axis of pure noise. I tried clustering the matched set instead, and k-means silhouette scored 0.03-0.07 for every k from 2 to 6, which is near zero, meaning the groups overlap almost entirely. This corpus is semantically continuous, not clumpy, which is the same property that made HDBSCAN call 78% of it noise. So two thirds of my own proposal was wrong.",
+      "What survived that measurement is better than what I designed. One axis of difference is real and reads as a genuine polarity: for 'mercy' it runs from divine attribute (The Most Merciful) to mercy enacted (protect them from evil consequences); for 'patience in hardship' from the counsel to be patient to the affliction itself; for 'forgiving my father' from literal kin to repentance before God. So the galaxy spreads answers along one named axis instead of a fictional ring, and the two ends are labelled by one cached model call rather than the arcs I could not honestly produce. The visualisation now claims exactly as much structure as the data actually contains.",
       "First version did the embedding + clustering at request time on Vercel Edge. It worked but took 8 seconds on cold start. Moved everything to a one-shot Python pipeline that writes the static file at build time. Cold start is now instant. Documented in commit 9520c55: galaxy physics, video reset, debounce, shooting stars all stabilised together.",
       "Originally fetched the AI analysis on every verse open. Realised most users skim, so I made it click-to-reveal, the analysis only fetches when the user explicitly asks for it. Cut my LLM spend by ~70%. This pattern became the default for every AI feature in v2.",
       "First tour implementation had a race condition where the next step would fire before the previous step's animation finished. Caused card overlap on mobile (commit 0309957). Fixed by holding tour state in a state machine with explicit transitions instead of setTimeout chains.",
       "Theme search was originally just keyword matching. Got too many false positives, 'mercy' would match every verse with 'merciful' which is most of the Qur'an. Added synonym expansion + PCA-64 semantic boost, narrowing matches to verses that are actually about mercy as a theme.",
     ],
     weaknesses: [
+      "I made the same calibration mistake twice in one feature, in two different places, and only caught it because I tested the output instead of trusting the code. Both times I normalised a score to its observed range when the meaning depended on its absolute value. First in the coherence readout, where mean-centring made a deliberately unanswerable question score highest of the four I tried. Then again in the galaxy layout, where min-max normalising relevance stretched any query to fill the range, so 'kubernetes pod autoscaling config' pulled 1,416 verses into the bright core against 510 for 'mercy'. Exactly backwards, and it would have looked plausible on screen. Relative normalisation quietly destroys any claim about absence, and absence is the thing this feature exists to express.",
+      "I shipped a NaN into the single best-matching verse and did not see it for a while. Relevance was stored as float32 but the bounds were captured from the float64 accumulator, so a value that rounded above the maximum pushed the normalised term just past 1, and a negative base raised to a fractional power is NaN. It affected exactly the top hit for a query, the one verse a reader is most likely to look at, and everything else rendered fine. Now the bounds come from the stored values and the term is clamped as well.",
       "I had never written a fragment shader before this project. Spent two weeks learning GLSL through The Book of Shaders, then implemented per-particle glow on hover. The per-point size attribute I feed into the injected shader is the result of that struggle.",
       "I didn't know what UMAP and HDBSCAN actually did at the math level when I started, and it cost me. I read the papers and ran both on toy datasets, but I shipped the clustering step silently broken: UMAP was correctly using cosine distance while HDBSCAN ran euclidean on the raw 384-dim embeddings, where density estimation falls apart. 78% of the corpus came back as noise with one surviving cluster of 33 verses, and I never checked the label distribution, so 'clustered with HDBSCAN' sat in my README for months while being effectively untrue. The fix is the standard one BERTopic uses, cluster on a UMAP-reduced space rather than the raw vectors, and it took noise from 78% to 1.2%. The real lesson wasn't about metrics, it was that I'd validated the visualisation by looking at it and never validated the numbers underneath it.",
       "Three.js performance was a steep learning curve. My first prototype used regular Mesh objects in a loop, 4fps on a phone. Rewriting as a single THREE.Points cloud + custom shaders + reducing pixel ratio on low-end devices got it to a steady 60fps.",
     ],
     outcome: [
       "All 6,236 verses live in the galaxy with semantic neighbour relations",
+      "Semantic search that runs entirely in the browser, no inference server",
+      "The galaxy reshapes itself around the question, along one measured axis of meaning",
+      "Says so when the Qur'an does not address a question, instead of returning a plausible list",
+      "Clustering fixed: 78% noise down to 1.2%",
+      "The trail remembers the question that led to each verse, not just the destination",
       "18 reciters with word-level audio highlighting",
       "Sub-1-second initial load on 3G",
       "AI tafsir caches globally, second user pays nothing",
@@ -412,9 +437,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Guided onboarding tour with state-machine transitions",
     ],
     regret:
-      "I'd add a per-Surah constellation zoom mode. Right now the galaxy is one undifferentiated cosmos and very long surahs (Al-Baqarah, 286 verses) get visually crowded. A 'tap a Surah, fly into its constellation' interaction would reward the curious without polluting the global view. The architecture supports it, it's just an unbuilt camera transition.",
+      "I proposed the labelled-arc feature publicly before I had tested whether the structure existed. The write-up was confident, the demo was persuasive, and the whole thing rested on synthetic vectors with the clusters planted in them by construction. If I had run the eigenvalue check first, an afternoon's work, I would have designed the one-dimensional version from the start instead of arriving at it by demolition. I now treat a convincing demo on synthetic data as evidence of nothing.",
     takeaway:
-      "When the corpus is fixed, do the expensive work once and ship the artefact. When the per-user cost is zero, you can run forever on free tiers. The Qur'an is the only book I know that asks the reader to find connections across its 114 chapters. Software should reward that, not flatten it into a scroll.",
+      "When the corpus is fixed, do the expensive work once and ship the artefact, and when the per-user cost is zero you can run forever on free tiers. But the thing this project actually taught me is narrower and more useful: measure the claim your design depends on before you build on it. Two thirds of my proposal died to an eigenvalue check and a silhouette score, and the feature that shipped is more honest for it. The Qur'an is the only book I know that asks the reader to find connections across its 114 chapters. Software should reward that, and it should also admit when there is no connection to find.",
   },
 
   // ─────────────────────────────────────────────────────────────────

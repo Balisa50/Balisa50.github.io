@@ -109,15 +109,15 @@ export const PROJECTS: Project[] = [
   {
     slug: "ayat",
     title: "AYAT",
-    tagline: "6,236 Qur'anic verses as a semantic galaxy",
+    tagline: "A Qur'an that rearranges itself around your question",
     description:
-      "Every verse of the Qur'an embedded with sentence-transformers, projected to 3D with UMAP, clustered with HDBSCAN, and rendered as a live particle galaxy in Three.js. Colour-codes Meccan vs Medinan revelation, surfaces semantic neighbours, and pulls LLM-generated historical context for any ayah you click.",
-    tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "Next.js 16", "Three.js", "LLM API"],
+      "All 6,236 verses embedded with sentence-transformers, projected to 3D with UMAP and rendered as a live particle galaxy in Three.js. Ask a question and the corpus physically reorganises: the query is embedded in the browser, verses converge on an axis of meaning measured from the results themselves, and the rest opens outward. Ask something it has nothing for and it says so instead of returning a plausible list. No inference server, so it costs nothing to run.",
+    tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "transformers.js", "Next.js 16", "Three.js", "LLM API"],
     github: "https://github.com/Balisa50/ayat",
     githubRepo: "Balisa50/ayat",
     demo: "https://ayat-ab.vercel.app/",
     status: "live",
-    metric: "6,236 verses, live 3D semantic search",
+    metric: "6,236 verses reprojected in 22ms, fully client-side",
     accent: "violet",
     fallbackStars: 0,
     featured: true
