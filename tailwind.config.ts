@@ -9,24 +9,30 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      // Neutral greys and one restrained accent. The previous palette was
+      // neon cyan and hot pink over pure black with glow shadows, which reads
+      // as a themed showcase rather than an engineer's portfolio. Token names
+      // are kept so every existing component keeps compiling; only the values
+      // move. `cyan` is now a muted steel blue and `pink` is a warm grey, so
+      // the per-project accent field neutralises itself without a rewrite.
       colors: {
-        background: "#050505",
-        surface: "#0A0A0A",
-        card: "rgba(10, 10, 10, 0.7)",
-        border: "#1A1A1A",
+        background: "#0B0B0C",
+        surface: "#131315",
+        card: "rgba(19, 19, 21, 0.7)",
+        border: "#232326",
         cyan: {
-          DEFAULT: "#00F0FF",
-          dark: "#00B8CC"
+          DEFAULT: "#7FA6D9",
+          dark: "#5B82B0"
         },
-        pink: "#FF0055",
+        pink: "#A8A29E",
         text: {
-          DEFAULT: "#FFFFFF",
-          secondary: "#A0A0A0"
+          DEFAULT: "#FAFAFA",
+          secondary: "#A1A1AA"
         },
         status: {
-          live: "#00FF88",
-          progress: "#FFB800",
-          planning: "#666666"
+          live: "#6EA97F",
+          progress: "#C9A227",
+          planning: "#71717A"
         }
       },
       fontFamily: {
@@ -41,8 +47,10 @@ const config: Config = {
       animation: {
         "fade-up": "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
         "fade-in": "fade-in 0.4s ease-out both",
-        "glow-pulse": "glow-pulse 3s ease-in-out infinite",
-        "float": "float 6s ease-in-out infinite"
+        // Kept as no-ops so any component still referencing them compiles and
+        // simply stops pulsing or drifting, rather than needing a sweep.
+        "glow-pulse": "none",
+        "float": "none"
       },
       keyframes: {
         "fade-up": {
@@ -63,9 +71,11 @@ const config: Config = {
         }
       },
       boxShadow: {
-        "glow-cyan": "0 0 40px -10px rgba(0, 240, 255, 0.4)",
-        "glow-cyan-lg": "0 0 60px -5px rgba(0, 240, 255, 0.6)",
-        "card": "0 4px 24px -4px rgba(0, 0, 0, 0.6)"
+        // The glows were the loudest thing on the page. Neutralised rather
+        // than deleted so existing class names stay valid.
+        "glow-cyan": "none",
+        "glow-cyan-lg": "none",
+        "card": "0 1px 2px 0 rgba(0, 0, 0, 0.4)"
       }
     }
   },

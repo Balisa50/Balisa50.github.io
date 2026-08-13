@@ -2,21 +2,69 @@
 
 import { motion } from "framer-motion";
 
-const STACK: { label: string; items: string[] }[] = [
+/**
+ * Stack, rebuilt around what the projects on this page actually demonstrate.
+ *
+ * The previous list claimed LangChain, Pinecone, ChromaDB and TensorFlow. None
+ * of them appear in any project here, and they are the first four things an
+ * interviewer probes when a CV says "AI engineer", so they were the riskiest
+ * possible entries: a single follow-up question turns the whole list into a
+ * liability. They are removed rather than kept as aspiration.
+ *
+ * What replaced them is stronger anyway, because it is specific and provable.
+ * "Retrieval over pgvector with a citation validator" is a harder thing to have
+ * built than "LangChain", and it is on this site with the code to back it.
+ */
+const STACK: { label: string; note: string; items: string[] }[] = [
   {
-    label: "AI / ML",
+    label: "AI engineering",
+    note: "What I actually build with",
     items: [
-      "LangChain", "HuggingFace", "PyTorch", "TensorFlow", "scikit-learn",
-      "LLM APIs", "OpenAI SDK", "Groq", "Pinecone", "ChromaDB"
+      "LLM orchestration",
+      "RAG / retrieval",
+      "pgvector",
+      "sentence-transformers",
+      "Prompt specification",
+      "Tool calling",
+      "Model fallback chains",
+      "Output validation",
+      "NVIDIA NIM",
+      "Groq"
     ]
   },
   {
-    label: "Data Science & Stats",
-    items: ["Pandas", "NumPy", "scikit-learn", "R", "MATLAB", "SQL", "Prophet"]
+    label: "Machine learning & statistics",
+    note: "Modelling, mostly Python",
+    items: [
+      "PyTorch",
+      "CTGAN",
+      "scikit-learn",
+      "PyMC / MCMC",
+      "Lee-Carter",
+      "lifelines",
+      "HDBSCAN",
+      "UMAP",
+      "Pandas",
+      "NumPy",
+      "R",
+      "SQL"
+    ]
   },
   {
-    label: "Engineering",
-    items: ["Python", "TypeScript", "Next.js", "React", "FastAPI", "Flask", "Docker", "Streamlit", "Supabase"]
+    label: "Systems & delivery",
+    note: "Getting it in front of people",
+    items: [
+      "Python",
+      "TypeScript",
+      "Next.js",
+      "FastAPI",
+      "PostgreSQL",
+      "Prisma",
+      "Supabase",
+      "Chrome MV3",
+      "Vercel",
+      "Docker"
+    ]
   }
 ];
 
@@ -24,47 +72,38 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="relative mx-auto w-full max-w-7xl scroll-mt-20 px-6 py-16 md:py-20"
+      className="relative mx-auto w-full max-w-5xl scroll-mt-20 border-t border-border px-6 py-16"
       aria-labelledby="skills-heading"
     >
       <motion.div
-        initial={{ opacity: 0, y: 14 }}
+        initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.5 }}
         className="flex flex-col gap-8"
       >
-        <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
-          ~/stack
-        </span>
-        <h2 id="skills-heading" className="sr-only">
+        <h2
+          id="skills-heading"
+          className="text-sm font-semibold uppercase tracking-[0.16em] text-text-secondary"
+        >
           Stack
         </h2>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {STACK.map((group, gi) => (
-            <motion.div
-              key={group.label}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.1 }}
-              transition={{ duration: 0.4, delay: gi * 0.08 }}
-              className="flex flex-col gap-3"
-            >
-              <h3 className="font-mono text-xs font-semibold uppercase tracking-wider text-white/60">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
+          {STACK.map((group) => (
+            <div key={group.label} className="flex flex-col gap-3">
+              <h3 className="text-base font-semibold text-text">
                 {group.label}
               </h3>
-              <ul className="flex flex-wrap gap-2">
+              <p className="text-sm text-text-secondary">{group.note}</p>
+              <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-1.5">
                 {group.items.map((t) => (
-                  <li
-                    key={t}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-text-secondary transition hover:border-cyan/40 hover:text-white"
-                  >
+                  <li key={t} className="text-sm text-text-secondary">
                     {t}
                   </li>
                 ))}
               </ul>
-            </motion.div>
+            </div>
           ))}
         </div>
       </motion.div>

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BookOpen, FileText, Github } from "lucide-react";
+import { ArrowUpRight, BookOpen, FileText, Github, Lock } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { CASE_STUDIES } from "@/lib/case-studies";
 import { cn } from "@/lib/utils";
@@ -53,10 +53,11 @@ function caseStudyHref(p: Project): string | null {
   return null;
 }
 
-/** Where the title links to: live demo > repo > article. */
+/** Where the title links to: live demo > repo > article. A private repo is
+ *  skipped here, since sending a reader to a 404 is worse than not linking. */
 function primaryHref(p: Project): string {
   if (p.demo) return p.demo;
-  if (p.github) return p.github;
+  if (p.github && !p.codePrivate) return p.github;
   if (p.articleUrl) return p.articleUrl;
   return "#";
 }
@@ -117,11 +118,17 @@ function Links({ project }: { project: Project }) {
           <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
         </a>
       )}
-      {project.github && (
+      {project.github && !project.codePrivate && (
         <a href={project.github} target="_blank" rel="noreferrer noopener" className={linkClass}>
           <Github className="h-3.5 w-3.5" aria-hidden="true" />
           Code
         </a>
+      )}
+      {project.codePrivate && (
+        <span className={`${linkClass} cursor-default opacity-70`}>
+          <Lock className="h-3.5 w-3.5" aria-hidden="true" />
+          Code private
+        </span>
       )}
       {project.articleUrl && (
         <a href={project.articleUrl} target="_blank" rel="noreferrer noopener" className={linkClass}>

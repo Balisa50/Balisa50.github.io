@@ -10,7 +10,7 @@
  */
 
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Github, ExternalLink, Linkedin, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, Github, ExternalLink, Linkedin, BookOpen, Lock } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { PROFILE } from "@/lib/projects";
 import type { CaseStudy } from "@/lib/case-studies";
@@ -55,7 +55,7 @@ export function CaseStudyView({
         {/* Header, full width */}
         <header className="border-b border-white/10 pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">
-            ~/projects/{project.slug}
+            Case study
           </p>
           <h1 className="mt-4 max-w-[20ch] text-balance text-[clamp(2.25rem,6vw,4.25rem)] font-semibold leading-[1.04] tracking-tight">
             {project.title}
@@ -79,10 +79,15 @@ export function CaseStudyView({
                   <ExternalLink className="h-3.5 w-3.5" /> Open the live app
                 </a>
               )}
-              {project.github && (
+              {project.github && !project.codePrivate && (
                 <a href={project.github} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-white">
                   <Github className="h-3.5 w-3.5" /> Source on GitHub
                 </a>
+              )}
+              {project.codePrivate && (
+                <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary opacity-70">
+                  <Lock className="h-3.5 w-3.5" /> Source private
+                </span>
               )}
               {project.articleUrl && (
                 <a href={project.articleUrl} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-white">

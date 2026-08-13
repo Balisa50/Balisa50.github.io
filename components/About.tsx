@@ -20,7 +20,7 @@ export function About() {
         className="flex flex-col items-start gap-4"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
-          ~/about
+          About
         </span>
 
         {/* Photo + heading row */}

@@ -3,12 +3,6 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SkipLink } from "@/components/SkipLink";
-import { ConsoleGreeting } from "@/components/ConsoleGreeting";
-import { KonamiEasterEgg } from "@/components/KonamiEasterEgg";
-import { FloatingCTA } from "@/components/FloatingCTA";
-import { CinematicBackground } from "@/components/CinematicBackground";
-import { DroneScan } from "@/components/DroneScan";
-import { WarpNav } from "@/components/WarpNav";
 import { PROFILE } from "@/lib/projects";
 
 const description =
@@ -78,14 +72,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="bg-background font-sans text-text antialiased">
-        <CinematicBackground />
+        {/* The animated background, scanline sweep, warp navigation, console
+            easter egg and floating CTA were removed rather than restyled.
+            None of them carried information, they competed with the work for
+            attention, and they cost a Three.js bundle on first paint. */}
         <SkipLink />
-        <ConsoleGreeting />
         {children}
-        <FloatingCTA />
-        <DroneScan />
-        <WarpNav />
-        <KonamiEasterEgg />
 
         {/* Register the service worker (progressive enhancement) */}
         <script

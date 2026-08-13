@@ -38,7 +38,7 @@ export function Certifications() {
         className="mb-12 flex flex-col items-start gap-3 md:mb-16"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
-          ~/certifications
+          Certifications
         </span>
         <h2
           id="certs-heading"

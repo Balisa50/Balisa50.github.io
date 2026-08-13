@@ -12,6 +12,14 @@ export interface Project {
   tech: string[];
   github?: string;
   githubRepo?: string; // owner/repo for API calls
+  /**
+   * The repository exists but is not public, so `github` must not render as a
+   * link. Verified against the GitHub API on 2026-08-13: five of the twelve
+   * linked repos were private, so a reader clicking through got a 404 on work
+   * that does exist. Saying "private" is honest; a dead link reads as a
+   * project that was never really built.
+   */
+  codePrivate?: boolean;
   demo?: string;
   articleUrl?: string; // Read Article link (e.g. Medium post)
   status: ProjectStatus;
@@ -30,10 +38,11 @@ export const PROJECTS: Project[] = [
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. All of it is open, and anyone can reproduce it from public data.",
+      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. Every input is public data, so the method can be reproduced end to end from the write-up.",
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
+    codePrivate: true,
     articleUrl: "https://balisa50.github.io/research/gambia-2074",
     status: "live",
     metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
@@ -146,6 +155,7 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
     github: "https://github.com/Balisa50/gamba-legal-aid",
     githubRepo: "Balisa50/gamba-legal-aid",
+    codePrivate: true,
     demo: "https://gambia-legal-aid-ab.vercel.app/",
     status: "live",
     metric: "Hallucination-guarded answers",
@@ -161,6 +171,7 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "Pandas", "Next.js", "CBG API", "World Bank data"],
     github: "https://github.com/Balisa50/dalasi-pulse",
     githubRepo: "Balisa50/dalasi-pulse",
+    codePrivate: true,
     demo: "https://dalasi-ab.vercel.app/",
     status: "live",
     metric: "Live Dalasi forecast",
@@ -176,6 +187,7 @@ export const PROJECTS: Project[] = [
     tech: ["Next.js 16", "Prisma 7", "TypeScript", "Tailwind"],
     github: "https://github.com/Balisa50/bs-real-estate",
     githubRepo: "Balisa50/bs-real-estate",
+    codePrivate: true,
     demo: "https://bs-real-estate-fawn.vercel.app/",
     status: "live",
     metric: "Client site with a self-serve admin CMS",
@@ -191,6 +203,7 @@ export const PROJECTS: Project[] = [
     tech: ["Python", "FastAPI", "NVIDIA NIM", "Hunter.io", "Tavily", "NVIDIA NIM", "APScheduler", "Next.js 16"],
     github: "https://github.com/Balisa50/coldpilot",
     githubRepo: "Balisa50/coldpilot",
+    codePrivate: true,
     demo: "https://coldpilot-ab.vercel.app",
     status: "in-progress",
     progress: 80,

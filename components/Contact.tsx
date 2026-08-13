@@ -43,7 +43,7 @@ export function Contact() {
         />
 
         <span className="relative font-mono text-xs uppercase tracking-[0.2em] text-cyan">
-          ~/contact
+          Contact
         </span>
 
         <h2
