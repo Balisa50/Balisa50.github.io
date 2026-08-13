@@ -35,8 +35,15 @@ export async function GET() {
     },
     skills: [
       {
+        // TensorFlow was dropped here for the same reason as on the site: it
+        // appears in no project, and a machine-readable resume is exactly the
+        // artifact a screener greps. Replaced with what the work shows.
+        name: "AI engineering",
+        keywords: ["RAG", "pgvector", "sentence-transformers", "prompt specification", "tool calling", "output validation"]
+      },
+      {
         name: "Machine Learning",
-        keywords: ["PyTorch", "TensorFlow", "HuggingFace", "scikit-learn", "fine-tuning", "RAG"]
+        keywords: ["PyTorch", "CTGAN", "scikit-learn", "PyMC", "MCMC", "HuggingFace"]
       },
       {
         name: "Backend",
