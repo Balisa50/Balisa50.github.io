@@ -125,9 +125,9 @@ export const PRINT_ENTRIES: PrintEntry[] = [
       }
     ],
     stats: [
-      { value: "0.29", label: "Gini on holdout, under the 0.4 industry bar" },
-      { value: "0.23", label: "KS statistic, under the 0.3 bar" },
-      { value: "0.008", label: "PSI on a time-based holdout" },
+      { value: "0.27", label: "Gini on a later-vintage holdout, under the 0.4 industry bar" },
+      { value: "0.21", label: "KS statistic, under the 0.3 bar" },
+      { value: "0.002", label: "PSI across vintages, while defaults rose a third" },
       { value: "12,000", label: "Loans in the calibrated generator" }
     ]
   },
@@ -155,7 +155,7 @@ export const PRINT_ENTRIES: PrintEntry[] = [
       }
     ],
     stats: [
-      { value: "0.77", label: "Cox PH concordance on holdout" },
+      { value: "0.78", label: "Cox PH concordance, held out (0.77 in-sample)" },
       { value: "5,000", label: "Monte Carlo scenarios per run" },
       { value: "8s", label: "Full vectorised simulation" },
       { value: "10,000", label: "Synthetic policies in the book" }

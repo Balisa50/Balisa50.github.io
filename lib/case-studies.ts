@@ -1018,7 +1018,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Time-based holdout, not random-split holdout.",
         reason:
-          "First version used random-split validation. PSI looked great. Then realised: the holdout was sampled from the same time period as training, so PSI was artificially low. Re-split with time-based holdout (oldest 80% for training, newest 20% for validation), and PSI dropped, indicating real population drift. More honest, less flattering. The lesson: validation theatre is worse than no validation.",
+          "The first version validated on a random split, so the holdout came from the same months as the training data and every stability measure was flattering by construction. The loan book had no origination date at all, so a time-based split was not merely unused, it was impossible. Adding a vintage column and refitting on the earlier 70 percent of the book cost about 0.02 Gini, and it produced a result I did not expect: PSI stayed at 0.002 while realised defaults rose from 12.3 to 15.9 percent. PSI compares score distributions, so it cannot see a deterioration driven by something no feature measures. Monitoring PSI alone would have reported this model as stable the whole way down.",
       },
       {
         call: "Multi-scenario stress tests: drought, currency crisis, pandemic.",
@@ -1033,7 +1033,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     pivots: [
       "First feature set had monthly_income as raw, high IV but skewed. WoE-binning by deciles became more stable across population shifts. Standard scorecard practice but I had to discover it via the validation failing.",
-      "Initial PSI was tested on a holdout that was too similar to training (random split). Validation theatre. Re-split with time-based holdout and PSI dropped, indicating real drift. More honest, less flattering.",
+      "I assumed a time-based holdout would make PSI reveal the drift. It did not. The split was still the right change, because a same-period holdout measures nothing, but the number I expected to move stayed flat and the damage showed up in the outcome rate instead. That taught me more than a confirming result would have: a stability metric can only see the thing it is computed on.",
       "Originally tried XGBoost first because the accuracy was higher. Realised the explainability requirement made it disqualifying. Killed the XGBoost branch and went back to logistic regression. The right model is the one regulators allow, not the one that scores best.",
       "Stress tests originally hardcoded scenario multipliers in the script. Refactored to a `SCENARIOS` config so new shocks (climate, geopolitical) could be added without rewriting validation code.",
     ],
@@ -1047,8 +1047,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "12,000 synthetic West African microfinance loans, regionally-calibrated",
       "WoE/IV feature selection pipeline, optimal binning for categoricals",
       "Basel II points conversion (factor 28.85, offset 487.123)",
-      "Validation: Gini 0.29, KS 0.23 on holdout, below industry thresholds and reported as such, capped by the synthetic generator's weak feature signal",
-      "PSI 0.008 on time-based holdout (population stable)",
+      "Validation: Gini 0.27, KS 0.21 on a later-vintage holdout, below industry thresholds and reported as such, capped by the synthetic generator's weak feature signal rather than by the fitting",
+      "PSI 0.002 across vintages: the score distribution held while realised defaults rose from 12.3 to 15.9 percent, because the deterioration came from a macro shock no feature observes. PSI alone would have called the model stable",
       "Multi-scenario stress testing (drought, currency crisis, pandemic)",
       "Live Next.js + Recharts dashboard",
       "Explainable end-to-end: every score traceable back to feature contributions",
@@ -1129,7 +1129,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     outcome: [
       "Gompertz-Makeham mortality model fitted from scratch via MLE",
-      "Cox PH C-index 0.77 on holdout (above industry standard)",
+      "Cox PH C-index 0.78 on a held-out 30 percent, 0.77 in-sample, with 0 of 5 covariates breaching proportional hazards",
       "Kaplan-Meier curves with log-rank tests across risk groups",
       "5,000-scenario Monte Carlo VaR (95%, 99%)",
       "Pandemic stress test calibrated to COVID excess-mortality data",
