@@ -627,7 +627,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     research: [
       "Read the Central Bank of The Gambia's annual reports (2019-2024) to understand which currencies matter for the Dalasi's stability (USD, EUR, GBP, CHF, JPY) and how seasonality plays in (remittance peaks during Ramadan, Eid, school-year start in September).",
       "Read World Bank KNOMAD methodology on bilateral remittance estimation. The data is corridor-level: UK to GM, US to GM, ES to GM, DE to GM, and so on. Knowing the methodology was crucial because it's mostly imputed from migration stocks + sender-country incomes, not from actual transaction data.",
-      "Studied Prophet's underlying Bayesian framework (Taylor & Letham 2017) before using it. Prophet handles seasonality + holidays elegantly, which is what I needed for Ramadan/Eid effects. Compared with SARIMA: Prophet better at multi-period seasonality, SARIMA better at short cyclicality. Used both, ensemble.",
+      "Read Prophet's Bayesian framework (Taylor and Letham 2017) while working out how to handle Ramadan and Eid, which drift 11 days a year against the Gregorian calendar and so are invisible to a month-of-year seasonal term. Compared with SARIMA: Prophet better at multi-period seasonality, SARIMA better at short cyclicality. Used both, ensemble.",
       "Reverse-engineered the Central Bank of The Gambia website's network behaviour by opening their FX rates page in Chrome devtools. Saw an undocumented JSON endpoint at `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates. Authoritative, free, no key required. Confirmed it worked across all major currencies before betting the project on it.",
       "Read GitHub Actions cron syntax + storage limits. Decided to refresh forecasts daily via Actions instead of Vercel cron, Vercel's Hobby cron wakes the function once per day at a non-customisable schedule. Actions gave me precise scheduling and a free workflow log.",
     ],
@@ -645,9 +645,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "The Central Bank publishes daily indicative rates as a webpage with no documented API. Opened the network tab and found `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates as JSON, no auth required. Official, authoritative, free. Found by curiosity, not documentation. Built the entire pipeline on it; cross-validated against `exchangerate.host` as a backup. The trick is being willing to look in places nobody put 'API' in the URL.",
       },
       {
-        call: "Prophet + SARIMA ensemble, not single-model forecast.",
+        call: "SARIMA only, and the holiday model is still unbuilt.",
         reason:
-          "Prophet handles seasonality (Ramadan/Eid spikes in remittances) elegantly. SARIMA captures shorter cyclicality and is more robust on stationary FX series. Each fails differently on different windows. Averaging both, with confidence intervals from each, gives a forecast that reflects model uncertainty too, which is the honest thing to publish for financial data.",
+          "The plan was a Prophet and SARIMA ensemble: Prophet for the Ramadan and Eid remittance spikes, which drift 11 days a year against the Gregorian calendar and are therefore invisible to a month-of-year seasonal term, and SARIMA for the shorter cyclicality in the FX series. What ships is SARIMA(1,1,1)(1,1,1,12) alone. Prophet is named as the next step in the exploration notebooks and was never built, so the holiday model is the largest open item rather than a shipped feature.",
       },
       {
         call: "Static export pre-rendered at build time, not server-rendered per request.",
@@ -682,7 +682,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Mobile UX broke because the currency selector pills wrapped onto a second line under the amount input on narrow screens, pushing content off-screen. Restructured the layout so currency pills sit ABOVE the amount field on mobile, side-by-side on desktop. Mobile-first means actually testing on a real phone, which I should have done sooner (commit 64e7bec).",
     ],
     weaknesses: [
-      "I did not know Prophet vs SARIMA differences before this project. Read both papers, ran both on toy series, then on the Dalasi data with cross-validated holdouts. Picked the ensemble approach after seeing each model's failure modes.",
+      "I did not know how Prophet and SARIMA differed before this project. I read both papers and fitted SARIMA with walk-forward holdouts, but I never got Prophet running on the Dalasi series, so the comparison I set out to make is still unmade.",
       "I was new to GitHub Actions cron schedules. First version had the wrong cron syntax and the job ran every minute. Fortunately discovered before committing API-key usage to that.",
       "Time-series cross-validation is different from random-split CV. You can't shuffle time-ordered data without leaking the future into the training set. Read about walk-forward validation and rewrote my evaluation pipeline. Forecast metrics dropped from optimistic to realistic, which was the point.",
       "I underestimated how much pre-2010 Dalasi data was non-comparable to post-2010 data due to a methodology break. Adding the correction factor was a research task, not a coding task, I had to read the CBG's methodology footnotes to find the conversion ratio.",
@@ -690,7 +690,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     outcome: [
       "Live FX dashboard for Dalasi vs USD, EUR, GBP, CHF, JPY",
       "25 years of daily CBG rates",
-      "6-month-horizon forecasts with confidence intervals (Prophet + SARIMA ensemble)",
+      "6-month-horizon forecasts with confidence intervals (SARIMA, walk-forward validated against a random-walk baseline)",
       "Bilateral remittance corridor breakdown (UK, US, Spain and Germany to GM)",
       "'£100 next month' calculator for diaspora users",
       "60-day daily forecasts + monthly sending calendar",
