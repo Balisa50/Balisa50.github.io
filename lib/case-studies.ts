@@ -158,6 +158,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I started out thinking synthetic data meant copying, and building the criteria engine is what changed my mind. The more valuable thing is generating data that should exist but does not, a different problem with a different tool, and I would not have seen that if I had stopped at the GAN.",
     ],
     outcome: [
+      "A fifth measure the headline four leave out: a classifier tells real from synthetic 89% of the time against a 0.50 baseline. Called a diagnostic rather than a gate, which is defensible, but it is the most informative number about the generator",
       "A structural-causal ground-truth set, 10,000 rows by 29 columns of realistic West African microfinance data, with all ten correlations and seven integrity constraints verified on every generation",
       "A CTGAN implemented from scratch in PyTorch, mode-specific normalisation, PacGAN critic, WGAN-GP, conditional training-by-sampling, early stopping, with no SDV or ctgan import",
       "All four validation metrics pass, honestly: statistical similarity 0.94, correlation L1 0.05, TSTR 0.92 (AUC ratio 0.94), and distance-to-closest-record privacy 1.10 with 1.1 percent near-duplicates",
@@ -427,7 +428,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Semantic search that runs entirely in the browser, no inference server",
       "The galaxy reshapes itself around the question, along one measured axis of meaning",
       "Says so when the Qur'an does not address a question, instead of returning a plausible list",
-      "Clustering fixed: 78% noise down to 1.2%",
+      "Clustering stopped collapsing: noise fell from 78% to 1.2%. Measured afterwards it recovers only 2 coarse clusters at a silhouette of 0.06, so the noise share was never evidence of quality",
       "The trail remembers the question that led to each verse, not just the destination",
       "18 reciters with word-level audio highlighting",
       "Sub-1-second initial load on 3G",

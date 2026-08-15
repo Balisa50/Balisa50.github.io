@@ -98,7 +98,7 @@ export const PRINT_ENTRIES: PrintEntry[] = [
       { value: "0.94", label: "Statistical similarity, mean column shape" },
       { value: "0.05", label: "Correlation L1 distance" },
       { value: "0.92", label: "Train on synthetic, test on real" },
-      { value: "1.10", label: "Distance-to-closest-record ratio" }
+      { value: "0.89", label: "Real-vs-synthetic detection, 0.50 baseline: the metric that does not pass" }
     ]
   },
   {
@@ -177,7 +177,7 @@ export const PRINT_ENTRIES: PrintEntry[] = [
     stats: [
       { value: "6,236", label: "Texts embedded and clustered" },
       { value: "22 ms", label: "Full reprojection, client side" },
-      { value: "1.2%", label: "Clustering noise, down from 78%" }
+      { value: "0.06", label: "Silhouette of the 2 clusters, noise fell to 1.2%" }
     ]
   },
   {
