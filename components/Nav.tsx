@@ -69,12 +69,12 @@ export function Nav() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-white/10 bg-background/70 backdrop-blur-xl"
+          ? "border-b border-rule bg-background/70 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent"
       )}
     >
       <nav
-        className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-6"
+        className="mx-auto flex h-14 w-full max-w-shell items-center justify-between px-6 sm:px-10"
         aria-label="Primary"
       >
         <a
@@ -83,7 +83,7 @@ export function Nav() {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="group inline-flex items-center gap-2 rounded-full px-2 py-1 font-mono text-sm font-semibold tracking-tight text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+          className="group inline-flex items-center gap-2 rounded-full px-2 py-1 font-mono text-sm font-semibold tracking-tight text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
         >
           <span className="relative inline-flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan/40" />
@@ -104,8 +104,8 @@ export function Nav() {
                   handleClick(l.href)();
                 }}
                 className={cn(
-                  "relative rounded-full px-3 py-1.5 text-sm text-text-secondary transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan",
-                  active === l.href && "text-white"
+                  "relative rounded-full px-3 py-1.5 text-sm text-text-secondary transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan",
+                  active === l.href && "text-ink"
                 )}
               >
                 {l.label}
@@ -127,7 +127,7 @@ export function Nav() {
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-rule bg-surface text-ink transition hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan md:hidden"
         >
           {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </button>
@@ -141,10 +141,10 @@ export function Nav() {
           onClick={() => setOpen(false)}
         >
           <div
-            className="border-t border-white/10 bg-background/95 backdrop-blur-xl"
+            className="border-t border-rule bg-background/95 backdrop-blur-xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <ul className="mx-auto flex w-full max-w-7xl flex-col gap-1 px-6 py-4">
+            <ul className="mx-auto flex w-full max-w-shell flex-col gap-1 px-6 py-4 sm:px-10">
               {LINKS.map((l) => (
                 <li key={l.href}>
                   <a
@@ -154,8 +154,8 @@ export function Nav() {
                       handleClick(l.href)();
                     }}
                     className={cn(
-                      "block rounded-lg px-3 py-3 text-base text-text-secondary transition hover:bg-white/5 hover:text-white",
-                      active === l.href && "text-white"
+                      "block rounded-lg px-3 py-3 text-base text-text-secondary transition hover:bg-surface hover:text-ink",
+                      active === l.href && "text-ink"
                     )}
                   >
                     {l.label}

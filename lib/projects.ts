@@ -30,11 +30,20 @@ export interface Project {
   fallbackStars: number;
   /** Lead entries get the full case-study row treatment in the editorial layout. */
   featured?: boolean;
+  /**
+   * A real output from the project: a chart, a report, a screen. These already
+   * existed for the print portfolio and were sitting unused on the site, which
+   * is why the homepage read as a wall of text. A figure earns its place by
+   * showing a result, so projects without one simply run text-only rather than
+   * getting a decorative stand-in.
+   */
+  figure?: { src: string; alt: string };
 }
 
 export const PROJECTS: Project[] = [
   {
     slug: "gambia-population-projection",
+    figure: { src: "/figures/gambia-2074-projection.png", alt: "Cohort-component projection to 2074: population path, age structure, and dependency ratios." },
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
@@ -52,6 +61,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "wingman",
+    figure: { src: "/figures/wingman.png", alt: "The reply composer: pick who you are talking to, drop the chat in, get three tonally distinct replies." },
     title: "Wingman",
     tagline: "An AI texting coach that reads the chat you're in and replies like a human, in your voice",
     description:
@@ -66,6 +76,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "nova",
+    figure: { src: "/figures/nova-quality.png", alt: "NOVA quality report: column shapes, correlation distance, train-on-synthetic-test-on-real, and the privacy check." },
     title: "NOVA",
     tagline: "A synthetic-data engine for finance, from domain rules or from real data",
     description:
@@ -82,6 +93,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "forge",
+    figure: { src: "/figures/forge.png", alt: "The FORGE landing page: commit to a schedule, then prove the work with real commits and a deployed URL." },
     title: "FORGE",
     tagline: "Mentor-driven learning platform with proof-of-work verification",
     description:
@@ -99,6 +111,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "hireiq",
+    figure: { src: "/figures/hireiq.png", alt: "The hiring dashboard with ranked, scored candidates." },
     title: "HireIQ",
     tagline: "AI-powered hiring platform",
     description:
@@ -117,6 +130,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "ayat",
+    figure: { src: "/figures/ayat-cloud.png", alt: "6,236 texts embedded and positioned by semantic similarity, coloured by revelation period." },
     title: "AYAT",
     tagline: "A Qur'an that rearranges itself around your question",
     description:
@@ -133,6 +147,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "vantage",
+    figure: { src: "/figures/vantage.png", alt: "The daily technology brief the pipeline produces unattended." },
     title: "VANTAGE",
     tagline: "Tech intelligence platform",
     description:
@@ -148,6 +163,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "gambia-legal-aid",
+    figure: { src: "/figures/legal-aid.png", alt: "An answer with its statute section cited, so the reader can check it." },
     title: "Gambia Legal Aid",
     tagline: "RAG chatbot for Gambian law",
     description:
@@ -164,6 +180,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "dalasi-pulse",
+    figure: { src: "/figures/dalasi-forecast.png", alt: "Dalasi exchange-rate forecast with the confidence band around it." },
     title: "Dalasi Pulse",
     tagline: "FX and remittance forecasting for The Gambia",
     description:
@@ -214,6 +231,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "credit-risk-scorecard",
+    figure: { src: "/figures/credit-discrimination.png", alt: "Gini, KS and ROC for the scorecard, measured on a later-vintage holdout." },
     title: "Credit Risk Scorecard",
     tagline: "Basel II scorecard for West African microfinance",
     description:
@@ -229,6 +247,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "life-insurance-risk",
+    figure: { src: "/figures/life-var.png", alt: "Monte Carlo claims distribution over 5,000 scenarios with the 95 and 99 percent value-at-risk points." },
     title: "Life Insurance Risk Model",
     tagline: "Actuarial risk model for Sub-Saharan Africa",
     description:

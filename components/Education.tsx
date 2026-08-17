@@ -10,7 +10,7 @@ export function Education() {
   return (
     <section
       id="education"
-      className="relative mx-auto w-full max-w-5xl scroll-mt-20 px-6 py-24 md:py-28"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="education-heading"
     >
       <motion.div
@@ -54,7 +54,7 @@ export function Education() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold leading-tight text-white">
+              <h3 className="text-lg font-semibold leading-tight text-ink">
                 {ed.degree} {ed.field}
               </h3>
               <p className="mt-1 text-sm text-cyan">{ed.institution}</p>
@@ -66,7 +66,7 @@ export function Education() {
                 {ed.coursework.map((c) => (
                   <span
                     key={c}
-                    className="text-[11px] text-text-secondary after:mx-1.5 after:text-white/20 after:content-['·'] last:after:hidden"
+                    className="text-[11px] text-text-secondary after:mx-1.5 after:text-text-faint after:content-['·'] last:after:hidden"
                   >
                     {c}
                   </span>

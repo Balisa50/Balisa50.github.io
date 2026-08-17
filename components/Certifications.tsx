@@ -18,7 +18,7 @@ const CATEGORY_ACCENT: Record<Certificate["category"], string> = {
   ai: "text-cyan border-cyan/30 bg-cyan/10",
   data: "text-pink border-pink/30 bg-pink/10",
   software: "text-violet-300 border-violet-400/30 bg-violet-500/10",
-  other: "text-text-secondary border-white/10 bg-white/5"
+  other: "text-text-secondary border-rule bg-surface"
 };
 
 export function Certifications() {
@@ -27,7 +27,7 @@ export function Certifications() {
   return (
     <section
       id="certifications"
-      className="relative mx-auto w-full max-w-7xl scroll-mt-20 px-6 py-24 md:py-28"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="certs-heading"
     >
       <motion.div
@@ -91,7 +91,7 @@ export function Certifications() {
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-sm font-medium leading-snug text-white">
+                    <h3 className="text-sm font-medium leading-snug text-ink">
                       {cert.name}
                     </h3>
                     {hasUrl && (

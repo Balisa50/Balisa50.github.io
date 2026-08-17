@@ -10,7 +10,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="relative mx-auto w-full max-w-5xl scroll-mt-20 px-6 py-24 md:py-28"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="experience-heading"
     >
       <motion.div
@@ -31,7 +31,7 @@ export function Experience() {
         </h2>
       </motion.div>
 
-      <ol className="relative space-y-10 border-l border-white/10 pl-6 md:pl-10">
+      <ol className="relative space-y-10 border-l border-rule pl-6 md:pl-10">
         {EXPERIENCE.map((exp, i) => (
           <motion.li
             key={`${exp.company}-${i}`}
@@ -44,13 +44,13 @@ export function Experience() {
             {/* Timeline dot */}
             <span
               aria-hidden="true"
-              className="absolute -left-[31px] md:-left-[43px] top-1 flex h-6 w-6 items-center justify-center rounded-full border border-cyan/40 bg-black/80 shadow-glow-cyan"
+              className="absolute -left-[31px] md:-left-[43px] top-1 flex h-6 w-6 items-center justify-center rounded-full border border-cyan/40 bg-background/90 shadow-glow-cyan"
             >
               <Briefcase className="h-3 w-3 text-cyan" />
             </span>
 
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h3 className="text-lg font-semibold text-white">{exp.role}</h3>
+              <h3 className="text-lg font-semibold text-ink">{exp.role}</h3>
               <span className="text-sm text-cyan">· {exp.company}</span>
             </div>
             <p className="mt-1 font-mono text-xs uppercase tracking-wider text-text-secondary">

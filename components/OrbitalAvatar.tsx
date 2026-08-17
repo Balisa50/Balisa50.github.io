@@ -52,7 +52,7 @@ export function OrbitalAvatar() {
 
       {/* Decorative orbit rings */}
       <span
-        className="pointer-events-none absolute rounded-full border border-white/10"
+        className="pointer-events-none absolute rounded-full border border-rule"
         style={{ width: "100%", height: "100%" }}
       />
       <span
@@ -60,7 +60,7 @@ export function OrbitalAvatar() {
         style={{ width: "78%", height: "78%", transform: "rotateX(70deg)" }}
       />
       <span
-        className="pointer-events-none absolute rounded-full border border-white/10"
+        className="pointer-events-none absolute rounded-full border border-rule"
         style={{ width: "60%", height: "60%" }}
       />
 

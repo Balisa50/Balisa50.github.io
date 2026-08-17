@@ -1,5 +1,18 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Light editorial palette.
+ *
+ * History of this file: it began as neon cyan and hot pink over pure black,
+ * became neutral greys over near-black when the cinematic layer came off, and
+ * is now light. The through-line is that the work should carry the page, so
+ * each pass has removed something that was competing with it.
+ *
+ * Monochrome plus one blue, on warm-ish off-white rather than pure #FFF, which
+ * is harsh over a long read. Every colour here is a token: components no longer
+ * hardcode `text-white` or `border-white/10`, because that coupling is what
+ * made the dark-to-light switch a 14-file edit instead of a config change.
+ */
 const config: Config = {
   content: [
     "./app/**/*.{ts,tsx}",
@@ -9,73 +22,77 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      // Neutral greys and one restrained accent. The previous palette was
-      // neon cyan and hot pink over pure black with glow shadows, which reads
-      // as a themed showcase rather than an engineer's portfolio. Token names
-      // are kept so every existing component keeps compiling; only the values
-      // move. `cyan` is now a muted steel blue and `pink` is a warm grey, so
-      // the per-project accent field neutralises itself without a rewrite.
       colors: {
-        background: "#0B0B0C",
-        surface: "#131315",
-        card: "rgba(19, 19, 21, 0.7)",
-        border: "#232326",
-        cyan: {
-          DEFAULT: "#7FA6D9",
-          dark: "#5B82B0"
-        },
-        pink: "#A8A29E",
+        background: "#FAFAF9",
+        // A half-step down from the page, for the rare block that needs to sit
+        // back. Never used as a card fill.
+        surface: "#F4F4F2",
+        card: "#F4F4F2",
+
+        // Two hairline weights: one to separate rows, one to separate sections.
+        border: "#E7E5E4",
+        rule: "#E7E5E4",
+        "rule-strong": "#D6D3D1",
+
+        // Type ramp. `ink` is reserved for display type and anything that must
+        // read as the darkest thing on the page.
+        ink: "#0C0A09",
         text: {
-          DEFAULT: "#FAFAFA",
-          secondary: "#A1A1AA"
+          DEFAULT: "#1C1917",
+          secondary: "#57534E",
+          faint: "#A8A29E"
         },
+
+        // One accent, used for links and the single primary action. Passes AA
+        // on the background at body size.
+        accent: {
+          DEFAULT: "#1D4ED8",
+          soft: "#EFF4FF"
+        },
+        // Kept so older components compile; both now resolve to the one accent.
+        cyan: { DEFAULT: "#1D4ED8", dark: "#1E40AF" },
+        pink: "#57534E",
+
         status: {
-          live: "#6EA97F",
-          progress: "#C9A227",
-          planning: "#71717A"
+          live: "#15803D",
+          progress: "#B45309",
+          planning: "#78716C"
         }
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        // Inter for interface and body, a serif for display. The generator
+        // proposed Playfair as the BODY face, which is a display serif and
+        // unreadable at paragraph length; the roles are swapped here.
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
         mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"]
       },
-      backdropBlur: {
-        xs: "2px",
-        sm: "4px",
-        md: "8px"
+      maxWidth: {
+        // One measure for prose, one for the page shell. Everything aligns to
+        // these two, which is most of what "properly aligned" means here.
+        prose: "68ch",
+        shell: "1120px"
       },
       animation: {
-        "fade-up": "fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both",
+        "fade-up": "fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both",
         "fade-in": "fade-in 0.4s ease-out both",
-        // Kept as no-ops so any component still referencing them compiles and
-        // simply stops pulsing or drifting, rather than needing a sweep.
         "glow-pulse": "none",
-        "float": "none"
+        float: "none"
       },
       keyframes: {
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "0%": { opacity: "0", transform: "translateY(12px)" },
           "100%": { opacity: "1", transform: "translateY(0)" }
         },
         "fade-in": {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" }
-        },
-        "glow-pulse": {
-          "0%, 100%": { opacity: "0.6", filter: "blur(20px)" },
-          "50%": { opacity: "1", filter: "blur(28px)" }
-        },
-        "float": {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-8px)" }
         }
       },
       boxShadow: {
-        // The glows were the loudest thing on the page. Neutralised rather
-        // than deleted so existing class names stay valid.
         "glow-cyan": "none",
         "glow-cyan-lg": "none",
-        "card": "0 1px 2px 0 rgba(0, 0, 0, 0.4)"
+        card: "none"
       }
     }
   },

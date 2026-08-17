@@ -72,7 +72,7 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="relative mx-auto w-full max-w-5xl scroll-mt-20 border-t border-border px-6 py-16"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 border-t border-border py-16"
       aria-labelledby="skills-heading"
     >
       <motion.div

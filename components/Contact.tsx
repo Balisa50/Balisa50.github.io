@@ -22,7 +22,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      className="relative mx-auto w-full max-w-5xl scroll-mt-20 px-6 py-24 md:py-32"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="contact-heading"
     >
       <motion.div
@@ -75,7 +75,7 @@ export function Contact() {
           <MagneticButton>
             <a
               href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
-              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-6 py-3 text-sm font-medium text-ink transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             >
               <Phone className="h-4 w-4" aria-hidden="true" />
               {PROFILE.phone}
@@ -85,7 +85,7 @@ export function Contact() {
           <MagneticButton>
             <button
               onClick={copyEmail}
-              className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
               aria-label={`Copy email ${PROFILE.email} to clipboard`}
               title={`${PROFILE.email} · PGP available on request`}
             >
@@ -109,7 +109,7 @@ export function Contact() {
             href={PROFILE.github}
             target="_blank"
             rel="noreferrer noopener"
-            className="group inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white"
+            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:outline-none focus-visible:text-ink"
           >
             <span className="energy-icon grid place-items-center">
               <Github className="h-4 w-4" aria-hidden="true" />
@@ -120,7 +120,7 @@ export function Contact() {
             href={PROFILE.linkedin}
             target="_blank"
             rel="noreferrer noopener"
-            className="group inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white"
+            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:outline-none focus-visible:text-ink"
           >
             <span className="energy-icon grid place-items-center">
               <Linkedin className="h-4 w-4" aria-hidden="true" />

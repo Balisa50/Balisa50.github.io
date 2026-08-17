@@ -43,7 +43,7 @@ function Fig({ src, alt, caption }: { src: string; alt: string; caption: string 
 
 function H({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h2 id={id} className="mt-16 scroll-mt-24 text-2xl font-semibold tracking-tight text-white md:text-[1.75rem]">
+    <h2 id={id} className="mt-16 scroll-mt-24 text-2xl font-semibold tracking-tight text-ink md:text-[1.75rem]">
       {children}
     </h2>
   );
@@ -58,7 +58,7 @@ export default function GambiaResearchArticle() {
     <main className="relative min-h-screen bg-background text-text-primary">
       <Link
         href="/#projects"
-        className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-white"
+        className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-ink"
       >
         <ArrowLeft className="h-3 w-3" />
         Back to work
@@ -66,7 +66,7 @@ export default function GambiaResearchArticle() {
 
       <div className="mx-auto max-w-6xl px-6 pb-28 pt-24 md:pt-28">
         {/* Header, full width */}
-        <header className="border-b border-white/10 pb-10">
+        <header className="border-b border-rule pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">~/research/gambia-2074</p>
           <h1 className="mt-4 max-w-[18ch] text-balance text-[clamp(2.5rem,7vw,5rem)] font-semibold leading-[1.02] tracking-tight">
             The Gambia in 2074
@@ -82,7 +82,7 @@ export default function GambiaResearchArticle() {
         </header>
 
         {/* Key numbers, full-width strip */}
-        <dl className="grid grid-cols-2 gap-y-7 border-b border-white/10 py-9 md:grid-cols-4 md:gap-0 md:divide-x md:divide-white/10">
+        <dl className="grid grid-cols-2 gap-y-7 border-b border-rule py-9 md:grid-cols-4 md:gap-0 md:divide-x md:divide-white/10">
           {[
             { v: "4.66M", l: "people by 2074 (range 4.35 to 4.98M)" },
             { v: "13%", l: "lower than the UN's current figure" },
@@ -90,7 +90,7 @@ export default function GambiaResearchArticle() {
             { v: "1%", l: "how close my engine got to the UN's" },
           ].map((s, i) => (
             <div key={s.l} className={i === 0 ? "md:pr-7" : "md:px-7 md:last:pr-0"}>
-              <dt className="font-mono text-3xl font-semibold tabular-nums text-white md:text-4xl">{s.v}</dt>
+              <dt className="font-mono text-3xl font-semibold tabular-nums text-ink md:text-4xl">{s.v}</dt>
               <dd className="mt-1.5 text-[11px] uppercase leading-snug tracking-wider text-text-secondary">{s.l}</dd>
             </div>
           ))}
@@ -105,7 +105,7 @@ export default function GambiaResearchArticle() {
                 {SECTIONS.map(([id, label], i) => (
                   <li key={id}>
                     <a href={`#${id}`} className="block text-[13px] leading-snug text-text-secondary transition hover:text-cyan">
-                      <span className="font-mono text-white/30">{String(i + 1).padStart(2, "0")}</span> {label}
+                      <span className="font-mono text-text-faint">{String(i + 1).padStart(2, "0")}</span> {label}
                     </a>
                   </li>
                 ))}
@@ -288,14 +288,14 @@ export default function GambiaResearchArticle() {
               worth a second look.
             </P>
 
-            <nav className="mt-16 flex flex-col gap-4 border-t border-white/10 pt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8">
-              <a href={REPO} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition hover:text-white">
+            <nav className="mt-16 flex flex-col gap-4 border-t border-rule pt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8">
+              <a href={REPO} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition hover:text-ink">
                 <Github className="h-3.5 w-3.5" /> Code and data
               </a>
-              <a href={`${REPO}/blob/main/reports/research-report.md`} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition hover:text-white">
+              <a href={`${REPO}/blob/main/reports/research-report.md`} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition hover:text-ink">
                 <FileText className="h-3.5 w-3.5" /> Full technical report
               </a>
-              <Link href="/projects/gambia-population-projection" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition hover:text-white">
+              <Link href="/projects/gambia-population-projection" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition hover:text-ink">
                 <FileText className="h-3.5 w-3.5" /> How I built it
               </Link>
             </nav>

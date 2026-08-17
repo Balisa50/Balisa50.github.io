@@ -25,7 +25,7 @@ export function Metrics() {
   return (
     <section
       aria-label="Summary"
-      className="mx-auto w-full max-w-5xl border-y border-border px-6 py-6"
+      className="mx-auto w-full max-w-shell px-6 sm:px-10 border-y border-border py-6"
     >
       <ul className="flex flex-wrap gap-x-12 gap-y-4">
         {items.map((it) => (

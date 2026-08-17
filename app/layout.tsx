@@ -1,9 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import { Newsreader } from "next/font/google";
 import "./globals.css";
 import { SkipLink } from "@/components/SkipLink";
 import { PROFILE } from "@/lib/projects";
+
+// Display face. A serif carries the editorial register the layout is going
+// for, and Newsreader holds up at large sizes without the fussiness Playfair
+// (what the generator suggested) brings to a screen. Body stays on Geist Sans:
+// a display serif at paragraph length is a readability problem, not a style.
+const serif = Newsreader({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 const description =
   "AI Systems Developer and Data Science student building intelligent systems that ship: LLM tooling, applied NLP, RAG pipelines, and full-stack AI products.";
@@ -58,10 +71,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050505",
+  themeColor: "#fafaf9",
   width: "device-width",
   initialScale: 1,
-  colorScheme: "dark"
+  colorScheme: "light"
 };
 
 export default function RootLayout({
@@ -70,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
       <body className="bg-background font-sans text-text antialiased">
         {/* The animated background, scanline sweep, warp navigation, console
             easter egg and floating CTA were removed rather than restyled.

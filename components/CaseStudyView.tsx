@@ -44,16 +44,16 @@ export function CaseStudyView({
       {!standalone && (
         <Link
           href="/#projects"
-          className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-white"
+          className="fixed left-6 top-5 z-30 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-ink"
         >
           <ArrowLeft className="h-3 w-3" />
           Back to work
         </Link>
       )}
 
-      <div className="mx-auto max-w-6xl px-6 pb-24 pt-24 md:pt-28">
+      <div className="mx-auto w-full max-w-shell px-6 sm:px-10 pb-24 pt-24 md:pt-28">
         {/* Header, full width */}
-        <header className="border-b border-white/10 pb-10">
+        <header className="border-b border-rule pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">
             Case study
           </p>
@@ -75,12 +75,12 @@ export function CaseStudyView({
           {!standalone && (
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
               {project.demo && (
-                <a href={project.demo} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-cyan transition hover:text-white">
+                <a href={project.demo} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-cyan transition hover:text-ink">
                   <ExternalLink className="h-3.5 w-3.5" /> Open the live app
                 </a>
               )}
               {project.github && !project.codePrivate && (
-                <a href={project.github} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-white">
+                <a href={project.github} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-ink">
                   <Github className="h-3.5 w-3.5" /> Source on GitHub
                 </a>
               )}
@@ -90,7 +90,7 @@ export function CaseStudyView({
                 </span>
               )}
               {project.articleUrl && (
-                <a href={project.articleUrl} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-white">
+                <a href={project.articleUrl} target="_blank" rel="noreferrer noopener" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.18em] text-text-secondary transition hover:text-ink">
                   <ExternalLink className="h-3.5 w-3.5" /> Read the article
                 </a>
               )}
@@ -107,7 +107,7 @@ export function CaseStudyView({
                 {toc.map(([id, label], i) => (
                   <li key={id}>
                     <a href={`#${id}`} className="block text-[13px] leading-snug text-text-secondary transition hover:text-cyan">
-                      <span className="font-mono text-white/30">{String(i + 1).padStart(2, "0")}</span> {label}
+                      <span className="font-mono text-text-faint">{String(i + 1).padStart(2, "0")}</span> {label}
                     </a>
                   </li>
                 ))}
@@ -151,7 +151,7 @@ export function CaseStudyView({
                     <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-cyan/85">
                       Decision {String(i + 1).padStart(2, "0")}
                     </p>
-                    <h3 className="mt-1.5 text-lg font-semibold leading-snug text-white md:text-xl">{d.call}</h3>
+                    <h3 className="mt-1.5 text-lg font-semibold leading-snug text-ink md:text-xl">{d.call}</h3>
                     <p className="mt-3 text-[15px] leading-relaxed text-text-secondary">{d.reason}</p>
                   </li>
                 ))}
@@ -201,17 +201,17 @@ export function CaseStudyView({
 
             <section id="takeaway" className="mt-16 scroll-mt-24 border-l-2 border-cyan/40 pl-6 md:pl-8">
               <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">What I learned</p>
-              <p className="mt-3 max-w-[60ch] text-balance text-xl font-medium leading-snug text-white md:text-2xl">
+              <p className="mt-3 max-w-[60ch] text-balance text-xl font-medium leading-snug text-ink md:text-2xl">
                 {study.takeaway}
               </p>
             </section>
 
             {!standalone && (
-              <nav className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-8 sm:flex-row sm:items-center sm:justify-between">
-                <Link href="/#projects" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white">
+              <nav className="mt-16 flex flex-col gap-3 border-t border-rule pt-8 sm:flex-row sm:items-center sm:justify-between">
+                <Link href="/#projects" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-ink">
                   <ArrowLeft className="h-3 w-3" /> All projects
                 </Link>
-                <a href="mailto:[redacted, use the contact form]" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-white">
+                <a href="mailto:[redacted, use the contact form]" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-ink">
                   Talk to me about this <ArrowRight className="h-3 w-3" />
                 </a>
               </nav>
@@ -240,7 +240,7 @@ function Section({
     <section id={id} className="mt-14 scroll-mt-24 first:mt-0">
       <header className="mb-5">
         <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-cyan/85">{label}</p>
-        <h2 className="mt-1.5 text-2xl font-semibold tracking-tight text-white md:text-3xl">{title}</h2>
+        <h2 className="mt-1.5 text-2xl font-semibold tracking-tight text-ink md:text-3xl">{title}</h2>
       </header>
       {children}
     </section>
@@ -252,10 +252,10 @@ export function StandaloneCredit() {
   const link =
     "inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-cyan";
   return (
-    <footer className="mx-auto max-w-6xl px-6 pb-20">
-      <div className="border-t border-white/10 pt-8 text-center">
+    <footer className="mx-auto w-full max-w-shell px-6 sm:px-10 pb-20">
+      <div className="border-t border-rule pt-8 text-center">
         <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-secondary">
-          Built by <span className="text-white">{PROFILE.name}</span>
+          Built by <span className="text-ink">{PROFILE.name}</span>
         </p>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
           <a href={PROFILE.linkedin} target="_blank" rel="noreferrer noopener" className={link}>

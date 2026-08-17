@@ -46,7 +46,7 @@ export function KonamiEasterEgg() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 p-4 backdrop-blur-md"
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-background/90 p-4 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-labelledby="konami-title"
@@ -75,7 +75,7 @@ export function KonamiEasterEgg() {
               <button
                 onClick={reset}
                 aria-label="Close roadmap"
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-rule bg-surface text-ink transition hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -92,10 +92,10 @@ export function KonamiEasterEgg() {
               {ROADMAP.map((item) => (
                 <li
                   key={item.title}
-                  className="rounded-xl border border-white/10 bg-black/40 p-4"
+                  className="rounded-xl border border-rule bg-background/80 p-4"
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <h3 className="font-semibold text-white">{item.title}</h3>
+                    <h3 className="font-semibold text-ink">{item.title}</h3>
                     <span className="rounded-full border border-cyan/30 bg-cyan/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan">
                       {item.status}
                     </span>

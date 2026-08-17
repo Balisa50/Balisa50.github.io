@@ -2,20 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ---------- base ---------- */
+/* ---------------------------------------------------------------------------
+   Light editorial base.
+
+   This file was 444 lines, most of it effects for a layer that no longer
+   exists: a holographic row sheen, a glitching index number, a lens flare,
+   quantum dots, a rack-focus entrance, a scanline sweep. Those are gone with
+   the components that used them. What is left is type, rhythm and rules.
+--------------------------------------------------------------------------- */
+
 :root {
-  color-scheme: dark;
-  --bg: #0b0b0c;
-  --fg: #fafafa;
-  --accent: #7fa6d9;
+  color-scheme: light;
+  --bg: #fafaf9;
+  --ink: #0c0a09;
+  --accent: #1d4ed8;
+  --rule: #e7e5e4;
+
+  /* One vertical rhythm unit. Section padding is a multiple of it, which is
+     what stops the page reading as a pile of unrelated blocks. */
+  --step: 8px;
 }
 
 html {
   background-color: var(--bg);
-  color: var(--fg);
+  color: #1c1917;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 html,
@@ -25,420 +45,130 @@ body {
 }
 
 body {
-  /* Flat. The two neon radial washes here were doing most of the work of
-     making the page look like a themed showcase rather than a portfolio. */
   background-color: var(--bg);
 }
 
-/* ---------- focus ---------- */
-*:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  border-radius: 4px;
+/* ---------- type ---------- */
+
+/* Display face, used for the name and section openers only. Optical sizing and
+   a tight measure are what make a serif read as editorial rather than as a
+   word processor default. */
+.display {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.021em;
+  line-height: 1.04;
+  color: var(--ink);
 }
 
-/* ---------- scrollbar ---------- */
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+/* Small caps label. The tracking is modest on purpose: past about 0.14em the
+   eye stops reading a word and starts reading separate letters. */
+.label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.11em;
+  color: #57534e;
 }
-::-webkit-scrollbar-track {
-  background: #0a0a0a;
+
+.numeral {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
 }
-::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
-  border-radius: 8px;
-  border: 2px solid #0a0a0a;
+
+/* Body measure. Anything longer than this is measurably harder to read, and
+   it is the single most common failure on a wide light layout. */
+.measure {
+  max-width: 68ch;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #2a2a2a;
+
+/* ---------- links ---------- */
+
+.link-underline {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: #d6d3d1;
+  transition: text-decoration-color 0.15s ease;
+}
+.link-underline:hover {
+  text-decoration-color: var(--accent);
+}
+
+/* ---------- entrance ---------- */
+
+.hero-item {
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.section-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.section-reveal.revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-item,
+  .section-reveal {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ---------- figures ---------- */
+
+/* Project charts are matplotlib PNGs on white. On an off-white page a raw
+   white rectangle reads as a hole, so each figure gets a hairline and a matching
+   inset rather than sitting directly on the background. */
+.figure {
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 10px;
+}
+.figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---------- focus ---------- */
+
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 
 /* ---------- selection ---------- */
+
 ::selection {
-  background: rgba(127, 166, 217, 0.25);
-  color: #ffffff;
+  background: #dbe6ff;
+  color: var(--ink);
 }
 
-/* ---------- reduced motion ---------- */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+/* ---------- print ---------- */
+
+@media print {
+  .no-print {
+    display: none !important;
   }
 }
-
-/* ---------- hero CSS entrance animations ---------------------------------- */
-/* Progressive-enhancement approach:
-   - Default (no animation support / reduced motion): elements are ALWAYS visible.
-   - Only hide + animate when the user explicitly allows motion.
-   This prevents the "stuck at opacity:0" bug on Android with animations disabled. */
-
-@keyframes hero-fade-up {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
-
-/* Always-visible default, works on every device, every browser */
-.hero-item {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Animate only when the OS has motion enabled */
-@media (prefers-reduced-motion: no-preference) {
-  .hero-item {
-    opacity: 0;
-    transform: translateY(18px);
-    animation: hero-fade-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
-  }
-}
-
-/* ---------- utilities ---------- */
-.text-balance {
-  text-wrap: balance;
-}
-.text-pretty {
-  text-wrap: pretty;
-}
-
-/* Fine grid background used in a few places */
-.bg-grid {
-  background-image:
-    linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* ======================================================================
-   CINEMATIC SCI-FI LAYER
-   Ambient, continuous effects live in CSS so the global
-   prefers-reduced-motion rule (above) neutralises them automatically.
-   JS-driven effects guard reduced-motion themselves.
-   ====================================================================== */
-
-/* ---- Living background canvas (fixed, behind all content) ---- */
-.cinematic-bg {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  /* faint holographic grid that drifts; canvas stars draw on top */
-  background-image:
-    linear-gradient(to right, rgba(0, 240, 255, 0.06) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 240, 255, 0.06) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: grid-drift 24s linear infinite;
-  mask-image: radial-gradient(ellipse 95% 85% at 50% 35%, #000 45%, transparent 92%);
-  -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 35%, #000 45%, transparent 92%);
-}
-@keyframes grid-drift {
-  from { background-position: 0 0; }
-  to   { background-position: 60px 60px; }
-}
-
-/* ---- Holographic name ---- */
-.cinematic-name {
-  position: relative;
-  display: inline-block;
-  background-image: linear-gradient(
-    110deg,
-    #ffffff 0%, #cfefff 26%,
-    #4fe3ff 42%, #00f0ff 50%, #4fe3ff 58%,
-    #cfefff 74%, #ffffff 100%
-  );
-  background-size: 220% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: name-shimmer 5s linear infinite;
-  transform-style: preserve-3d;
-  filter: drop-shadow(0 0 22px rgba(0, 240, 255, 0.35));
-}
-@keyframes name-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.cinematic-name[data-glitch="true"] {
-  text-shadow:
-    0.045em 0 rgba(255, 0, 85, 0.75),
-    -0.045em 0 rgba(0, 240, 255, 0.75);
-  animation: name-shimmer 7s linear infinite, name-jolt 0.45s steps(3) 1;
-}
-@keyframes name-jolt {
-  0%   { transform: translate3d(0,0,0) skewX(0); }
-  20%  { transform: translate3d(-2px,1px,0) skewX(-3deg); }
-  40%  { transform: translate3d(2px,-1px,0) skewX(2deg); }
-  60%  { transform: translate3d(-1px,0,0) skewX(-1deg); }
-  100% { transform: translate3d(0,0,0) skewX(0); }
-}
-.cinematic-name .name-scan {
-  position: absolute;
-  left: -4%;
-  right: -4%;
-  height: 32%;
-  top: -34%;
-  background: linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.22), transparent);
-  mix-blend-mode: screen;
-  pointer-events: none;
-  border-radius: 50%;
-  filter: blur(1px);
-  animation: name-scan 6s ease-in-out infinite;
-}
-@keyframes name-scan {
-  0%, 70%, 100% { top: -34%; opacity: 0; }
-  72%           { opacity: 1; }
-  88%           { top: 100%; opacity: 0.7; }
-  92%           { opacity: 0; }
-}
-
-/* ---- Holographic tilt card ---- */
-.holo-card {
-  position: relative;
-  overflow: hidden;
-  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
-  will-change: transform;
-}
-.holo-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    220px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(0, 240, 255, 0.16),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
-.holo-card:hover::before { opacity: 1; }
-.holo-card::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.9), transparent);
-  opacity: 0;
-  pointer-events: none;
-}
-.holo-card:hover::after {
-  opacity: 1;
-  animation: holo-scan 1.8s linear infinite;
-}
-@keyframes holo-scan {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(calc(var(--scan-h, 120px))); }
-}
-.holo-card:hover {
-  box-shadow: 0 0 40px -12px rgba(0, 240, 255, 0.45);
-}
-
-/* ---- Pulse / energy ring ---- */
-@keyframes pulse-ring {
-  0%   { transform: scale(0.55); opacity: 0.6; }
-  80%  { opacity: 0.06; }
-  100% { transform: scale(2.1); opacity: 0; }
-}
-
-/* ---- Zero-g float ---- */
-@keyframes zero-g {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50%      { transform: translateY(-10px) rotate(0.6deg); }
-}
-
-/* ---- Orbit spin (radii/speeds set inline) ---- */
-@keyframes orbit-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-@keyframes orbit-spin-rev {
-  from { transform: rotate(360deg); }
-  to   { transform: rotate(0deg); }
-}
-
-/* ---- Magnetic contact icon energy ring ---- */
-.energy-icon {
-  position: relative;
-  transition: transform 0.18s ease-out;
-}
-.energy-icon::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 9999px;
-  border: 1px solid rgba(0, 240, 255, 0.5);
-  opacity: 0;
-  transform: scale(0.7);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-}
-.energy-icon:hover::after {
-  opacity: 1;
-  transform: scale(1);
-  animation: pulse-ring 1.6s ease-out infinite;
-}
-/* contact icon "transforms into a holographic symbol" on hover */
-.energy-icon svg {
-  transition: filter 0.3s ease;
-}
-.energy-icon:hover svg {
-  animation: holo-flip 0.6s ease 1;
-  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.8));
-}
-@keyframes holo-flip {
-  0% { transform: rotateY(0deg); }
-  50% { transform: rotateY(180deg); }
-  100% { transform: rotateY(360deg); }
-}
-
-/* ---- Section "AI construction" reveal ---- */
-.section-reveal {
-  position: relative;
-}
-.sr-bracket {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  opacity: 0;
-  transition: opacity 0.7s ease 0.25s;
-  pointer-events: none;
-  z-index: 2;
-}
-.section-reveal.revealed .sr-bracket { opacity: 1; }
-.sr-tl { top: 10px; left: 10px; border-right: 0; border-bottom: 0; }
-.sr-tr { top: 10px; right: 10px; border-left: 0; border-bottom: 0; }
-.sr-bl { bottom: 10px; left: 10px; border-right: 0; border-top: 0; }
-.sr-br { bottom: 10px; right: 10px; border-left: 0; border-top: 0; }
-.sr-scan {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 1;
-  background: linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.14) 50%, transparent);
-  background-size: 100% 170px;
-  background-repeat: no-repeat;
-  background-position: 0 -170px;
-}
-.section-reveal.revealed .sr-scan { animation: sr-sweep 1.5s ease-out 1; }
-@keyframes sr-sweep {
-  0%   { opacity: 0; background-position: 0 -170px; }
-  12%  { opacity: 1; }
-  100% { opacity: 0; background-position: 0 120%; }
-}
-
-/* ---- Project-row holographic sheen + index glitch ---- */
-.row-holo::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  background: radial-gradient(
-    320px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(0, 240, 255, 0.08),
-    transparent 60%
-  );
-}
-.row-holo:hover::before { opacity: 1; }
-.glitch-num[data-glitch="true"] {
-  text-shadow: 0.04em 0 rgba(255, 0, 85, 0.8), -0.04em 0 rgba(0, 240, 255, 0.8);
-  animation: name-jolt 0.4s steps(3) 1;
-}
-
-/* ---- Rare full-page drone scan ---- */
-.drone-scan {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.drone-scan.active { opacity: 1; }
-.drone-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 170px;
-  background: linear-gradient(180deg, rgba(0, 240, 255, 0.1), transparent);
-  border-top: 1.5px solid rgba(0, 240, 255, 0.85);
-  box-shadow: 0 0 22px rgba(0, 240, 255, 0.5);
-  transform: translateY(-170px);
-}
-.drone-scan.active .drone-line { animation: drone-sweep 2.4s ease-in-out 1; }
-@keyframes drone-sweep {
-  from { transform: translateY(-170px); }
-  to   { transform: translateY(100vh); }
-}
-
-/* ---- Hero lens flare / volumetric drift ---- */
-.lens-flare {
-  position: absolute;
-  width: 70%;
-  height: 70%;
-  left: 15%;
-  top: 6%;
-  pointer-events: none;
-  background: radial-gradient(circle at 35% 35%, rgba(0, 240, 255, 0.1), transparent 55%);
-  mix-blend-mode: screen;
-  filter: blur(10px);
-  animation: flare-drift 16s ease-in-out infinite;
-}
-@keyframes flare-drift {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.55; }
-  50%      { transform: translate(6%, 4%) scale(1.12); opacity: 0.85; }
-}
-
-/* ---- Depth-of-field rack focus (hero, one-time on load) ---- */
-@keyframes rack-focus {
-  0%   { filter: blur(16px); opacity: 0.3; }
-  100% { filter: blur(0); opacity: 1; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .rack-focus { animation: rack-focus 1.7s cubic-bezier(0.22, 1, 0.36, 1) 1 both; }
-}
-
-/* ---- Quantum flicker particles ---- */
-@keyframes quantum {
-  0%, 100% { opacity: 0; transform: scale(0.3); }
-  8%       { opacity: 1; transform: scale(1); }
-  16%      { opacity: 0; transform: scale(0.6); }
-  54%      { opacity: 0; }
-  61%      { opacity: 0.9; transform: scale(1.15); }
-  69%      { opacity: 0; transform: scale(0.5); }
-}
-.quantum-dot {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 9999px;
-  background: #9bf6ff;
-  box-shadow: 0 0 9px #00f0ff;
-  pointer-events: none;
-  opacity: 0;
-  animation: quantum 7s ease-in-out infinite;
-}
-
-/* ---- Wormhole warp transition overlay ---- */
-.warp-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-.warp-overlay.active { opacity: 1; }

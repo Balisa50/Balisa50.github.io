@@ -9,7 +9,7 @@ export function About() {
   return (
     <section
       id="about"
-      className="relative mx-auto w-full max-w-4xl scroll-mt-20 px-6 py-24 md:py-32"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="about-heading"
     >
       <motion.div
@@ -26,7 +26,7 @@ export function About() {
         {/* Photo + heading row */}
         <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
           {/* Profile photo */}
-          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border border-white/15 bg-white/5 shadow-glow-cyan sm:h-28 sm:w-28">
+          <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border border-rule bg-surface shadow-glow-cyan sm:h-28 sm:w-28">
             <Image
               src="/avatar.jpg"
               alt={PROFILE.fullName}
@@ -92,7 +92,7 @@ export function About() {
           </a>
           <a
             href="#projects"
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition hover:border-white/30 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-rule bg-surface px-5 py-2.5 text-sm font-medium text-ink transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
           >
             See the work
           </a>
