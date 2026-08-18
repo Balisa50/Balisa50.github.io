@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { ArrowUpRight, BookOpen, FileText, Github, Lock } from "lucide-react";
 import type { Project } from "@/lib/projects";
 import { CASE_STUDIES } from "@/lib/case-studies";
@@ -152,11 +151,7 @@ export function ProjectRow({ project, index, variant }: Props) {
     const figureFirst = index % 2 === 1;
 
     return (
-      <motion.article
-        initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.15 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      <article
         className="group border-t border-rule py-14 first:border-t-0 md:py-20"
       >
         <div className="grid grid-cols-1 items-start gap-x-10 gap-y-8 lg:grid-cols-12">
@@ -176,6 +171,10 @@ export function ProjectRow({ project, index, variant }: Props) {
                   height={750}
                   className="h-auto w-full"
                   sizes="(min-width: 1024px) 50vw, 100vw"
+                  // The first figure is the Largest Contentful Paint on this
+                  // page, and lazy-loading the LCP element delays it by a round
+                  // trip. Only the first one is eager; the rest stay lazy.
+                  priority={index === 0}
                 />
               </div>
               <p className="mt-3 text-[13px] leading-relaxed text-text-faint">
@@ -242,17 +241,13 @@ export function ProjectRow({ project, index, variant }: Props) {
             </div>
           </div>
         </div>
-      </motion.article>
+      </article>
     );
   }
 
   /* --------------------------------------------------- Compact */
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    <article
       className="group border-t border-rule py-7"
     >
       <div className="grid grid-cols-1 items-baseline gap-x-6 gap-y-3 sm:grid-cols-12">
@@ -291,6 +286,6 @@ export function ProjectRow({ project, index, variant }: Props) {
           <Links project={project} />
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { GraduationCap } from "lucide-react";
 import { EDUCATION } from "@/lib/projects";
 
@@ -13,11 +12,7 @@ export function Education() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="education-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.6 }}
+      <div
         className="mb-12 flex flex-col items-start gap-3 md:mb-16"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
@@ -29,16 +24,12 @@ export function Education() {
         >
           Education
         </h2>
-      </motion.div>
+      </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         {EDUCATION.map((ed, i) => (
-          <motion.div
+          <div
             key={`${ed.institution}-${i}`}
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: i * 0.08 }}
             className="flex flex-col gap-3 border-l-2 border-cyan/30 pl-6"
           >
             <div className="flex items-center gap-3">
@@ -73,7 +64,7 @@ export function Education() {
                 ))}
               </div>
             )}
-          </motion.div>
+          </div>
         ))}
       </div>
     </section>

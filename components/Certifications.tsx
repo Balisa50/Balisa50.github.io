@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowUpRight, Award } from "lucide-react";
 import { CERTIFICATES, type Certificate } from "@/lib/projects";
 import { cn } from "@/lib/utils";
@@ -30,11 +29,7 @@ export function Certifications() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="certs-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.6 }}
+      <div
         className="mb-12 flex flex-col items-start gap-3 md:mb-16"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
@@ -50,7 +45,7 @@ export function Certifications() {
           {CERTIFICATES.length} certificates spanning AI engineering, data
           science, and software engineering. Tap any to verify.
         </p>
-      </motion.div>
+      </div>
 
       <ul className="grid grid-cols-1 gap-x-10 md:grid-cols-2 lg:grid-cols-3">
         {CERTIFICATES.map((cert, i) => {
@@ -65,12 +60,8 @@ export function Certifications() {
             : {};
 
           return (
-            <motion.li
+            <li
               key={`${cert.name}-${i}`}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.4, delay: i * 0.04 }}
             >
               <Tag
                 {...props}
@@ -115,7 +106,7 @@ export function Certifications() {
                   </span>
                 </div>
               </Tag>
-            </motion.li>
+            </li>
           );
         })}
       </ul>

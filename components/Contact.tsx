@@ -1,10 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Copy, Github, Linkedin, Mail, Phone, Check, MapPin } from "lucide-react";
 import { useState } from "react";
 import { PROFILE } from "@/lib/projects";
-import { MagneticButton } from "./MagneticButton";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -25,11 +23,7 @@ export function Contact() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="contact-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.7 }}
+      <div
         className="relative overflow-hidden"
       >
         {/* Decorative glow */}
@@ -62,7 +56,6 @@ export function Contact() {
         </p>
 
         <div className="relative mt-8 flex flex-wrap items-center gap-3">
-          <MagneticButton>
             <a
               href={`mailto:${PROFILE.email}?subject=Let%27s%20talk`}
               className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-cyan px-6 py-3 text-sm font-medium text-background shadow-glow-cyan transition hover:shadow-glow-cyan-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -70,9 +63,6 @@ export function Contact() {
               <Mail className="h-4 w-4" aria-hidden="true" />
               Email me
             </a>
-          </MagneticButton>
-
-          <MagneticButton>
             <a
               href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
               className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-6 py-3 text-sm font-medium text-ink transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
@@ -80,9 +70,6 @@ export function Contact() {
               <Phone className="h-4 w-4" aria-hidden="true" />
               {PROFILE.phone}
             </a>
-          </MagneticButton>
-
-          <MagneticButton>
             <button
               onClick={copyEmail}
               className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
@@ -101,7 +88,6 @@ export function Contact() {
                 </>
               )}
             </button>
-          </MagneticButton>
         </div>
 
         <div className="relative mt-10 flex flex-wrap items-center gap-5 text-sm text-text-secondary">
@@ -132,7 +118,7 @@ export function Contact() {
             {PROFILE.location}
           </span>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

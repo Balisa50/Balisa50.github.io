@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Briefcase } from "lucide-react";
 import { EXPERIENCE } from "@/lib/projects";
 
@@ -13,11 +12,7 @@ export function Experience() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="experience-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
-        transition={{ duration: 0.6 }}
+      <div
         className="mb-12 flex flex-col items-start gap-3 md:mb-16"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
@@ -29,16 +24,12 @@ export function Experience() {
         >
           Experience
         </h2>
-      </motion.div>
+      </div>
 
       <ol className="relative space-y-10 border-l border-rule pl-6 md:pl-10">
         {EXPERIENCE.map((exp, i) => (
-          <motion.li
+          <li
             key={`${exp.company}-${i}`}
-            initial={{ opacity: 0, x: -16 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: i * 0.08 }}
             className="relative"
           >
             {/* Timeline dot */}
@@ -65,7 +56,7 @@ export function Experience() {
                 </li>
               ))}
             </ul>
-          </motion.li>
+          </li>
         ))}
       </ol>
     </section>

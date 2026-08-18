@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 
 /**
  * Stack, rebuilt around what the projects on this page actually demonstrate.
@@ -75,11 +74,7 @@ export function Skills() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 border-t border-border py-16"
       aria-labelledby="skills-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.5 }}
+      <div
         className="flex flex-col gap-8"
       >
         <h2
@@ -106,7 +101,7 @@ export function Skills() {
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

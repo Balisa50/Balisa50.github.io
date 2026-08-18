@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
 import { Mail, Download } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
@@ -12,11 +11,7 @@ export function About() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="about-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.7 }}
+      <div
         className="flex flex-col items-start gap-4"
       >
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
@@ -106,7 +101,7 @@ export function About() {
             Download CV
           </a>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

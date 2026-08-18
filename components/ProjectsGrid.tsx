@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { PROJECTS } from "@/lib/projects";
 import { ProjectRow } from "./ProjectRow";
 
@@ -21,11 +20,7 @@ export function ProjectsGrid() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-20"
       aria-labelledby="projects-heading"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.6 }}
+      <div
         className="mb-4 flex flex-col items-start gap-4"
       >
         <h2
@@ -38,7 +33,7 @@ export function ProjectsGrid() {
           {PROJECTS.length} projects spanning RAG, agentic pipelines, forecasting, and
           full-stack AI tooling. {liveCount} shipped, {wipCount} in active development.
         </p>
-      </motion.div>
+      </div>
 
       {/* Featured, full case-study rows */}
       <div>
@@ -50,18 +45,14 @@ export function ProjectsGrid() {
       {/* The rest, compact index */}
       {rest.length > 0 && (
         <div className="mt-20">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div
             className="mb-2 flex items-center gap-3"
           >
             <span className="font-mono text-xs uppercase tracking-[0.2em] text-text-secondary">
               More builds
             </span>
             <span className="h-px flex-1 bg-surface" />
-          </motion.div>
+          </div>
           <div>
             {rest.map((p, i) => (
               <ProjectRow

@@ -217,7 +217,7 @@ export const PROJECTS: Project[] = [
     tagline: "Autonomous cold-outreach agent",
     description:
       "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline, contact discovery via Hunter.io, Tavily company research, LLM-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
-    tech: ["Python", "FastAPI", "NVIDIA NIM", "Hunter.io", "Tavily", "NVIDIA NIM", "APScheduler", "Next.js 16"],
+    tech: ["Python", "FastAPI", "NVIDIA NIM", "Hunter.io", "Tavily", "APScheduler", "Next.js 16"],
     github: "https://github.com/Balisa50/coldpilot",
     githubRepo: "Balisa50/coldpilot",
     codePrivate: true,

@@ -5,10 +5,16 @@ import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 /**
- * Wraps a section so that, the first time it scrolls into view, a scan line
- * sweeps down it and HUD corner brackets fade in, as if an AI is
- * constructing the panel. Decorative only (doesn't touch child layout);
- * reduced-motion simply shows the brackets with no sweep.
+ * Fades a section up the first time it enters the viewport.
+ *
+ * Deliberately additive. The previous version set `opacity: 0` in CSS and only
+ * cleared it once JavaScript added a class, so every section below the fold was
+ * invisible until the observer fired: with JS blocked, on a crawler, or on a
+ * direct jump to an anchor, the page rendered blank. Content is visible by
+ * default now and the animation is the enhancement rather than the gate.
+ *
+ * It also rendered a scan line and four HUD corner brackets. Those belonged to
+ * the cinematic layer, their CSS is gone, and the empty spans went with them.
  */
 export function SectionReveal({
   children,
@@ -18,17 +24,12 @@ export function SectionReveal({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  // `amount: "some"` (fires as any part enters) is robust for sections that
-  // are taller than the viewport, where a ratio threshold could never trip.
+  // `amount: "some"` (fires as any part enters) is robust for sections taller
+  // than the viewport, where a ratio threshold could never trip.
   const inView = useInView(ref, { once: true, amount: "some" });
 
   return (
     <div ref={ref} className={cn("section-reveal", inView && "revealed", className)}>
-      <span className="sr-scan" aria-hidden="true" />
-      <span className="sr-bracket sr-tl" aria-hidden="true" />
-      <span className="sr-bracket sr-tr" aria-hidden="true" />
-      <span className="sr-bracket sr-bl" aria-hidden="true" />
-      <span className="sr-bracket sr-br" aria-hidden="true" />
       {children}
     </div>
   );

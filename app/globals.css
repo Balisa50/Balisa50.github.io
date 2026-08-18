@@ -112,16 +112,12 @@ body {
   }
 }
 
-.section-reveal {
-  opacity: 0;
-  transform: translateY(14px);
-  transition:
-    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
+/* Additive: the section is visible on its own, and `.revealed` only plays the
+   entrance. Hiding content in CSS and un-hiding it from JavaScript means a
+   blocked script, a crawler, or a jump straight to an anchor gets a blank
+   page, which is what happened here. */
 .section-reveal.revealed {
-  opacity: 1;
-  transform: none;
+  animation: fade-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

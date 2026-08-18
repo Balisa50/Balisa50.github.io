@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
 import { Metrics } from "@/components/Metrics";
@@ -9,13 +8,17 @@ import { Education } from "@/components/Education";
 import { Certifications } from "@/components/Certifications";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
+import { ProjectsGrid } from "@/components/ProjectsGrid";
 import { SectionReveal } from "@/components/SectionReveal";
 
-// Lazy-load the heavier projects grid (stars fetch + many motion nodes).
-const ProjectsGrid = dynamic(
-  () => import("@/components/ProjectsGrid").then((m) => m.ProjectsGrid),
-  { loading: () => <div className="h-[40vh]" aria-hidden="true" /> }
-);
+// ProjectsGrid used to be a dynamic() import behind a fixed 40vh placeholder.
+// It was lazy for a reason that no longer exists: the "many motion nodes" went
+// with the framer-motion entrances, and the stars fetch with the GitHub card.
+// The placeholder was actively harmful, because it is the tallest block on the
+// page and anchor links resolved against its 40vh stand-in, then the real grid
+// loaded and pushed every section below it down. Clicking "Contact" landed you
+// somewhere else. It is the main content of a statically exported page, so it
+// ships with the page.
 
 export default function HomePage() {
   return (
