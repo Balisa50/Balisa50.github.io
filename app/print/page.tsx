@@ -31,7 +31,7 @@ import { PRINT_CSS } from "./print-css";
  * point of linking a repository that had since gone private.
  */
 export const metadata: Metadata = {
-  title: `${PROFILE.fullName} — Selected work`,
+  title: `${PROFILE.fullName} · Selected work`,
   robots: { index: false, follow: false }
 };
 
@@ -107,17 +107,17 @@ export default function PrintPage() {
               </li>
             ))}
             <li>
-              <span className="toc-no">—</span>
+              <span className="toc-no">·</span>
               <span className="toc-title">Also built</span>
               <span className="toc-kicker">HireIQ and VANTAGE, in short</span>
             </li>
             <li>
-              <span className="toc-no">—</span>
+              <span className="toc-no">·</span>
               <span className="toc-title">Experience</span>
               <span className="toc-kicker">Roles and contracts</span>
             </li>
             <li>
-              <span className="toc-no">—</span>
+              <span className="toc-no">·</span>
               <span className="toc-title">Education and tools</span>
               <span className="toc-kicker">Background</span>
             </li>

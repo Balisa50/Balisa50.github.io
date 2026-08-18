@@ -105,7 +105,7 @@ export const PRINT_ENTRIES: PrintEntry[] = [
     slug: "credit-risk-scorecard",
     kicker: "Credit risk · Regulated modelling",
     standfirst:
-      "A Basel II scorecard for West African microfinance, built from the statistics up so every point on the score can be traced back to a feature.",
+      "A Basel II scorecard for West African microfinance. Each point on the score traces back to a feature, so the reasons for a decision can be read off it.",
     spread: true,
     figures: [
       {

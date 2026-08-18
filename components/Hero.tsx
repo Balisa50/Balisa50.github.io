@@ -48,11 +48,10 @@ export function Hero() {
             className="hero-item measure mt-8 text-[1.0625rem] leading-[1.7] text-text"
             style={{ animationDelay: "0.18s" }}
           >
-            I build AI systems that run in production rather than in a demo.
-            Retrieval that cites its source and refuses when it cannot, model
-            fallback chains that survive a provider retiring a model overnight,
-            and validation that catches an invented citation before a reader
-            ever sees it.
+            I mostly work on retrieval and forecasting systems, and on the
+            checks around them. A lot of what I have learned came from getting
+            those checks wrong first: answers that cited sections which did not
+            exist, and validation splits that flattered the model.
           </p>
 
           <nav
@@ -102,27 +101,29 @@ export function Hero() {
         {/*
           Portrait, right of the name.
 
-          Deliberately not centred above the heading: that placement was tried
-          before and rejected, and it pushes the work further down. Here it
-          fills the empty right-hand field the 12-column grid already had.
+          No frame, no border, no corners. The photograph's own backdrop was a
+          cool grey-blue (#E7EBF1) against a warm page, so any container just
+          drew attention to the mismatch. Instead the image itself was prepared:
+          the outer pixels trimmed (the phone export left dark artefact lines
+          down the edges), the backdrop repainted to the page colour on a
+          smoothstep ramp, and the edges feathered to transparency with a longer
+          dissolve at the bottom so the crop through his shirt is not a line.
+          It is a PNG with alpha, so it sits on the page rather than on top of it.
 
-          It shares the hairline treatment the project figures use, because the
-          photograph's backdrop is a brighter white than the page and the edge
-          would otherwise read as a seam. Hidden below lg, where there is no
-          second column and it would only push the intro down the screen.
+          Hidden below lg, where there is no second column and it would only
+          push the intro down the screen.
         */}
         <div className="hidden lg:col-span-4 lg:col-start-9 lg:block">
-          <div className="figure portrait hero-item" style={{ animationDelay: "0.1s" }}>
-            <Image
-              src="/portrait.jpg"
-              alt="Abdoulie Balisa"
-              width={536}
-              height={670}
-              priority
-              sizes="(min-width: 1024px) 30vw, 0px"
-              className="h-auto w-full"
-            />
-          </div>
+          <Image
+            src="/portrait.png"
+            alt="Abdoulie Balisa"
+            width={528}
+            height={662}
+            priority
+            sizes="(min-width: 1024px) 30vw, 0px"
+            className="hero-item h-auto w-full"
+            style={{ animationDelay: "0.1s" }}
+          />
         </div>
       </div>
     </header>

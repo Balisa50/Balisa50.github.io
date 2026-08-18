@@ -56,24 +56,22 @@ export function About() {
 
         <div className="mt-2 space-y-4 text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
           <p>
-            Based in Fajikunda, The Gambia. Studying Statistics at KNUST
-            in Ghana and building things in parallel. The Gambia is a small
-            country, and the problems here look different from what most tech
-            spaces talk about, which is part of why I started building.
+            Based in Fajikunda, The Gambia, studying Statistics at KNUST in
+            Ghana. I build things alongside the coursework, mostly because the
+            problems I run into at home are not the ones the tutorials are
+            written about.
           </p>
           <p>
-            A lot of the work came from bumping into real gaps: Gambians with
-            no easy access to legal information, families sending money home
-            with no clear picture of what the exchange rate would be, people
-            who needed accountability tools that actually worked. I started
-            building what I needed instead of waiting for someone else to do it.
+            Most of it started from something specific. Legal information that
+            is hard to look up. Families sending money home without much idea of
+            what the rate will be next month. None of these are solved, and some
+            of what I built works better than the rest.
           </p>
           <p>
-            The stack changes depending on what the problem needs. I work
-            across Python, TypeScript, machine learning, and statistical
-            modelling because the interesting problems don&apos;t stay in one
-            lane. Currently going deeper into actuarial science. Always
-            shipping something.
+            I work in Python and TypeScript, with statistical modelling on the
+            side I care about most. I am reading toward actuarial exams at the
+            moment, which is where the survival analysis and credit work came
+            from.
           </p>
         </div>
 
