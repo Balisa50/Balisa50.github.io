@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
@@ -20,7 +21,7 @@ export function Hero() {
       aria-label="Introduction"
     >
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-        <div className="col-span-12 lg:col-span-7">
+        <div className="lg:col-span-7">
           <p className="label hero-item flex items-center gap-2">
             <span
               className="inline-block h-1.5 w-1.5 rounded-full bg-status-live"
@@ -96,6 +97,32 @@ export function Hero() {
               Email
             </a>
           </nav>
+        </div>
+
+        {/*
+          Portrait, right of the name.
+
+          Deliberately not centred above the heading: that placement was tried
+          before and rejected, and it pushes the work further down. Here it
+          fills the empty right-hand field the 12-column grid already had.
+
+          It shares the hairline treatment the project figures use, because the
+          photograph's backdrop is a brighter white than the page and the edge
+          would otherwise read as a seam. Hidden below lg, where there is no
+          second column and it would only push the intro down the screen.
+        */}
+        <div className="hidden lg:col-span-4 lg:col-start-9 lg:block">
+          <div className="figure portrait hero-item" style={{ animationDelay: "0.1s" }}>
+            <Image
+              src="/portrait.jpg"
+              alt="Abdoulie Balisa"
+              width={536}
+              height={670}
+              priority
+              sizes="(min-width: 1024px) 30vw, 0px"
+              className="h-auto w-full"
+            />
+          </div>
         </div>
       </div>
     </header>

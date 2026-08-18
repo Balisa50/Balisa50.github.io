@@ -159,7 +159,7 @@ export function ProjectRow({ project, index, variant }: Props) {
           {project.figure && (
             <div
               className={cn(
-                "col-span-12 lg:col-span-6",
+                "lg:col-span-6",
                 figureFirst ? "lg:order-1" : "lg:order-2"
               )}
             >
@@ -186,7 +186,7 @@ export function ProjectRow({ project, index, variant }: Props) {
           {/* Text */}
           <div
             className={cn(
-              "col-span-12 min-w-0",
+              "min-w-0",
               project.figure ? "lg:col-span-6" : "lg:col-span-8",
               project.figure && (figureFirst ? "lg:order-2" : "lg:order-1")
             )}
@@ -282,7 +282,7 @@ export function ProjectRow({ project, index, variant }: Props) {
           </div>
         </div>
 
-        <div className="col-span-12 sm:col-span-4 sm:justify-self-end">
+        <div className="sm:col-span-4 sm:justify-self-end">
           <Links project={project} />
         </div>
       </div>

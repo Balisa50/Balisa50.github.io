@@ -168,3 +168,12 @@ body {
     display: none !important;
   }
 }
+
+/* Portrait in the hero. Shares the figure hairline so it belongs to the same
+   system, but without the inner white inset: the photograph's own backdrop is
+   already near-white, so padding it in white read as a picture frame rather
+   than as part of the page. */
+.portrait {
+  background: none;
+  padding: 0;
+}
