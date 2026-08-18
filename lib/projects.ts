@@ -42,34 +42,19 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    slug: "gambia-population-projection",
-    figure: { src: "/figures/gambia-2074-projection.png", alt: "Cohort-component projection to 2074: population path, age structure, and dependency ratios." },
-    title: "The Gambia 2074",
-    tagline: "An independent population forecast for The Gambia, out to 2074",
+    slug: "gambia-legal-aid",
+    figure: { src: "/figures/legal-aid.png", alt: "An answer with its statute section cited, so the reader can check it." },
+    title: "Gambia Legal Aid",
+    tagline: "RAG chatbot for Gambian law",
     description:
-      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. Every input is public data, so the method can be reproduced end to end from the write-up.",
-    tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
-    github: "https://github.com/Balisa50/gambia-population-projection",
-    githubRepo: "Balisa50/gambia-population-projection",
+      "A question-answering system over 13 Gambian Acts of Parliament, built so that being wrong is harder than saying nothing. Every answer names the section it came from. A validator checks each citation against the retrieved text before the answer ships: invented section numbers are stripped, quotation marks are only allowed around text that appears verbatim in the statute, and a claim attached to the wrong section is caught by comparing it against that section title. When the legislation store is unreachable it refuses outright rather than answering from the model's memory, and the provider chain falls through to a second model so a retired model id degrades the answer instead of ending the conversation.",
+    tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
+    github: "https://github.com/Balisa50/gamba-legal-aid",
+    githubRepo: "Balisa50/gamba-legal-aid",
     codePrivate: true,
-    articleUrl: "https://balisa50.github.io/research/gambia-2074",
+    demo: "https://gambia-legal-aid-ab.vercel.app/",
     status: "live",
-    metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
-    accent: "violet",
-    fallbackStars: 0,
-    featured: true
-  },
-  {
-    slug: "wingman",
-    figure: { src: "/figures/wingman.png", alt: "The reply composer: pick who you are talking to, drop the chat in, get three tonally distinct replies." },
-    title: "Wingman",
-    tagline: "An AI texting coach that reads the chat you're in and replies like a human, in your voice",
-    description:
-      "Screenshot a conversation, or let the browser extension read it straight off WhatsApp Web, Instagram, X, LinkedIn, Messenger, Telegram or Discord, and Wingman reads the situation itself then hands you three tonally distinct, sendable replies: playful, direct, and one genuinely sincere. The core artifact is the system prompt, engineered like a spec: an explicit kill-list of AI fingerprints the model must hunt out of its own drafts, a register map spanning flirting, grief, conflict, professional and family conversation, orientation pinning so it never answers your own message as the other person's, and a hard self-check. Named chats remember the person and the whole thread, every reply you send teaches it your texting voice, and a per-chat context (dating, work, boss, making up) drives tone and length, all in localStorage with no account. One server route holds the free NVIDIA key for both the web app and the Manifest V3 extension, whose ten per-site DOM adapters sit in front of a generic fallback for anything else.",
-    tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Chrome Extension (MV3)", "Vision OCR"],
-    demo: "https://trywingman.vercel.app",
-    status: "live",
-    metric: "Reads 10 sites live · 3 real tones · sounds human, not AI",
+    metric: "Cites the section, or refuses. 13 Acts, validated before it answers",
     accent: "cyan",
     fallbackStars: 0,
     featured: true
@@ -92,6 +77,55 @@ export const PROJECTS: Project[] = [
     featured: true
   },
   {
+    slug: "gambia-population-projection",
+    figure: { src: "/figures/gambia-2074-projection.png", alt: "Cohort-component projection to 2074: population path, age structure, and dependency ratios." },
+    title: "The Gambia 2074",
+    tagline: "An independent population forecast for The Gambia, out to 2074",
+    description:
+      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. Every input is public data, so the method can be reproduced end to end from the write-up.",
+    tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
+    github: "https://github.com/Balisa50/gambia-population-projection",
+    githubRepo: "Balisa50/gambia-population-projection",
+    codePrivate: true,
+    articleUrl: "https://balisa50.github.io/research/gambia-2074",
+    status: "live",
+    metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
+    accent: "violet",
+    fallbackStars: 0,
+    featured: true
+  },
+  {
+    slug: "credit-risk-scorecard",
+    figure: { src: "/figures/credit-discrimination.png", alt: "The scorecard dashboard: portfolio summary with Gini and KS reported on the test book, above the Information Value table that drives feature selection." },
+    title: "Credit Risk Scorecard",
+    tagline: "Basel II scorecard for West African microfinance",
+    description:
+      "Full credit scoring pipeline: WoE/IV feature selection, logistic regression with Basel II points conversion, Gini/KS/PSI validation, and multi-scenario stress testing. Built on 12,000 synthetic West African microfinance loans.",
+    tech: ["Python", "scikit-learn", "Pandas", "Next.js", "Recharts"],
+    github: "https://github.com/Balisa50/credit-risk-scorecard",
+    githubRepo: "Balisa50/credit-risk-scorecard",
+    demo: "https://credit-risk-ab.vercel.app/",
+    status: "live",
+    metric: "Gini 0.27 · KS 0.21 on a later-vintage holdout · PSI 0.002 while defaults rose a third",
+    accent: "pink",
+    fallbackStars: 0,
+    featured: true
+  },
+  {
+    slug: "wingman",
+    figure: { src: "/figures/wingman.png", alt: "The reply composer: pick who you are talking to, drop the chat in, get three tonally distinct replies." },
+    title: "Wingman",
+    tagline: "An AI texting coach that reads the chat you're in and replies like a human, in your voice",
+    description:
+      "Screenshot a conversation, or let the browser extension read it straight off WhatsApp Web, Instagram, X, LinkedIn, Messenger, Telegram or Discord, and Wingman reads the situation itself then hands you three tonally distinct, sendable replies: playful, direct, and one genuinely sincere. The core artifact is the system prompt, engineered like a spec: an explicit kill-list of AI fingerprints the model must hunt out of its own drafts, a register map spanning flirting, grief, conflict, professional and family conversation, orientation pinning so it never answers your own message as the other person's, and a hard self-check. Named chats remember the person and the whole thread, every reply you send teaches it your texting voice, and a per-chat context (dating, work, boss, making up) drives tone and length, all in localStorage with no account. One server route holds the free NVIDIA key for both the web app and the Manifest V3 extension, whose ten per-site DOM adapters sit in front of a generic fallback for anything else.",
+    tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Chrome Extension (MV3)", "Vision OCR"],
+    demo: "https://trywingman.vercel.app",
+    status: "live",
+    metric: "Reads 10 sites live · 3 real tones · sounds human, not AI",
+    accent: "cyan",
+    fallbackStars: 0
+  },
+  {
     slug: "forge",
     figure: { src: "/figures/forge.png", alt: "The FORGE landing page: commit to a schedule, then prove the work with real commits and a deployed URL." },
     title: "FORGE",
@@ -106,8 +140,7 @@ export const PROJECTS: Project[] = [
     progress: 90,
     metric: "13 roadmaps · 385 video resources · 1:1 mentors · proof-of-work",
     accent: "cyan",
-    fallbackStars: 0,
-    featured: true
+    fallbackStars: 0
   },
   {
     slug: "hireiq",
@@ -125,8 +158,7 @@ export const PROJECTS: Project[] = [
     launchLabel: "95%, shipping soon",
     metric: "AI interviews · ranked scoring · PDF reports",
     accent: "violet",
-    fallbackStars: 0,
-    featured: true
+    fallbackStars: 0
   },
   {
     slug: "ayat",
@@ -142,8 +174,7 @@ export const PROJECTS: Project[] = [
     status: "live",
     metric: "6,236 verses reprojected in 22ms, fully client-side",
     accent: "violet",
-    fallbackStars: 0,
-    featured: true
+    fallbackStars: 0
   },
   {
     slug: "vantage",
@@ -158,23 +189,6 @@ export const PROJECTS: Project[] = [
     demo: "https://vantage-ab.vercel.app/",
     status: "live",
     metric: "Live news feed with AI scoring",
-    accent: "cyan",
-    fallbackStars: 0
-  },
-  {
-    slug: "gambia-legal-aid",
-    figure: { src: "/figures/legal-aid.png", alt: "An answer with its statute section cited, so the reader can check it." },
-    title: "Gambia Legal Aid",
-    tagline: "RAG chatbot for Gambian law",
-    description:
-      "Retrieval-augmented chatbot answering legal questions grounded in Gambian statutes. Has a hallucination-guard pipeline that rejects answers without citation anchors in the retrieved context.",
-    tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
-    github: "https://github.com/Balisa50/gamba-legal-aid",
-    githubRepo: "Balisa50/gamba-legal-aid",
-    codePrivate: true,
-    demo: "https://gambia-legal-aid-ab.vercel.app/",
-    status: "live",
-    metric: "Hallucination-guarded answers",
     accent: "cyan",
     fallbackStars: 0
   },
@@ -226,22 +240,6 @@ export const PROJECTS: Project[] = [
     progress: 80,
     launchLabel: "80%, v2 coming",
     metric: "Hunter · Seeker · 3 autonomy levels",
-    accent: "pink",
-    fallbackStars: 0
-  },
-  {
-    slug: "credit-risk-scorecard",
-    figure: { src: "/figures/credit-discrimination.png", alt: "Gini, KS and ROC for the scorecard, measured on a later-vintage holdout." },
-    title: "Credit Risk Scorecard",
-    tagline: "Basel II scorecard for West African microfinance",
-    description:
-      "Full credit scoring pipeline: WoE/IV feature selection, logistic regression with Basel II points conversion, Gini/KS/PSI validation, and multi-scenario stress testing. Built on 12,000 synthetic West African microfinance loans.",
-    tech: ["Python", "scikit-learn", "Pandas", "Next.js", "Recharts"],
-    github: "https://github.com/Balisa50/credit-risk-scorecard",
-    githubRepo: "Balisa50/credit-risk-scorecard",
-    demo: "https://credit-risk-ab.vercel.app/",
-    status: "live",
-    metric: "Gini 0.29 · KS 0.23 · PSI 0.008",
     accent: "pink",
     fallbackStars: 0
   },
