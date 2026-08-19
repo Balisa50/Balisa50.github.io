@@ -43,7 +43,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     slug: "gambia-population-projection",
-    figure: { src: "/figures/gambia-2074-projection.png", alt: "Cohort-component projection to 2074: population path, age structure, and dependency ratios." },
+    figure: { src: "/figures/gambia-2074-projection.png", alt: "This projection reaches 4.66 million by 2074, about 0.7 million under the UN medium variant, with both anchored on the 2024 census." },
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:

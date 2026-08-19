@@ -51,7 +51,7 @@ export const PRINT_ENTRIES: PrintEntry[] = [
       {
         src: "/figures/gambia-2074-projection.png",
         caption:
-          "Cohort-component projection to 2074: the population path, the age structure in 2023 against 2074, and the dependency ratios that follow from it."
+          "The independent projection against the UN medium variant, both anchored on the 2024 census: 4.66 million by 2074, with a 95 percent interval of 4.35 to 4.98 million, about 0.7 million below the UN."
       },
       {
         src: "/figures/gambia-2074-backtest.png",
