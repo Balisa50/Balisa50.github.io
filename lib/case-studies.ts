@@ -31,75 +31,6 @@ export interface CaseStudy {
 }
 
 export const CASE_STUDIES: Record<string, CaseStudy> = {
-  wingman: {
-    slug: "wingman",
-    problem:
-      "Wingman started as a dead voice-coaching app and became a question I could not put down: why does every AI texting assistant sound like an AI? Rizz has ten million users and its replies are still generic, cringe, and recognisably machine-made, and pasting a chat into ChatGPT gets you a paragraph that no human would ever send. The model is not the problem, the same model writes both the cringe and the killer line. The prompt is the product. So the real project became engineering one system prompt good enough that a free model reads a real conversation, screenshot or live off the page, and hands back messages a sharp, emotionally fluent human would actually send, in the user's own voice, across every register a life contains: flirting, grief, a client pushing back on price, an apology at 3am.",
-    research: [
-      "Rizz first: around 10 million users, 18 to 25, screenshot in, three replies out. Its own users' complaints are consistent, generic copy-paste lines, falls apart in emotionally serious conversations, paywalled. The gap was never features, it was that the output smells like AI.",
-      "So I studied the smell itself. AI text has fingerprints people now detect instantly: hedged balance ('it's not just X, it's Y'), customer-support warmth ('I hear you, I'm here for you'), three-part lists, symmetrical clauses, tidy life-lesson endings, words nobody texts. I catalogued every tell and made the prompt hunt its own output for them.",
-      "Then the harder domain: what actually lands in human conversation. How real people text when they flirt, fight, apologise, comfort grief, negotiate, hold a line with a client. What negging reads as (insecurity), why presence beats solutions when someone is hurting, why one word can outperform a paragraph. The prompt encodes a register map of all of it.",
-      "For the extension I read how ten sites structure their DOM. WhatsApp labels bubbles in and out, Instagram and Messenger obfuscate classes so you classify by which side of centre a bubble sits, LinkedIn stacks everything left and marks the other person with a modifier class, Discord has no own-message marker at all so you match each author against the logged-in username.",
-    ],
-    constraints: [
-      "Zero budget, permanently. Free NVIDIA endpoint for both the text model and the vision model, free hosting, no accounts, no backend database. Memory and voice-learning had to live entirely in the browser's own storage.",
-      "Any key shipped to a client is extractable, so both the web app and the extension had to route every model call through one server route that holds the key.",
-      "A browser extension runs inside pages that fight it: host CSS clobbers injected UI, page CSP blocks fetches, and Chrome does not reliably give content scripts storage access. Each of those broke something real.",
-      "The prompt had to do all the intelligence work, because the free model is mid-tier. No fine-tuning, no retrieval, one system prompt.",
-    ],
-    decisions: [
-      {
-        call: "Treat the system prompt as the core engineering artifact of the product.",
-        reason:
-          "It is written as a spec. Rule Zero is a list of AI tells the model has to check its own drafts against, hunting down in its own drafts, with a litmus: if the line could be a brand caption or sent to anyone else, delete it. Then a subtext pass before writing, a register map covering flirting, love, intimacy, banter, conflict, grief, professional, negotiation, family, and faith, each with its own move, and a final-cut self-check. Same model, unrecognisably better output. That gap is the whole discipline.",
-      },
-      {
-        call: "Force three genuinely different tones, and pin one to sincerity.",
-        reason:
-          "Early versions returned three flavours of the same cocky joke, and when a girl texted 'I love you' the app negged her three ways. Real feedback, real fix: the three replies must span playful, direct, and sincere, and exactly one must contain no joke, tease, or reframe at all. Banning negging and requiring an honest option taught me more about prompt design than any success did.",
-      },
-      {
-        call: "Pin conversational orientation explicitly, because the model will flip roles.",
-        reason:
-          "With ME and THEM labels in the transcript, the model still sometimes answered the user's own message as if the other person had sent it, apologising for things the user said. Probabilistic, so it passed casual testing. The fix is an orientation block that makes the model silently confirm who said what and whose side it writes for before composing. Subtle, and the difference between a tool and a liability.",
-      },
-      {
-        call: "Read the chat straight off the page with per-site adapters, generic fallback behind them.",
-        reason:
-          "The extension scrapes the open conversation using each app's real DOM structure, seven adapters, WhatsApp, Instagram, X, LinkedIn, Messenger, Telegram, Discord, each labelling who said what by whatever signal that app actually exposes, with an alignment-based generic scraper as the fallback. Screenshot friction gone entirely on desktop.",
-      },
-      {
-        call: "One server route serves the web app and the extension.",
-        reason:
-          "The extension does not talk to the model, it messages its service worker, which calls the same CORS-enabled Vercel route the web app uses. One key, server-side only, zero new infrastructure, and the extension's settings live in the worker too because content scripts turned out not to get chrome.storage at all.",
-      },
-      {
-        call: "Memory and context as user-set state, not guesswork.",
-        reason:
-          "Named chats remember the whole thread and every reply you actually send teaches it your voice, all in localStorage. Per chat you set who this is, dating, work, boss, making up, and what you want, and the server derives tone and length from that. The same incoming message gets a 60-character flirt or a 250-character professional answer depending on one pill.",
-      },
-    ],
-    pivots: [
-      "Audio to text: ripped out the entire mic-to-transcription-to-spoken-tip pipeline and rebuilt as a reply engine. Then paste to screenshot: a free vision model transcribes chat screenshots with speaker labels. Then screenshot to live page-reading via the extension. Each step existed to delete friction the previous version still had.",
-      "The prompt itself pivoted three times on real user disgust: from mode-pickers to auto-detection, from one-note cocky wit to enforced tonal range, and finally to the full anti-AI-smell rewrite when the replies still felt machine-made. The last rewrite was the one that mattered.",
-      "The extension's first real-world run crashed on chrome.storage being undefined in content scripts, and the WhatsApp adapter silently fell back to the generic scraper, which flipped who said what and made the AI answer the user's own messages. Fixed by moving settings into the service worker and hardening the adapter with WhatsApp's data-id fallback.",
-    ],
-    weaknesses: [
-      "I shipped the scraper on mock DOMs that matched my assumptions and called it tested. Real WhatsApp broke it in two ways in ten minutes. The lesson stuck: mock-DOM testing proves nothing about a selector, and selector-based scraping decays, which is why every adapter has a generic fallback behind it.",
-      "I could not reliably tell a probabilistic failure from a fixed one. The role-flip bug passed four straight tests after a fix that did not address it. I learned to rerun the exact failing scenario repeatedly and only trust zero-for-four.",
-      "The free model is a ceiling. The prompt closes most of the gap, but a stronger model behind the same prompt would be better still, and on a zero budget that trade is the design.",
-    ],
-    outcome: [
-      "Live at trywingman.vercel.app: screenshot or paste a conversation, get a read of the situation plus three tonally distinct, sendable replies, with openers from dating-profile screenshots, per-chat memory, and voice-learning. No account, nothing stored server-side.",
-      "A Chrome extension (v0.11.1, Manifest V3) that injects a shadow-DOM panel into ten sites, reads the open thread with per-site adapters, and drops the chosen reply into the message box, with a generic fallback behind them. Verified live on real WhatsApp.",
-      "The prompt, tested across opposite registers in one run: grief got 'do you want company or do you want quiet right now, either one i'm here', a client pushing back on price got three substantive professional approaches, and friend banter got 'that movie was boring as hell and i stand by my nap'. No AI smell in any of them.",
-    ],
-    regret:
-      "The phone is where texting happens and the extension cannot reach it, phone browsers do not run extensions and native apps are sealed. The web app's screenshot flow covers it, but the real answer is a native keyboard, and that is a separate build I have not started.",
-    takeaway:
-      "Prompt engineering is real engineering. The same free model produced cringe and produced lines indistinguishable from a sharp human, and the entire difference was a system prompt built like a spec: explicit failure modes, register maps, orientation pinning, self-checks. Model quality sets the ceiling, but the prompt decides how close you get to it, and on a zero budget the prompt is the only lever you own.",
-  },
-  // ─────────────────────────────────────────────────────────────────
   "nova": {
     slug: "nova",
     problem:
@@ -171,8 +102,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "Synthetic data is not about copying; it is about producing data that is safe, useful, and sometimes never existed. The hard part was never the GAN, it was the validation and the honesty: proving the data is good enough to trust, and being willing to throw out a metric that flatters the model for one that tells the truth. The model is the easy part. The trust is the hard part.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "gambia-population-projection": {
     slug: "gambia-population-projection",
     problem:
@@ -245,8 +174,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "Research quality is capped by data quality. For a country with no death registration, the honest thing is to make that gap the question and to carry the uncertainty through to the end, instead of hiding it behind one confident number. The most important result, that the UN figure is about 13% too high for The Gambia, came from nothing clever. It came from taking the new census seriously and checking every step against a known answer before believing it.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "gambia-political-risk": {
     slug: "gambia-political-risk",
     problem:
@@ -340,8 +267,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "When the data is messy and the stakes are visible (a public political index for a country with no other public index), every layer of the pipeline has to be defensible on its own. Scraping has to be polite, preprocessing has to be reproducible, sentiment has to be evaluated against ground truth, the index has to drop during real crises. Cut corners anywhere and the whole thing collapses.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "ayat": {
     slug: "ayat",
     problem:
@@ -442,8 +367,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "When the corpus is fixed, do the expensive work once and ship the artefact, and when the per-user cost is zero you can run forever on free tiers. But the thing this project actually taught me is narrower and more useful: measure the claim your design depends on before you build on it. Two thirds of my proposal died to an eigenvalue check and a silhouette score, and the feature that shipped is more honest for it. The Qur'an is the only book I know that asks the reader to find connections across its 114 chapters. Software should reward that, and it should also admit when there is no connection to find.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "vantage": {
     slug: "vantage",
     problem:
@@ -524,8 +447,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "When you're optimising AI cost, the cheapest call is the one you don't make. De-dup before you spend. When you're optimising on a free tier, treat every constraint (60s timeout, 100 req/day, 500MB DB) as the input to your architecture, not an obstacle. Constraints force creative wiring.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "gambia-legal-aid": {
     slug: "gambia-legal-aid",
     problem:
@@ -619,8 +540,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "In high-stakes domains, refusing to answer is a feature, not a failure. The system that says 'I don't know' is more useful than the one that confidently hallucinates. Hallucination prevention is not one technique, it's a stack: better retrieval, allowlists, verbatim validation, banned phrases, hard-fail on retry. Each layer catches what the previous one missed.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "dalasi-pulse": {
     slug: "dalasi-pulse",
     problem:
@@ -704,8 +623,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "Open data exists in unlikely places. The CBG endpoint was sitting in the network tab the whole time. Curiosity outranks documentation. When publishing financial forecasts, honesty about uncertainty (intervals, model ensembles, plain-language interpretation, last-updated timestamps) is the difference between trustworthy data and fake-precise data.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "forge": {
     slug: "forge",
     problem:
@@ -791,8 +708,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "The hardest software to build is software that's hard on you. Most apps optimise for retention; FORGE optimises for honesty. Ship the feature, watch how it actually changes behaviour, kill it if it produces the wrong incentive, even if you were proud of it. Removing software is harder than adding it.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "hireiq": {
     slug: "hireiq",
     problem:
@@ -882,101 +797,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "You can replace a static form with intelligence at the same UX cost, if you pick the right model for the job. Don't use GPT-4 for what Flash can do. Production is full of edge cases (CORS, cold starts, OAuth loops) that nobody warns you about, the bug list is the case study.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
-  "coldpilot": {
-    slug: "coldpilot",
-    problem:
-      "Cold outreach works but is brutally tedious, find leads, research them, write personalised emails, follow up, track replies, retry the bouncers. Most tools automate one step and call it done. I wanted an agent that ran the whole pipeline autonomously, with three levels of human oversight depending on how much you trust it. Especially for someone in The Gambia trying to land remote tech roles or B2B clients in the US/EU, the cost of doing this manually is prohibitive, and the cost of doing it sloppily is your domain blacklisted in days.",
-    research: [
-      "Read about email deliverability, SPF/DKIM/DMARC, RFC 2822 threading. Spam filters score every send on dozens of signals, sender reputation, content patterns, threading consistency, send rate. Sloppy cold-email automation is how domains get burned.",
-      "Studied IP/domain warm-up patterns from Lemlist, Instantly, Smartlead. The schedule: 5, then 10, then 20, then 35, then 50 emails/day over 3 weeks, with random spacing. Mimics human behaviour closely enough that filters don't flag you as a bot.",
-      "Read Hunter.io, Apollo, RocketReach API docs to understand contact discovery. Hunter has the cleanest free tier (25 searches/month). Tavily for company research (1000 free searches/month). Groq for LLM-as-email-writer (generous free tier).",
-      "Studied SMTP error codes carefully (4xx soft bounce vs 5xx hard bounce). Auto-marking a prospect as bounced on 4xx is wrong, those are temporary. Hard bounces (5xx) are permanent failures that should pause outreach to that address.",
-      "Read about IMAP reply detection. SMTP only handles outbound. To know if someone replied, you need to poll an IMAP inbox, parse threads, match by Message-ID. Built that as a separate service.",
-    ],
-    constraints: [
-      "Spam filters are aggressive, sloppy automation gets your domain blacklisted in days.",
-      "Free APIs only (Hunter.io 25/month, Tavily 1000/month, Groq generous limits).",
-      "Had to gracefully degrade across autonomy levels, same engine, different human-in-the-loop.",
-      "Multi-user platform meant SMTP credentials could not be hardcoded, each user connects their own Gmail (or domain SMTP).",
-      "Render free tier deploy means cold starts; SSE proxy required for live progress streaming.",
-    ],
-    decisions: [
-      {
-        call: "Pipeline of small services, not one mega-prompt.",
-        reason:
-          "Contact finder, researcher, writer, sender, follow-up, each is its own service with single responsibility. Easier to test, easier to swap (Hunter.io fails? swap in Apollo). Each step's output is the next step's input. One mega-prompt that 'does outreach' would be a black box impossible to debug.",
-      },
-      {
-        call: "Three autonomy levels: Copilot, Supervised, Full Auto.",
-        reason:
-          "Different users have different tolerance for AI sending email in their name. Copilot stops at draft for approval (safest). Supervised auto-sends but streams progress via SSE so you can watch and pause (mid-trust). Full Auto runs unattended (trusted user, established campaigns). Same pipeline, three trust levels, set per-campaign. The autonomy slider is the actual product.",
-      },
-      {
-        call: "Warm-up schedule baked into the scheduler, not optional.",
-        reason:
-          "New domain sending 50 emails on day 1 = blacklist guaranteed. The scheduler enforces a graduated send rate: 5, then 10, then 20, then 35, then 50 over 3 weeks, with 45-120s random spacing between sends. Users can't override this. Saving the user from themselves is the whole point of automation that respects deliverability.",
-      },
-      {
-        call: "RFC 2822 email threading via In-Reply-To headers.",
-        reason:
-          "Follow-ups originally sent as new emails. Got marked as spam because spam filters love 'multiple unsolicited emails from same sender'. Switched to RFC 2822 threading, every follow-up sets `In-Reply-To: <original-message-id>` and `References:`, so they land in the SAME thread as the original. Filters see one conversation, not three new emails. Open rates went up, spam complaints went down (commit b478b53).",
-      },
-      {
-        call: "Groq Llama 3.3 70B for email writing, with multi-model fallback.",
-        reason:
-          "Email drafts are formulaic, 3 short paragraphs, specific reason for reaching out, soft CTA. Llama 3.3 70B handles this trivially at a fraction of GPT-4 cost. Groq's inference is fast (drafts in 1-2s). Added 8B and gemma2 fallbacks (commits 8a3d0db, 7c771f7) when 70B occasionally returned garbage, fall through to a smaller model rather than retry the same one (which burned quota).",
-      },
-      {
-        call: "Per-user SMTP credentials, not platform-level.",
-        reason:
-          "Originally tried a single platform-level SMTP that all users sent through. Ran into deliverability hell, one user's spam complaint poisons everyone else's reputation. Switched to per-user SMTP: each user connects their own Gmail (or domain) via app password. Reputation is theirs, isolation is clean (commit 91de4fc).",
-      },
-      {
-        call: "Reject raw PDF binary server-side before LLM call.",
-        reason:
-          "Users upload CVs as PDFs. Naive approach: pass the PDF text to the LLM. Bug: PyPDF2 sometimes returns the literal binary stream as 'text', which then gets sent to Groq. Wasted tokens, garbage outputs. Fixed by detecting PDF-binary patterns and rejecting before the LLM call, asking the user to re-upload (commit cd5ad9a).",
-      },
-      {
-        call: "IMAP reply detection as separate service.",
-        reason:
-          "SMTP only handles outbound. Replies require an IMAP poller that connects to the user's inbox, fetches threads, matches incoming messages to outbound campaigns by Message-ID. Built it as a separate APScheduler job that runs every 15 minutes, updates Supabase with reply state. The reply rate UI was wrong for weeks before this shipped, was showing zero because there was no detection at all (commit d7da1a4).",
-      },
-    ],
-    pivots: [
-      "Initial follow-up logic was 'send at +3 days, +7 days, +14 days' as new emails. Got marked as spam fast. Switched to RFC 2822 threading. Open rates went up.",
-      "First version had no bounce detection, kept emailing dead addresses, burning Hunter.io credits. Added 5xx-error parsing to auto-mark prospects as bounced. Stopped wasting credits on dead leads.",
-      "Email-write LLM prompts were originally very generic and produced templated cover-letter prose. Rewrote with banned-phrase list ('I hope this email finds you well', 'I came across your company', 'circle back'), explicit structure constraints, and length-fits-content rules. Output went from 'AI cover letter' to 'real human reaching out' (commits 4ff5032, 321bb50).",
-      "Bug: Seeker mode was writing emails AS the recruiter TO the candidate. Wrong perspective. The Seeker is the job-seeker reaching out to a hiring manager. Spent half a day debugging the prompt, turned out the role parameter was being injected after the system prompt, getting overridden. Fixed by hard-coding the perspective in the system prompt itself (commit 97a76b3).",
-      "Supabase IPv6 connectivity bug from Render: Render's egress was routing via IPv6, Supabase pooler didn't accept IPv6 reliably. Half my DB calls were timing out with no error. Diagnosed by adding asyncpg connection logging. Fix: force IPv4 by setting `family=AF_INET` on asyncpg pool (commit 60273fb).",
-      "30-day cooldown between same-prospect contacts was the right deliverability behaviour but blocked dry-run testing. Added an exempt flag for dry-run campaigns (commit 7fbcdb2). Compliance shouldn't block the test environment.",
-    ],
-    weaknesses: [
-      "I did not understand SMTP threading at the start. Sent follow-ups as new emails; got blacklisted on a test domain. Read RFC 2822 from the start, fixed.",
-      "IPv4 vs IPv6 connection issues in cloud-to-cloud database connections is one of those things you only learn the hard way. Now I default to forcing IPv4 in production stacks.",
-      "Prompt-engineering an email that doesn't sound AI-written took many iterations. The pattern that worked: explicit banned-phrase list + length-fits-content + no template structure. The model converges on human voice when it can't fall back to known cliches.",
-      "Scaling a multi-user system with per-user SMTP credentials introduces auth-storage complexity. Used Supabase encrypted columns for SMTP passwords. Could've used a secrets manager but the cost wasn't worth it for the user count.",
-      "SSE streaming through a proxy (Render frontend, then Render backend, then user) buffered chunks initially. Fix was setting `X-Accel-Buffering: no` and forcing the proxy to forward chunks immediately (commit a2bbe53).",
-    ],
-    outcome: [
-      "32 endpoints across 6 routers (campaigns, emails, prospects, settings, activity, tracking)",
-      "Hunter mode (B2B outreach) + Seeker mode (job hunting)",
-      "Three autonomy levels: Copilot (approve each), Supervised (auto-send with live SSE pause), Full Auto",
-      "RFC 2822 email threading for compliant follow-ups",
-      "Warm-up schedule (5, then 50 over 3 weeks, random 45-120s spacing)",
-      "Bounce detection (5xx auto-mark)",
-      "IMAP reply detection (separate scheduler job, 15-min cadence)",
-      "Multi-model fallback (Groq 70B, then 8B, then gemma2)",
-      "Per-user SMTP credentials (reputation isolation)",
-      "Built on free-tier APIs end-to-end",
-    ],
-    regret:
-      "I'd add a reply classifier, when a lead replies, is it positive, negative, auto-reply, or out-of-office? Right now I parse manually. A small classifier on top of the inbox would close the loop properly. Also a deliverability dashboard (open rates, reply rates per template) would let users iterate on what works.",
-    takeaway:
-      "Autonomous agents work when each step is small and each interface is clean. The mega-prompt agents fail because debugging them is impossible. Production deliverability is a stack of small details (threading, warm-up, reputation isolation, bounce detection); skip any one and your domain dies.",
-  },
-  // ─────────────────────────────────────────────────────────────────
   "credit-risk-scorecard": {
     slug: "credit-risk-scorecard",
     problem:
@@ -1059,8 +879,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "In regulated domains, explainability isn't a feature, it's the constraint that picks the model. Logistic regression isn't old-fashioned, it's accountable. Validation theatre is worse than no validation: random-split metrics that look good but won't survive production are how models fail in deployment.",
   },
-
-  // ─────────────────────────────────────────────────────────────────
   "life-insurance-risk": {
     slug: "life-insurance-risk",
     problem:
@@ -1142,7 +960,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I'd add a reserves projection module, given current policies and the mortality model, what's the IBNR (incurred but not reported) estimate? That's the actuary's bread and butter and I skipped it. Also need to add LGD/EAD analogues for life products (sum-assured at risk). Adding next iteration.",
     takeaway:
       "You learn actuarial science by writing the math. The textbook tells you Gompertz-Makeham; doing the gradient descent yourself shows you why the second term matters in the data you actually have. When the assumptions are violated (proportional hazards, no interaction), the model tells you with a low C-index, listen to it.",
-  },
+  }
 };
 
 export function getCaseStudy(slug: string): CaseStudy | undefined {

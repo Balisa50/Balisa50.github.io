@@ -42,20 +42,20 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    slug: "gambia-legal-aid",
-    figure: { src: "/figures/legal-aid.png", alt: "Ask in plain English and the answer names the Act and section it came from." },
-    title: "Gambia Legal Aid",
-    tagline: "RAG chatbot for Gambian law",
+    slug: "gambia-population-projection",
+    figure: { src: "/figures/gambia-2074-projection.png", alt: "Cohort-component projection to 2074: population path, age structure, and dependency ratios." },
+    title: "The Gambia 2074",
+    tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "A question-answering system over 13 Gambian Acts of Parliament. Every answer names the section it came from. A validator checks each citation against the retrieved text before the answer ships: invented section numbers are stripped, quotation marks are only allowed around text that appears verbatim in the statute, and a claim attached to the wrong section is caught by comparing it against that section title. When the legislation store is unreachable it refuses outright rather than answering from the model's memory, and the provider chain falls through to a second model so a retired model id degrades the answer instead of ending the conversation.",
-    tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
-    github: "https://github.com/Balisa50/gamba-legal-aid",
-    githubRepo: "Balisa50/gamba-legal-aid",
+      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. Every input is public data, so the method can be reproduced end to end from the write-up.",
+    tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
+    github: "https://github.com/Balisa50/gambia-population-projection",
+    githubRepo: "Balisa50/gambia-population-projection",
     codePrivate: true,
-    demo: "https://gambia-legal-aid-ab.vercel.app/",
+    articleUrl: "https://balisa50.github.io/research/gambia-2074",
     status: "live",
-    metric: "Cites the section, or refuses. 13 Acts, validated before it answers",
-    accent: "cyan",
+    metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
+    accent: "violet",
     fallbackStars: 0,
     featured: true
   },
@@ -77,20 +77,20 @@ export const PROJECTS: Project[] = [
     featured: true
   },
   {
-    slug: "gambia-population-projection",
-    figure: { src: "/figures/gambia-2074-projection.png", alt: "Cohort-component projection to 2074: population path, age structure, and dependency ratios." },
-    title: "The Gambia 2074",
-    tagline: "An independent population forecast for The Gambia, out to 2074",
+    slug: "gambia-legal-aid",
+    figure: { src: "/figures/legal-aid.png", alt: "Ask in plain English and the answer names the Act and section it came from." },
+    title: "Gambia Legal Aid",
+    tagline: "RAG chatbot for Gambian law",
     description:
-      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. Every input is public data, so the method can be reproduced end to end from the write-up.",
-    tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
-    github: "https://github.com/Balisa50/gambia-population-projection",
-    githubRepo: "Balisa50/gambia-population-projection",
+      "A question-answering system over 13 Gambian Acts of Parliament. Every answer names the section it came from. A validator checks each citation against the retrieved text before the answer ships: invented section numbers are stripped, quotation marks are only allowed around text that appears verbatim in the statute, and a claim attached to the wrong section is caught by comparing it against that section title. When the legislation store is unreachable it refuses outright rather than answering from the model's memory, and the provider chain falls through to a second model so a retired model id degrades the answer instead of ending the conversation.",
+    tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
+    github: "https://github.com/Balisa50/gamba-legal-aid",
+    githubRepo: "Balisa50/gamba-legal-aid",
     codePrivate: true,
-    articleUrl: "https://balisa50.github.io/research/gambia-2074",
+    demo: "https://gambia-legal-aid-ab.vercel.app/",
     status: "live",
-    metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
-    accent: "violet",
+    metric: "Cites the section, or refuses. 13 Acts, validated before it answers",
+    accent: "cyan",
     fallbackStars: 0,
     featured: true
   },
@@ -110,20 +110,6 @@ export const PROJECTS: Project[] = [
     accent: "pink",
     fallbackStars: 0,
     featured: true
-  },
-  {
-    slug: "wingman",
-    figure: { src: "/figures/wingman.png", alt: "The reply composer: pick who you are talking to, drop the chat in, get three tonally distinct replies." },
-    title: "Wingman",
-    tagline: "An AI texting coach that reads the chat you're in and replies like a human, in your voice",
-    description:
-      "Screenshot a conversation, or let the browser extension read it straight off WhatsApp Web, Instagram, X, LinkedIn, Messenger, Telegram or Discord, and Wingman reads the situation itself then hands you three tonally distinct, sendable replies: playful, direct, and one genuinely sincere. Most of the work went into the system prompt: a list of AI tells the model has to check its own drafts against, guidance for different registers (flirting, grief, conflict, work, family), and a rule to stop it answering your own message as though it were the other person's. Named chats remember the person and the whole thread, every reply you send teaches it your texting voice, and a per-chat context (dating, work, boss, making up) drives tone and length, all in localStorage with no account. One server route holds the free NVIDIA key for both the web app and the Manifest V3 extension, whose ten per-site DOM adapters sit in front of a generic fallback for anything else.",
-    tech: ["Next.js 16", "TypeScript", "NVIDIA NIM", "Chrome Extension (MV3)", "Vision OCR"],
-    demo: "https://trywingman.vercel.app",
-    status: "live",
-    metric: "Reads 10 sites live · 3 real tones · sounds human, not AI",
-    accent: "cyan",
-    fallbackStars: 0
   },
   {
     slug: "forge",
@@ -223,24 +209,6 @@ export const PROJECTS: Project[] = [
     status: "live",
     metric: "Client site with a self-serve admin CMS",
     accent: "cyan",
-    fallbackStars: 0
-  },
-  {
-    slug: "coldpilot",
-    title: "ColdPilot",
-    tagline: "Autonomous cold-outreach agent",
-    description:
-      "Two-mode AI agent: Hunter finds B2B leads and sends personalised outreach; Seeker applies to jobs on your behalf. Full pipeline, contact discovery via Hunter.io, Tavily company research, LLM-written emails, SMTP send with open/click tracking, RFC 2822 email threading, bounce-rate auto-pause, and automated follow-ups. Three autonomy levels: Copilot (approve each email), Supervised (watch live via SSE), Full Auto.",
-    tech: ["Python", "FastAPI", "NVIDIA NIM", "Hunter.io", "Tavily", "APScheduler", "Next.js 16"],
-    github: "https://github.com/Balisa50/coldpilot",
-    githubRepo: "Balisa50/coldpilot",
-    codePrivate: true,
-    demo: "https://coldpilot-ab.vercel.app",
-    status: "in-progress",
-    progress: 80,
-    launchLabel: "80%, v2 coming",
-    metric: "Hunter · Seeker · 3 autonomy levels",
-    accent: "pink",
     fallbackStars: 0
   },
   {
