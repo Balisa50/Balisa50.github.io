@@ -51,7 +51,7 @@ export function CaseStudyView({
         </Link>
       )}
 
-      <div className="mx-auto w-full max-w-shell px-6 sm:px-10 pb-24 pt-24 md:pt-28">
+      <div className="mx-auto w-full max-w-[1280px] px-6 sm:px-10 pb-24 pt-24 md:pt-28">
         {/* Header, full width */}
         <header className="border-b border-rule pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">
@@ -99,7 +99,7 @@ export function CaseStudyView({
         </header>
 
         {/* Body: sticky contents rail + main column */}
-        <div className="mt-4 lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-14">
+        <div className="mt-4 lg:grid lg:grid-cols-[190px_minmax(0,78ch)] lg:justify-center lg:gap-16">
           <nav aria-label="Contents" className="hidden lg:block">
             <div className="sticky top-24">
               <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-secondary">Contents</p>
@@ -117,13 +117,13 @@ export function CaseStudyView({
 
           <article className="min-w-0">
             <Section id="problem" label="01" title="The problem">
-              <p className="max-w-[68ch] text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
+              <p className="max-w-[78ch] text-pretty text-[17px] leading-relaxed text-text-secondary md:text-[18.5px]">
                 {study.problem}
               </p>
             </Section>
 
             <Section id="research" label="02" title="What I read before writing code">
-              <ul className="max-w-[72ch] space-y-3">
+              <ul className="max-w-[78ch] space-y-3">
                 {study.research.map((r, i) => (
                   <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-text-secondary">
                     <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-violet-400/60" />
@@ -134,7 +134,7 @@ export function CaseStudyView({
             </Section>
 
             <Section id="constraints" label="03" title="What I couldn't do">
-              <ul className="max-w-[72ch] space-y-2">
+              <ul className="max-w-[78ch] space-y-2">
                 {study.constraints.map((c, i) => (
                   <li key={i} className="flex gap-3 text-base leading-relaxed text-text-secondary">
                     <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-cyan/60" />
@@ -145,7 +145,7 @@ export function CaseStudyView({
             </Section>
 
             <Section id="decisions" label="04" title="The decisions that shaped it">
-              <ol className="max-w-[72ch] space-y-7">
+              <ol className="max-w-[78ch] space-y-7">
                 {study.decisions.map((d, i) => (
                   <li key={i} className="border-l-2 border-cyan/25 pl-5 md:pl-6">
                     <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-cyan/85">
@@ -160,7 +160,7 @@ export function CaseStudyView({
 
             {study.pivots.length > 0 && (
               <Section id="pivots" label="05" title="What broke and how I changed course">
-                <ul className="max-w-[72ch] space-y-4">
+                <ul className="max-w-[78ch] space-y-4">
                   {study.pivots.map((p, i) => (
                     <li key={i} className="border-l-2 border-pink/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary">
                       {p}
@@ -172,7 +172,7 @@ export function CaseStudyView({
 
             {study.weaknesses.length > 0 && (
               <Section id="weaknesses" label="06" title="What I didn't know, and how I learned">
-                <ul className="max-w-[72ch] space-y-4">
+                <ul className="max-w-[78ch] space-y-4">
                   {study.weaknesses.map((w, i) => (
                     <li key={i} className="border-l-2 border-violet-400/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary">
                       {w}
@@ -183,7 +183,7 @@ export function CaseStudyView({
             )}
 
             <Section id="outcome" label="07" title="What shipped">
-              <ul className="max-w-[72ch] space-y-2">
+              <ul className="max-w-[78ch] space-y-2">
                 {study.outcome.map((o, i) => (
                   <li key={i} className="flex gap-3 text-base leading-relaxed text-text-secondary">
                     <span className="mt-2 inline-block h-1 w-3 shrink-0 rounded-full bg-cyan/80" />
@@ -194,7 +194,7 @@ export function CaseStudyView({
             </Section>
 
             <Section id="next" label="08" title="What's next">
-              <p className="max-w-[68ch] text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
+              <p className="max-w-[78ch] text-pretty text-[17px] leading-relaxed text-text-secondary md:text-[18.5px]">
                 {study.regret}
               </p>
             </Section>
@@ -252,7 +252,7 @@ export function StandaloneCredit() {
   const link =
     "inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-text-secondary transition hover:text-cyan";
   return (
-    <footer className="mx-auto w-full max-w-shell px-6 sm:px-10 pb-20">
+    <footer className="mx-auto w-full max-w-[1280px] px-6 sm:px-10 pb-20">
       <div className="border-t border-rule pt-8 text-center">
         <p className="font-mono text-xs uppercase tracking-[0.22em] text-text-secondary">
           Built by <span className="text-ink">{PROFILE.name}</span>

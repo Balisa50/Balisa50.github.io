@@ -36,7 +36,7 @@ function Fig({ src, alt, caption }: { src: string; alt: string; caption: string 
     <figure className="my-10">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={`${FIG}/${src}`} alt={alt} className="w-full" loading="lazy" />
-      <figcaption className="mt-3 max-w-[70ch] text-sm leading-relaxed text-text-secondary">{caption}</figcaption>
+      <figcaption className="mt-3 max-w-[78ch] text-sm leading-relaxed text-text-secondary">{caption}</figcaption>
     </figure>
   );
 }
@@ -50,7 +50,7 @@ function H({ id, children }: { id: string; children: React.ReactNode }) {
 }
 
 function P({ children }: { children: React.ReactNode }) {
-  return <p className="mt-4 max-w-[68ch] text-[15.5px] leading-[1.75] text-text-secondary md:text-base">{children}</p>;
+  return <p className="mt-4 max-w-[78ch] text-[17px] leading-[1.75] text-text-secondary md:text-[18.5px]">{children}</p>;
 }
 
 export default function GambiaResearchArticle() {
@@ -64,7 +64,7 @@ export default function GambiaResearchArticle() {
         Back to work
       </Link>
 
-      <div className="mx-auto max-w-6xl px-6 pb-28 pt-24 md:pt-28">
+      <div className="mx-auto max-w-[1280px] px-6 pb-28 pt-24 md:pt-28">
         {/* Header, full width */}
         <header className="border-b border-rule pb-10">
           <p className="font-mono text-xs uppercase tracking-[0.32em] text-cyan/85">~/research/gambia-2074</p>
@@ -97,7 +97,7 @@ export default function GambiaResearchArticle() {
         </dl>
 
         {/* Body: sticky contents rail + main column */}
-        <div className="mt-4 lg:grid lg:grid-cols-[180px_minmax(0,1fr)] lg:gap-14">
+        <div className="mt-4 lg:grid lg:grid-cols-[190px_minmax(0,78ch)] lg:justify-center lg:gap-16">
           <nav aria-label="Contents" className="hidden lg:block">
             <div className="sticky top-24">
               <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-text-secondary">Contents</p>
