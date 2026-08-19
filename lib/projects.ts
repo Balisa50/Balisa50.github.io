@@ -61,7 +61,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "nova",
-    figure: { src: "/figures/nova-quality.png", alt: "NOVA quality report: column shapes, correlation distance, train-on-synthetic-test-on-real, and the privacy check." },
+    figure: { src: "/figures/nova-quality.png", alt: "The four steps from describing your columns to downloading the CSV, and the four checks every batch has to pass." },
     title: "NOVA",
     tagline: "A synthetic-data engine for finance, from domain rules or from real data",
     description:
