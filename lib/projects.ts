@@ -43,7 +43,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     slug: "gambia-legal-aid",
-    figure: { src: "/figures/legal-aid.png", alt: "An answer with its statute section cited, so the reader can check it." },
+    figure: { src: "/figures/legal-aid.png", alt: "Ask in plain English and the answer names the Act and section it came from." },
     title: "Gambia Legal Aid",
     tagline: "RAG chatbot for Gambian law",
     description:
