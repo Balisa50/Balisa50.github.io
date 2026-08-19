@@ -19,10 +19,10 @@ const serif = Newsreader({
 });
 
 const description =
-  "AI Systems Developer and Data Science student building intelligent systems that ship: LLM tooling, applied NLP, RAG pipelines, and full-stack AI products.";
+  "Data science student in The Gambia. I work on retrieval and forecasting systems, and on the checks around them: RAG pipelines, applied NLP, and statistical modelling.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://balisa.dev"),
+  metadataBase: new URL("https://balisa50.github.io"),
   title: {
     default: `${PROFILE.fullName} · ${PROFILE.title}`,
     template: `%s · ${PROFILE.fullName}`
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://balisa.dev",
+    url: "https://balisa50.github.io",
     siteName: `${PROFILE.fullName} · ${PROFILE.title}`,
     title: `${PROFILE.fullName} · ${PROFILE.title}`,
     description

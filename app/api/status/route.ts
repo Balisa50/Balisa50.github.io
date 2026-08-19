@@ -6,7 +6,7 @@ export const revalidate = 3600;
 
 export async function GET() {
   const payload = {
-    name: "balisa.dev",
+    name: "balisa50.github.io",
     updatedAt: new Date().toISOString(),
     projects: Object.fromEntries(
       PROJECTS.map((p) => [

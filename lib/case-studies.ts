@@ -721,7 +721,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     constraints: [
       "Conversation has to feel like a real interview, not a bot quiz, multi-second response delays kill the vibe.",
-      "Hiring teams need a defensible scoring system, not just AI vibes, they have to justify decisions internally.",
+      "Hiring teams have to justify their decisions internally, so the scoring has to be defensible on its own terms.",
       "Couldn't pay for GPT-4 on every candidate at scale.",
       "Candidates apply on slow connections; all interactions had to feel instant.",
       "Render free tier for the Python backend, which means cold starts of ~30s if no traffic for 15 min.",
@@ -735,7 +735,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Adaptive follow-up, not a fixed question list.",
         reason:
-          "If the candidate gives a weak answer, the system asks for specifics. If they nailed it, it moves on. Mirrors how a good interviewer behaves. Fixed-question forms can't do this and that's the failure mode static forms can never escape.",
+          "If the candidate gives a weak answer, the system asks for specifics. If they nailed it, it moves on. Mirrors how a good interviewer behaves. A fixed list of questions cannot do that.",
       },
       {
         call: "Scored report with strengths + concerns + binary recommendation.",
@@ -800,7 +800,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "credit-risk-scorecard": {
     slug: "credit-risk-scorecard",
     problem:
-      "Microfinance institutions in West Africa make lending decisions on intuition because the analytical infrastructure isn't there. Loans are granted or denied based on the loan officer's read of the applicant's character, with results that range from biased to disastrous depending on the officer. I wanted to build a Basel II-compliant credit scorecard from scratch, not import a black-box library, to actually understand WoE, IV, points conversion, validation gauntlets, and stress testing the way an actuary would. The point wasn't to replace human judgement. It was to give the human a quantified second opinion.",
+      "Microfinance institutions in West Africa make lending decisions on intuition because the analytical infrastructure isn't there. Loans are granted or denied based on the loan officer's read of the applicant's character, with results that range from biased to disastrous depending on the officer. I wanted to build a Basel II-compliant credit scorecard from scratch, not import a black-box library, to actually understand WoE, IV, points conversion, validation gauntlets, and stress testing the way an actuary would. It is there to give the loan officer a quantified second opinion, not to take the decision off them.",
     research: [
       "Read Naeem Siddiqi's 'Credit Risk Scorecards: Developing and Implementing Intelligent Credit Scoring' end-to-end. The WoE/IV chapter alone is the methodology bible. Read it twice.",
       "Studied the Basel II framework (BCBS Pillar 1) for credit risk. Specifically the Internal Ratings-Based Approach: PD (probability of default), LGD (loss given default), EAD (exposure at default). My scorecard implements PD; the rest are placeholders for the next iteration.",

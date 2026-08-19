@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://balisa.dev/sitemap.xml
+Sitemap: https://balisa50.github.io/sitemap.xml

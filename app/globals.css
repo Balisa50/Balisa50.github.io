@@ -168,3 +168,23 @@ body {
     display: none !important;
   }
 }
+
+/* ---------- scrollbars ---------- */
+
+/* Abdoulie does not want scrollbars drawn anywhere. The page still scrolls
+   normally with wheel, trackpad, keyboard and touch; only the bar itself is
+   hidden, on the standard property and on the WebKit pseudo-element. */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+*,
+*::before,
+*::after {
+  scrollbar-width: none;
+}
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}

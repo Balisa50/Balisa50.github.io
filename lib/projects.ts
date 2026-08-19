@@ -47,7 +47,7 @@ export const PROJECTS: Project[] = [
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "A research project I took on myself. The Gambia has no working death-registration system, so its future population is mostly guesswork, and the only real numbers come from the UN. Those were locked in before the country ran its first digital census in 2024, so I built my own projection to check them. It uses the Lee-Carter mortality model, the same one the UN relies on, in three versions that get steadily more careful. First the plain version, then a Bayesian one fitted with PyMC, then a coherent one that ties The Gambia to its West-African neighbours so the forecast stays sensible. All three feed a cohort-component model that I tested against the UN's own projection first, and matched to within 1 percent. My answer comes out around 4.66 million people by 2074, somewhere between 4.35 and 4.98 million. That sits about 0.7 million under the UN, because the new census shows they have been overcounting by roughly 13 percent. The work also catches the demographic dividend opening up for the country, where the total dependency ratio drops from 77 to 49 even as old-age dependency triples, from 5 to 18 per 100 working-age adults. Every input is public data, so the method can be reproduced end to end from the write-up.",
+      "The Gambia has no working death-registration system, so its population figures come almost entirely from the UN, and those were set before the first digital census in 2024. Mortality is fitted with Lee-Carter in three forms: the standard SVD fit, a Bayesian one in PyMC, and a coherent one that pools The Gambia with its West African neighbours. Each feeds a cohort-component model. Run first on the UN's own inputs, that model reproduces their published figures to within 1 percent, which is what makes the independent run worth reading. Re-based on the census it gives 4.66 million by 2074, with a 95 percent interval of 4.35 to 4.98 million. That is about 0.7 million below the UN, whose base sits roughly 13 percent above the census count. Over the same period total dependency falls from 77 to 49 per 100 working-age adults while old-age dependency rises from 5 to 18. Every input is public.",
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
@@ -65,13 +65,13 @@ export const PROJECTS: Project[] = [
     title: "NOVA",
     tagline: "A synthetic-data engine for finance, from domain rules or from real data",
     description:
-      "Financial institutions in West Africa hold the data that could power local AI and cannot share it; for the populations that matter most, rural borrowers and the informal economy, it often does not exist at all. NOVA answers both. In Create mode you define columns, distributions, and domain rules, rural schools score lower, a new account making a large international transfer is likely fraud, and it generates realistic data from nothing, with seven financial-domain presets or your own, behind a whitelist evaluator so user-supplied rules cannot inject code. In Copy mode a Conditional Tabular GAN I implemented from scratch in PyTorch, no SDV, learns a real dataset and generates statistically identical, privacy-safe rows. Every batch is validated four ways: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record privacy 1.10 with only 1.1 percent near-duplicates. Served by a FastAPI backend on Hugging Face Spaces behind a Next.js studio on Vercel.",
+      "Banks in West Africa hold customer data they are not allowed to share, and for rural borrowers and the informal economy much of it was never collected in the first place. NOVA generates stand-in data two ways. In Create mode you set the columns, distributions and rules, such as a new account making a large international transfer being likely fraud, and it builds records from nothing, using seven financial presets or your own. Rules run through a whitelist evaluator, so what a user types cannot execute. In Copy mode a Conditional Tabular GAN, written from scratch in PyTorch rather than pulled from SDV, learns an existing dataset and produces rows that match its structure without copying anyone. Each batch is checked four ways: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record 1.10, with 1.1 percent near-duplicates. FastAPI backend on Hugging Face Spaces, Next.js front end on Vercel.",
     tech: ["Python", "PyTorch", "CTGAN", "FastAPI", "Next.js 16", "scikit-learn"],
     github: "https://github.com/Balisa50/nova",
     githubRepo: "Balisa50/nova",
     demo: "https://nova-fin.vercel.app",
     status: "live",
-    metric: "4 metrics pass · TSTR 0.92 · 7 domains, zero-data generation",
+    metric: "TSTR 0.92 · 4 checks pass · 7 domains, no source data needed",
     accent: "pink",
     fallbackStars: 0,
     featured: true
@@ -117,7 +117,7 @@ export const PROJECTS: Project[] = [
     title: "FORGE",
     tagline: "Mentor-driven learning platform with proof-of-work verification",
     description:
-      "A structured platform that pairs every self-taught learner 1:1 with a real human mentor and runs them through one of 13 hand-curated career roadmaps (Data Science, AI Engineering, Cybersecurity, Full-Stack and more), 12 to 43 weeks each with around 5 mastery checks a week and 385 verified video resources. The proof-of-work engine checks your progress against your real GitHub commits and deployed projects before a week counts, no self-reporting. Mentors release each week, control the pace, and sign off only when you've truly learned it; finishers earn a cryptographically signed, employer-verifiable certificate. Includes a custom Actuarial Exam P & FM mastery engine that auto-generates tiered, non-repeating SOA-style questions with interactive diagrams.",
+      "A learning platform where each learner works through one of 13 career roadmaps with a mentor: data science, AI engineering, cybersecurity, full-stack and others, 12 to 43 weeks each, with about five mastery checks a week and 385 video resources. A week only counts once the engine has matched it against the learner's actual GitHub commits and deployed URLs, so nothing is self-reported. Mentors release each week and sign it off, and finishers get a signed certificate an employer can check. It also carries an Actuarial Exam P and FM engine that generates tiered, non-repeating SOA-style questions with interactive diagrams.",
     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "KaTeX"],
     github: "https://github.com/Balisa50/forge",
     githubRepo: "Balisa50/forge",
@@ -132,9 +132,9 @@ export const PROJECTS: Project[] = [
     slug: "hireiq",
     figure: { src: "/figures/hireiq.png", alt: "The hiring dashboard with ranked, scored candidates." },
     title: "HireIQ",
-    tagline: "AI-powered hiring platform",
+    tagline: "A conversation in place of an application form",
     description:
-      "Replaces static job application forms with intelligent AI conversational interviews. Every candidate is interviewed by an AI agent (NVIDIA-hosted open models) that follows up on weak answers; your hiring team sees ranked, scored reports and only talks to people worth their time. Full pipeline: job posting, AI question generation, adaptive follow-up, candidate scoring, PDF reports.",
+      "Candidates answer in a conversation rather than a form. Each interview is run by a model on NVIDIA-hosted open weights that asks a follow-up when an answer is thin, and the hiring team gets a ranked, scored report per candidate. It covers the whole path: posting the role, generating the questions, adapting the follow-ups, scoring, and a PDF report at the end.",
     tech: ["Python", "FastAPI", "NVIDIA NIM", "Next.js 14", "Supabase", "WeasyPrint"],
     github: "https://github.com/Balisa50/hireiq",
     githubRepo: "Balisa50/hireiq",
@@ -142,7 +142,7 @@ export const PROJECTS: Project[] = [
     status: "in-progress",
     progress: 95,
     launchLabel: "95%, shipping soon",
-    metric: "AI interviews · ranked scoring · PDF reports",
+    metric: "Conversational interviews · ranked scoring · PDF reports",
     accent: "violet",
     fallbackStars: 0
   },
@@ -166,15 +166,15 @@ export const PROJECTS: Project[] = [
     slug: "vantage",
     figure: { src: "/figures/vantage.png", alt: "The daily technology brief the pipeline produces unattended." },
     title: "VANTAGE",
-    tagline: "Tech intelligence platform",
+    tagline: "A technology brief that assembles itself",
     description:
-      "Real-time feed of global tech stories, synthesised and scored by AI. Covers startups, policy, big tech, markets, infrastructure and AI across six regions. Each article gets a signal score so you can skim what matters.",
+      "Collects technology stories from six regions, writes each one up and scores it, then publishes with nobody in the loop. Covers startups, policy, big tech, markets and infrastructure. The score exists so you can skim the feed instead of reading all of it.",
     tech: ["Next.js", "TypeScript", "AI synthesis", "Vercel"],
     github: "https://github.com/Balisa50/vantage",
     githubRepo: "Balisa50/vantage",
     demo: "https://vantage-ab.vercel.app/",
     status: "live",
-    metric: "Live news feed with AI scoring",
+    metric: "Runs unattended · every story scored",
     accent: "cyan",
     fallbackStars: 0
   },
@@ -200,7 +200,7 @@ export const PROJECTS: Project[] = [
     title: "BS Real Estate",
     tagline: "Website and admin CMS for a Gambian property firm",
     description:
-      "A real estate site I built for a client in The Gambia, with a private admin dashboard the team uses to manage their own listings without needing a developer. Next.js 16 and Prisma 7, a blue and gold brand, admin-only login, and real data throughout rather than placeholder content. I handled it end to end, from the design to the listings dashboard to deployment.",
+      "A property site for a client in The Gambia, with a private dashboard the team uses to manage their own listings without calling a developer. Next.js 16 and Prisma 7, a blue and gold brand, admin-only login, and their real listings throughout rather than placeholder content.",
     tech: ["Next.js 16", "Prisma 7", "TypeScript", "Tailwind"],
     github: "https://github.com/Balisa50/bs-real-estate",
     githubRepo: "Balisa50/bs-real-estate",
@@ -240,7 +240,7 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/abalisa",
   linkedinHandle: "abalisa",
   location: "Fajikunda, The Gambia",
-  tagline: "Building AI systems I actually ship, not slides."
+  tagline: "Retrieval and forecasting systems, and the checks around them."
 } as const;
 
 /* ----------------------------------------------------------------- */

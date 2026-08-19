@@ -10,13 +10,13 @@ export async function GET() {
     meta: {
       version: "1.0.0",
       lastModified: new Date().toISOString(),
-      canonical: "https://balisa.dev/api/resume"
+      canonical: "https://balisa50.github.io/api/resume"
     },
     basics: {
       name: PROFILE.fullName,
       label: PROFILE.title,
       email: PROFILE.email,
-      url: "https://balisa.dev",
+      url: "https://balisa50.github.io",
       summary:
         "ML/AI engineer and data scientist. Self-taught, shipping real products end-to-end: RAG, agentic pipelines, forecasting models, and polished Next.js front-ends. Comfortable across Python, TypeScript, and the infra that glues them.",
       location: { city: "Fajikunda", countryCode: "GM", region: "Remote" },
