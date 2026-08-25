@@ -1,35 +1,152 @@
 {
   "slug": "ayat",
   "title": "AYAT",
-  "caption": "Everything expensive happens once, at build time. The browser holds the vectors, so a query costs nothing to serve.",
+  "caption": "Everything expensive happens once, at build time. The browser holds the vectors, so a query costs nothing to serve. The only part that needs a provider is the commentary, and that walks a chain rather than trusting one host.",
   "layers": [
-    { "name": "Corpus", "nodes": [
-      { "id": "verses", "label": "6,236 verses", "kind": "source" }
-    ] },
-    { "name": "Embed", "nodes": [
-      { "id": "st", "label": "sentence-transformers", "kind": "model" }
-    ] },
-    { "name": "Reduce", "nodes": [
-      { "id": "umap", "label": "UMAP to 3D, HDBSCAN", "kind": "model" }
-    ] },
-    { "name": "Ship", "nodes": [
-      { "id": "bundle", "label": "Coordinates and vectors", "kind": "store" }
-    ] },
-    { "name": "Browser", "nodes": [
-      { "id": "tjs", "label": "transformers.js query embedding", "kind": "model" },
-      { "id": "three", "label": "Three.js Points, one draw call", "kind": "ui" }
-    ] },
-    { "name": "Answer", "nodes": [
-      { "id": "llm", "label": "LLM, or it says it has nothing", "kind": "external" }
-    ] }
+    {
+      "name": "Corpus",
+      "nodes": [
+        {
+          "id": "verses",
+          "label": "6,236 verses",
+          "kind": "source"
+        }
+      ]
+    },
+    {
+      "name": "Embed",
+      "nodes": [
+        {
+          "id": "st",
+          "label": "sentence-transformers",
+          "kind": "model"
+        }
+      ]
+    },
+    {
+      "name": "Reduce",
+      "nodes": [
+        {
+          "id": "umap",
+          "label": "UMAP to 3D, HDBSCAN",
+          "kind": "model"
+        }
+      ]
+    },
+    {
+      "name": "Ship",
+      "nodes": [
+        {
+          "id": "bundle",
+          "label": "Coordinates and vectors",
+          "kind": "store"
+        }
+      ]
+    },
+    {
+      "name": "Browser",
+      "nodes": [
+        {
+          "id": "tjs",
+          "label": "transformers.js query embedding",
+          "kind": "model"
+        },
+        {
+          "id": "three",
+          "label": "Three.js Points, one draw call",
+          "kind": "ui"
+        }
+      ]
+    },
+    {
+      "name": "Commentary",
+      "nodes": [
+        {
+          "id": "pipeline",
+          "label": "AI pipeline: breaker, retry, deadline",
+          "kind": "service"
+        }
+      ]
+    },
+    {
+      "name": "Providers",
+      "nodes": [
+        {
+          "id": "p1",
+          "label": "NVIDIA NIM",
+          "kind": "external"
+        },
+        {
+          "id": "p2",
+          "label": "Groq",
+          "kind": "external"
+        },
+        {
+          "id": "p3",
+          "label": "Gemini or OpenAI",
+          "kind": "external"
+        },
+        {
+          "id": "refuse",
+          "label": "One sentence, if none answer",
+          "kind": "service"
+        }
+      ]
+    }
   ],
   "edges": [
-    { "from": "verses", "to": "st" },
-    { "from": "st", "to": "umap" },
-    { "from": "umap", "to": "bundle" },
-    { "from": "bundle", "to": "three" },
-    { "from": "bundle", "to": "tjs" },
-    { "from": "tjs", "to": "three", "label": "axis of meaning" },
-    { "from": "tjs", "to": "llm", "optional": true }
+    {
+      "from": "verses",
+      "to": "st"
+    },
+    {
+      "from": "st",
+      "to": "umap"
+    },
+    {
+      "from": "umap",
+      "to": "bundle"
+    },
+    {
+      "from": "bundle",
+      "to": "three"
+    },
+    {
+      "from": "bundle",
+      "to": "tjs"
+    },
+    {
+      "from": "tjs",
+      "to": "three",
+      "label": "axis of meaning"
+    },
+    {
+      "from": "tjs",
+      "to": "pipeline",
+      "label": "only on request",
+      "optional": true
+    },
+    {
+      "from": "pipeline",
+      "to": "p1",
+      "label": "first"
+    },
+    {
+      "from": "pipeline",
+      "to": "p2",
+      "label": "on failure",
+      "optional": true
+    },
+    {
+      "from": "pipeline",
+      "to": "p3",
+      "label": "then",
+      "optional": true
+    },
+    {
+      "from": "pipeline",
+      "to": "refuse",
+      "optional": true
+    }
   ]
 }
