@@ -1,0 +1,124 @@
+"use client";
+
+import { Copy, Github, Linkedin, Mail, Phone, Check, MapPin } from "lucide-react";
+import { useState } from "react";
+import { PROFILE } from "@/lib/projects";
+
+export function Contact() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(PROFILE.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard denied; do nothing */
+    }
+  };
+
+  return (
+    <section
+      id="contact"
+      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
+      aria-labelledby="contact-heading"
+    >
+      <div
+        className="relative overflow-hidden"
+      >
+        {/* Decorative glow */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-cyan/20 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-pink/10 blur-3xl"
+        />
+
+        <span className="relative font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+          Contact
+        </span>
+
+        <h2
+          id="contact-heading"
+          className="relative mt-3 text-balance text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-tight tracking-tight"
+        >
+          Have a hard problem?{" "}
+          <span className="bg-gradient-to-r from-cyan via-white to-cyan bg-clip-text text-transparent">
+            Let&apos;s talk.
+          </span>
+        </h2>
+
+        <p className="relative mt-4 max-w-xl text-text-secondary">
+          Open to full-time roles and select contract work on ML-heavy products.
+          Fastest reply is email. Phone works too.
+        </p>
+
+        <div className="relative mt-8 flex flex-wrap items-center gap-3">
+            <a
+              href={`mailto:${PROFILE.email}?subject=Let%27s%20talk`}
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-cyan px-6 py-3 text-sm font-medium text-background shadow-glow-cyan transition hover:shadow-glow-cyan-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              Email me
+            </a>
+            <a
+              href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
+              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-6 py-3 text-sm font-medium text-ink transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+            >
+              <Phone className="h-4 w-4" aria-hidden="true" />
+              {PROFILE.phone}
+            </a>
+            <button
+              onClick={copyEmail}
+              className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+              aria-label={`Copy email ${PROFILE.email} to clipboard`}
+              title={`${PROFILE.email} · PGP available on request`}
+            >
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4 text-status-live" aria-hidden="true" />
+                  <span className="text-status-live">Copied</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" aria-hidden="true" />
+                  {PROFILE.email}
+                </>
+              )}
+            </button>
+        </div>
+
+        <div className="relative mt-10 flex flex-wrap items-center gap-5 text-sm text-text-secondary">
+          <a
+            href={PROFILE.github}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:outline-none focus-visible:text-ink"
+          >
+            <span className="energy-icon grid place-items-center">
+              <Github className="h-4 w-4" aria-hidden="true" />
+            </span>
+            github.com/{PROFILE.githubHandle}
+          </a>
+          <a
+            href={PROFILE.linkedin}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:outline-none focus-visible:text-ink"
+          >
+            <span className="energy-icon grid place-items-center">
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+            </span>
+            linkedin.com/in/{PROFILE.linkedinHandle}
+          </a>
+          <span className="inline-flex items-center gap-2">
+            <MapPin className="h-4 w-4" aria-hidden="true" />
+            {PROFILE.location}
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
