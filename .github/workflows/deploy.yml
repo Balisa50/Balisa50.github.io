@@ -32,6 +32,11 @@ jobs:
         run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Contact form destination. NEXT_PUBLIC_* is inlined at build time, so
+          # it has to be here rather than only in the deployment environment.
+          # Until this secret exists the form simply does not render, and the
+          # email and phone links carry the section on their own.
+          NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

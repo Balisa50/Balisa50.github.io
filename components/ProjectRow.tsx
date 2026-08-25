@@ -152,9 +152,9 @@ export function ProjectRow({ project, index, variant }: Props) {
 
     return (
       <article
-        className="group border-t border-rule py-14 first:border-t-0 md:py-20"
+        className="group border-t border-rule py-16 first:border-t-0 md:py-24"
       >
-        <div className="grid grid-cols-1 items-start gap-x-10 gap-y-8 lg:grid-cols-12">
+        <div className="grid grid-cols-1 items-start gap-x-12 gap-y-10 lg:grid-cols-12">
           {/* Figure */}
           {project.figure && (
             <div
@@ -203,7 +203,7 @@ export function ProjectRow({ project, index, variant }: Props) {
               className="focus-visible:outline-none"
               aria-label={`${project.title}, open`}
             >
-              <h3 className="display mt-4 flex items-start gap-2 text-[clamp(1.75rem,3vw,2.5rem)] transition-colors group-hover:text-accent">
+              <h3 className="display mt-4 flex items-start gap-2 text-[clamp(1.9rem,3.2vw,2.75rem)] transition-colors group-hover:text-accent">
                 <span>{project.title}</span>
                 <ArrowUpRight
                   className="mt-2 h-5 w-5 shrink-0 -translate-x-1 text-text-faint opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
@@ -212,16 +212,16 @@ export function ProjectRow({ project, index, variant }: Props) {
               </h3>
             </a>
 
-            <p className="mt-3 text-[15px] italic leading-relaxed text-text-secondary">
+            <p className="mt-3 text-[16px] italic leading-relaxed text-text-secondary">
               {project.tagline}
             </p>
 
-            <p className="mt-5 text-[15px] leading-[1.75] text-text">
+            <p className="mt-5 text-[16px] leading-[1.75] text-text">
               {lead(project.description)}
             </p>
 
             {project.metric && (
-              <p className="mt-5 border-l-2 border-accent pl-4 text-[13px] leading-relaxed text-text-secondary">
+              <p className="mt-6 border-l-2 border-accent pl-4 text-[14px] leading-relaxed text-text-secondary">
                 {project.metric}
               </p>
             )}
@@ -248,7 +248,7 @@ export function ProjectRow({ project, index, variant }: Props) {
   /* --------------------------------------------------- Compact */
   return (
     <article
-      className="group border-t border-rule py-7"
+      className="group border-t border-rule py-9"
     >
       <div className="grid grid-cols-1 items-baseline gap-x-6 gap-y-3 sm:grid-cols-12">
         <span className="numeral col-span-2 text-[13px] text-text-faint sm:col-span-1">
@@ -264,7 +264,7 @@ export function ProjectRow({ project, index, variant }: Props) {
               className="focus-visible:outline-none"
               aria-label={`${project.title}, open`}
             >
-              <h3 className="inline-flex items-center gap-1.5 text-[17px] font-semibold tracking-tight text-ink transition-colors group-hover:text-accent">
+              <h3 className="inline-flex items-center gap-1.5 text-[19px] font-semibold tracking-tight text-ink transition-colors group-hover:text-accent">
                 {project.title}
                 <ArrowUpRight
                   className="h-3.5 w-3.5 -translate-x-1 text-text-faint opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
@@ -274,7 +274,7 @@ export function ProjectRow({ project, index, variant }: Props) {
             </a>
             <StatusTag project={project} />
           </div>
-          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">
+          <p className="mt-2 text-[15px] leading-relaxed text-text-secondary">
             {project.tagline}
           </p>
           <div className="mt-3">

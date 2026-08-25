@@ -14,6 +14,8 @@ import { ArrowLeft, ArrowRight, Github, ExternalLink, Linkedin, BookOpen, Lock }
 import type { Project } from "@/lib/projects";
 import { PROFILE } from "@/lib/projects";
 import type { CaseStudy } from "@/lib/case-studies";
+import { architectureFor } from "@/lib/architecture";
+import { Mermaid } from "@/components/Mermaid";
 
 const MEDIUM = "https://medium.com/@abdouliebalisa904";
 
@@ -26,9 +28,14 @@ export function CaseStudyView({
   study: CaseStudy;
   standalone: boolean;
 }) {
+  // A diagram exists for most projects, not all. The section and its contents
+  // entry are both gated on it rather than rendering an empty heading.
+  const arch = architectureFor(project.slug);
+
   // Contents rail: only list sections that actually render.
   const toc: Array<[string, string]> = [
     ["problem", "The problem"],
+    ...(arch ? ([["architecture", "Architecture"]] as Array<[string, string]>) : []),
     ["research", "What I read"],
     ["constraints", "Constraints"],
     ["decisions", "Decisions"],
@@ -122,7 +129,13 @@ export function CaseStudyView({
               </p>
             </Section>
 
-            <Section id="research" label="02" title="What I read before writing code">
+            {arch && (
+              <Section id="architecture" label="02" title="How it fits together">
+                <Mermaid chart={arch.chart} caption={arch.caption} />
+              </Section>
+            )}
+
+            <Section id="research" label="03" title="What I read before writing code">
               <ul className="max-w-[78ch] space-y-3">
                 {study.research.map((r, i) => (
                   <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-text-secondary">
@@ -133,7 +146,7 @@ export function CaseStudyView({
               </ul>
             </Section>
 
-            <Section id="constraints" label="03" title="What I couldn't do">
+            <Section id="constraints" label="04" title="What I couldn't do">
               <ul className="max-w-[78ch] space-y-2">
                 {study.constraints.map((c, i) => (
                   <li key={i} className="flex gap-3 text-base leading-relaxed text-text-secondary">
@@ -144,7 +157,7 @@ export function CaseStudyView({
               </ul>
             </Section>
 
-            <Section id="decisions" label="04" title="The decisions that shaped it">
+            <Section id="decisions" label="05" title="The decisions that shaped it">
               <ol className="max-w-[78ch] space-y-7">
                 {study.decisions.map((d, i) => (
                   <li key={i} className="border-l-2 border-cyan/25 pl-5 md:pl-6">
@@ -159,7 +172,7 @@ export function CaseStudyView({
             </Section>
 
             {study.pivots.length > 0 && (
-              <Section id="pivots" label="05" title="What broke and how I changed course">
+              <Section id="pivots" label="06" title="What broke and how I changed course">
                 <ul className="max-w-[78ch] space-y-4">
                   {study.pivots.map((p, i) => (
                     <li key={i} className="border-l-2 border-pink/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary">
@@ -171,7 +184,7 @@ export function CaseStudyView({
             )}
 
             {study.weaknesses.length > 0 && (
-              <Section id="weaknesses" label="06" title="What I didn't know, and how I learned">
+              <Section id="weaknesses" label="07" title="What I didn't know, and how I learned">
                 <ul className="max-w-[78ch] space-y-4">
                   {study.weaknesses.map((w, i) => (
                     <li key={i} className="border-l-2 border-violet-400/40 py-1 pl-5 text-[15px] leading-relaxed text-text-secondary">
@@ -182,7 +195,7 @@ export function CaseStudyView({
               </Section>
             )}
 
-            <Section id="outcome" label="07" title="What shipped">
+            <Section id="outcome" label="08" title="What shipped">
               <ul className="max-w-[78ch] space-y-2">
                 {study.outcome.map((o, i) => (
                   <li key={i} className="flex gap-3 text-base leading-relaxed text-text-secondary">
@@ -193,7 +206,7 @@ export function CaseStudyView({
               </ul>
             </Section>
 
-            <Section id="next" label="08" title="What's next">
+            <Section id="next" label="09" title="What's next">
               <p className="max-w-[78ch] text-pretty text-[17px] leading-relaxed text-text-secondary md:text-[18.5px]">
                 {study.regret}
               </p>

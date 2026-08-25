@@ -3,6 +3,7 @@
 import { Copy, Github, Linkedin, Mail, Phone, Check, MapPin } from "lucide-react";
 import { useState } from "react";
 import { PROFILE } from "@/lib/projects";
+import { ContactForm } from "./ContactForm";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -89,6 +90,8 @@ export function Contact() {
               )}
             </button>
         </div>
+
+        <ContactForm />
 
         <div className="relative mt-10 flex flex-wrap items-center gap-5 text-sm text-text-secondary">
           <a
