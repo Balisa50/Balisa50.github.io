@@ -1,0 +1,38 @@
+{
+  "slug": "forge",
+  "title": "FORGE",
+  "caption": "Nothing is self-reported. A week closes when the engine has matched it against real commits and a URL that answers, and a mentor has signed it off.",
+  "layers": [
+    { "name": "Evidence", "nodes": [
+      { "id": "commits", "label": "Learner GitHub commits", "kind": "external" },
+      { "id": "url", "label": "Deployed URL", "kind": "external" }
+    ] },
+    { "name": "Verify", "nodes": [
+      { "id": "pow", "label": "Proof-of-work engine", "kind": "model" }
+    ] },
+    { "name": "Content", "nodes": [
+      { "id": "roadmaps", "label": "13 roadmaps, 12 to 43 weeks", "kind": "store" },
+      { "id": "exam", "label": "Exam P and FM generator", "kind": "service" }
+    ] },
+    { "name": "Record", "nodes": [
+      { "id": "db", "label": "Prisma 7 on Postgres", "kind": "store" }
+    ] },
+    { "name": "Release", "nodes": [
+      { "id": "mentor", "label": "Mentor release and sign-off", "kind": "service" }
+    ] },
+    { "name": "Surface", "nodes": [
+      { "id": "app", "label": "Next.js 16, NextAuth v5", "kind": "ui" },
+      { "id": "cert", "label": "Signed certificate", "kind": "ui" }
+    ] }
+  ],
+  "edges": [
+    { "from": "commits", "to": "pow" },
+    { "from": "url", "to": "pow" },
+    { "from": "pow", "to": "db" },
+    { "from": "roadmaps", "to": "db" },
+    { "from": "exam", "to": "db" },
+    { "from": "db", "to": "mentor" },
+    { "from": "mentor", "to": "app" },
+    { "from": "mentor", "to": "cert" }
+  ]
+}

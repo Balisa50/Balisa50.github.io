@@ -1,0 +1,89 @@
+---
+title: Credit Risk Scorecard
+lede: A Basel II scorecard built from the formulas up, and validated on a later vintage rather than a random split. The headline numbers came out below industry thresholds, which is the most useful result in the project.
+updated: 25 August 2026
+---
+
+Microfinance lending in West Africa runs on the loan officer's read of the applicant. That produces outcomes ranging from mildly biased to genuinely disastrous depending on who is sitting across the desk, and there is usually no analytical layer anywhere in the process to argue with.
+
+This is a full scorecard: weight of evidence and information value for feature selection, logistic regression, Basel II points conversion, a validation gauntlet, and multi-scenario stress testing. Written from the methodology rather than imported from a library, because the point was to understand every step well enough to defend it.
+
+It is meant to give the loan officer a quantified second opinion, not to take the decision away from them.
+
+## How it fits together
+
+<Architecture />
+
+<DiagramLegend />
+
+<Stats>
+  <Stat value="0.27" label="Gini, later-vintage holdout" note="Below the 0.4 industry threshold, and reported as the pipeline produces it rather than as I wanted it." />
+  <Stat value="0.21" label="KS statistic" note="Also below the 0.3 threshold. The ceiling here is the data, not the fitting." />
+  <Stat value="0.002" label="Population Stability Index" note="Comfortably stable. This is the number that turned out to be misleading." />
+  <Stat value="12.3 → 15.9%" label="Realised default rate across vintages" note="Defaults rose by nearly a third while PSI said nothing had changed." />
+  <Stat value="12,000" label="Synthetic loans" note="Regionally calibrated: group lending, sector-specific default, agricultural seasonality." />
+  <Stat value="0.51" label="Total information value" note="Across the eight selected features. No single feature reaches Strong. A scorecard cannot separate better than its features do." />
+</Stats>
+
+## Why these calls and not the obvious ones
+
+<TradeOffs>
+
+<TradeOff chose="logistic regression on weight-of-evidence bins" over="XGBoost, which scored better">
+
+I built the gradient-boosted version first because the accuracy was higher, and then deleted the branch.
+
+Regulated credit scoring will not accept a model whose decisions cannot be audited feature by feature. A regulator asking why an applicant scored 480 needs an answer in points per characteristic, not a SHAP plot. Logistic regression on weight-of-evidence bins gives that directly: you can read the contribution of every band off the model.
+
+The right model in a regulated domain is the one that survives review, not the one that wins on a holdout. Explainability is not a feature you add here. It is the constraint that selects the model class before you start.
+
+</TradeOff>
+
+<TradeOff chose="a time-based holdout" over="the random split I started with">
+
+The first validation used a random split, so the holdout came from the same months as the training data. Every stability measure was flattering by construction, and I did not notice because the numbers looked good.
+
+The loan book had no origination date at all, so a vintage split was not merely unused, it was impossible. Adding a vintage column and refitting on the earlier seventy percent cost about 0.02 Gini and produced the single most useful finding in the project.
+
+</TradeOff>
+
+<TradeOff chose="reporting Gini 0.27 against a 0.4 threshold" over="tuning until it cleared">
+
+The discrimination is capped by the synthetic generator, not by the modelling. The strongest single feature reaches an information value of 0.13, which is Medium, and the total across the eight selected features is about 0.51. A scorecard cannot separate better than its inputs do.
+
+I could have engineered features until the number cleared 0.4, and it would have meant nothing except that I had fitted the generator's own construction more tightly. Publishing the number the pipeline produces, next to the reason it is capped, is the more useful artefact. It also states plainly what would change the answer: real anonymised loan data.
+
+</TradeOff>
+
+<TradeOff chose="binning continuous features by deciles" over="using them raw">
+
+Raw monthly income had high information value and a skewed distribution with unstable bands, which is the classic setup for a model that validates well once and drifts immediately.
+
+Binning costs information and buys stability, and in a model that has to survive a shifting population for years, that is the correct direction to trade. Low-volume categorical levels get merged for the same reason. I found this out by watching the validation fail rather than by reading it first.
+
+</TradeOff>
+
+</TradeOffs>
+
+## What broke
+
+<PostMortem
+  title="The stability metric reported a healthy model while defaults rose by a third"
+  symptom="On the later-vintage holdout, PSI came in at 0.002, far inside the 0.1 threshold that means no population shift. Over the same period the realised default rate rose from 12.3 to 15.9 percent."
+  cause="PSI compares score distributions between the development sample and the current one. It answers 'are the applicants still the same kind of applicants'. It cannot answer 'is the world still the same world'. The deterioration here came from a macro shock that none of the eight features observes, so applicants scored identically and then defaulted more. The metric was working correctly and answering a different question than the one I was asking it."
+  fix="Monitor realised outcome rates by vintage alongside PSI, and treat PSI as a covariate-shift detector rather than a model-health check."
+  cost="I had gone into this expecting the time-based split to make PSI reveal the drift. It stayed flat. The split was still the right change, and the number I expected to move was the wrong number to watch."
+  lesson="A stability metric can only see the thing it is computed on. Monitoring PSI alone would have reported this model as stable the entire way down, which is exactly how models fail quietly in deployment."
+/>
+
+<Note>
+
+The scope limit is worth stating plainly. Basel II's internal ratings approach needs probability of default, loss given default, and exposure at default. This implements the first one. I know what the other two are and I have not built them, so the capital-requirement figures downstream of them are not here either.
+
+Everything rests on a synthetic book, calibrated to published microfinance statistics but incapable of containing an interaction effect I did not think to put in it. Real data always surprises you, and that is the point of it.
+
+</Note>
+
+## Is it up right now
+
+<Metrics />

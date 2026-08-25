@@ -1,0 +1,87 @@
+---
+title: From Vercel to VPS, and why I moved
+kind: Note
+lede: Vercel is free, faster than my droplet will ever be, and I moved anyway. Here is the honest accounting, including the parts where the platform wins and the part where the reason is not technical at all.
+updated: 25 August 2026
+---
+
+Almost everything I have built sits on Vercel. Seven of the eleven projects on this site are deployed there right now, and the free tier has never once failed me. So the first thing to say is that this is not a complaint about the platform.
+
+It is a note about what I could not claim while I was on it.
+
+## What Vercel is genuinely better at
+
+I want to be fair before I argue, because the argument is weaker than the people making it usually admit.
+
+A global edge network puts my site within a short hop of a reader in Berlin or Singapore. My droplet is one machine in Frankfurt, and a reader in Manila pays for that in every request. Vercel's build infrastructure has more memory than my entire server. Preview deployments per pull request are genuinely useful and I have not rebuilt them. Their image optimisation, analytics and log drains all exist and all work.
+
+And the operational load is zero. Nobody pages me when a Vercel region has a bad night. When my droplet runs out of disk because Docker kept every image I ever built, the person who fixes that at eleven at night is me.
+
+If the only question is "what is the best way to put a Next.js site online", the answer for most people most of the time is still Vercel, and I would say so in an interview.
+
+## The three reasons I moved anyway
+
+### One, I did not know what a server was
+
+This is the real reason and it is worth putting first rather than dressing up as an architecture decision.
+
+I could deploy. I could not administer. I had never configured a reverse proxy, never issued a certificate, never had to reason about why a container was killed, never looked at a memory limit and had to decide what to cut. Every one of those was a gap between "I use a platform" and "I understand what the platform does", and the gap was invisible from where I was standing.
+
+Two weeks of running my own box taught me more about deployment than two years of pushing to main. The Docker image for NOVA was heading for 2.5 GB before I learned that the default PyTorch wheel bundles CUDA I will never use on a CPU machine. Installing the CPU-only wheel cut it to 367 MB. That is not a fact you discover on a platform that hides the image from you.
+
+### Two, the free tier has a shape, and my projects kept hitting it
+
+Free tiers are not a smaller version of the paid product. They are a different product with different edges, and you find the edges by walking into them.
+
+VANTAGE runs an unattended pipeline that collects from six regions, and the story of that project is largely a story of a 60 second function limit: add a capability, blow the timeout, remove the capability. NOVA's backend sits on a trial machine that sleeps after five minutes, so a visitor's first request pays a cold start. Vercel's own terms rule out commercial use of the free plan, which is why the one project I sell as a service is not there at all.
+
+A droplet has limits too, and mine are tighter in most dimensions. The difference is that they are limits I chose and can see. I can run a job for ten minutes. I can keep a process warm. I can put five services on one box and pay once.
+
+### Three, the perception problem, stated plainly
+
+Every portfolio I have read says the same word: deployed. Vercel, Netlify, Vercel, Vercel. It is the default and it says nothing about the person, because clicking Import Repository requires no skill and everybody knows it.
+
+I am a statistics student in The Gambia with no employer to vouch for me, and I am competing for attention with people who have one. What I can offer instead is verifiable specificity: this is the machine, these are the five containers on it, this is the memory each one asks for, this is the path from a git push to a swapped container, this is the monthly bill.
+
+That is a thin edge. It is not nothing.
+
+<Note>
+
+I want to be careful with this one, because "recruiters will be impressed" is a bad reason to make a technical decision and I have seen it justify a lot of unnecessary complexity. The perception argument only works if the underlying claim is true. If I had put up an infrastructure page describing a droplet I do not administer, the page would be worse than not having one.
+
+</Note>
+
+## The accounting
+
+<Stats>
+  <Stat value="$0" label="Vercel, per month" note="Hobby plan. Genuinely free, and it stays free at my traffic." />
+  <Stat value="$12" label="Droplet, per month" note="2 GB. The 6 dollar tier runs the container but struggles to build it." />
+  <Stat value="5" label="Services on one box" note="The site, Coolify, its proxy, monitoring, and a shared Postgres. On a platform each of those is its own line." />
+  <Stat value="0" label="Paid tools in the stack" note="Coolify, Docker, Traefik, Uptime Kuma and Postgres are all open source." />
+</Stats>
+
+The cost comparison only turns in the droplet's favour once there is more than one thing on it. For a single static site, a droplet is 12 dollars a month worse than free. For five services, a shared database and a job that needs to run for longer than a minute, it stops being close.
+
+## What I gave up, and what I did about it
+
+I gave up the edge network, preview deployments, and the guarantee that somebody else is awake.
+
+What I kept is a way back. This repository builds three ways from the same source:
+
+```bash
+npm run build              # Vercel, or local
+npm run build:standalone   # the Docker image on the droplet
+npm run build:static       # static HTML for GitHub Pages
+```
+
+The static build is the interesting one, because it is the version that survives me not paying the bill. It has no server, so the live probe on each project page cannot run, and rather than print nothing or invent a number it falls back to the last measurement committed to the repository and shows the date it was taken. Losing a feature loudly is fine. Losing it quietly is what I was trying to avoid.
+
+That fallback is not a hedge I am embarrassed about. It is the same instinct as everything else here: a system should degrade in a way you can describe, and it should tell the truth about which mode it is in.
+
+## What I would tell someone else
+
+If you are deciding this for a client, stay on the platform. The operational load is real and it is not their problem to carry.
+
+If you are deciding it for yourself, and the reason you have never left is that you have never had to, then a small droplet for a few months is the cheapest education available. Break it a few times. Read the logs. You can always go back, and the going back will be a decision instead of a default.
+
+The [infrastructure page](/infra) has the specs, the compose file and the monthly bill, and the [deploy guide](/infra/deploy) is the whole path from an empty droplet to a running container.

@@ -1,0 +1,97 @@
+---
+title: Gambia Legal Aid
+lede: A question-answering system over thirteen Gambian Acts, built so that the failure mode is silence. It refuses more often than a normal chatbot, and the refusals are the feature.
+updated: 25 August 2026
+---
+
+A one-hour consultation with a Gambian lawyer costs more than most people earn in a week. The Acts themselves are public, in the sense that they exist as PDFs somewhere, which is not the same as being findable or readable. So the case for a legal chatbot writes itself.
+
+The case against it writes itself too. A model that invents a section number is not giving bad information, it is giving harmful information, to someone asking about an arrest, a dismissal, an eviction, or a violent partner. A person who acts on a right they do not have is worse off than a person who knew they had nothing.
+
+So the brief was never "build a chatbot". It was: build one that cannot lie about the law, and accept that it will be less useful in exchange.
+
+## How it fits together
+
+<Architecture />
+
+<DiagramLegend />
+
+The unusual part is on the right. Generation is not the last step. The answer is produced in full, checked against the retrieved statute text, and only then released to the user, one word at a time for the typewriter effect. Nothing reaches the screen that has not already passed the validator.
+
+<Stats>
+  <Stat value="13" label="Acts ingested" note="Constitution, Criminal Code, Labour Act, Children's Act, Sexual Offences, Domestic Violence, Immigration, and the Rent Acts of 2014, 2017 and 2024." />
+  <Stat value="3" label="Retrieval lenses" note="Semantic search, TF-IDF for rare exact terms, and hand-curated topic anchors that force known-relevant sections into scope." />
+  <Stat value="4" label="Guard layers" note="Section-number allowlist, verbatim quote check, section-title claim matching, banned-phrase stripping." />
+  <Stat value="0" label="Shipped citations to sections that do not exist" note="The hard-fail path refuses rather than retrying forever." />
+</Stats>
+
+## Why these calls and not the obvious ones
+
+<TradeOffs>
+
+<TradeOff chose="validate the whole answer, then stream it" over="streaming tokens as the model produces them">
+
+Token streaming is the default because it feels fast. It is also unrecoverable: if a hallucinated section number appears in word nine, the reader has already read it, and no amount of correcting afterwards unreads it.
+
+So the answer is generated in full, validated, and only then streamed word by word. The user waits about three seconds for the first word instead of about one. That is the entire cost, and it buys the guarantee that every word on screen has been checked. On a product where the failure mode is someone acting on invented law, three seconds is not a real price.
+
+</TradeOff>
+
+<TradeOff chose="an allowlist of section numbers and their titles" over="an allowlist of section numbers alone">
+
+The first version passed the model a list of valid section numbers and checked the citations against it. That caught the obvious class of failure, invented numbers, and missed a subtler one that took a while to see.
+
+The model started citing real numbers for the wrong reason: section 15, Powers of tribunal, offered as authority for a claim about notice periods, when notice is section 14. The number validated. The law did not. Passing the full list as number and title together lets the model see why each section exists, and lets the validator compare the claim against the title rather than just the digits.
+
+</TradeOff>
+
+<TradeOff chose="Llama 3.3 70B on a fast free tier" over="a frontier model">
+
+Every Gambian with the link uses this for free, so the per-question cost has to be close to zero or the project closes. The output format is one tight paragraph with citations, which is not a task that needs frontier reasoning; it needs instruction-following and coherence.
+
+The guard stack is what makes the answers trustworthy, not the model. That is the actual design claim here: put the reliability in the system around the model, and the model becomes a component you can choose on cost and latency. The provider chain falls through to a second model, so a retired model id degrades an answer instead of ending the conversation.
+
+</TradeOff>
+
+<TradeOff chose="section-aware chunking" over="fixed 1000-character windows">
+
+Fixed windows are one line of code and they were actively wrong here. A user asked about marriage law and got chunks from a tax statute that happened to share a phrase, because a window boundary had cut a legal unit in half and the surviving fragment matched on vocabulary rather than meaning.
+
+Statutes already come pre-chunked by their authors. Parsing the section markers and chunking on them makes every chunk a self-contained legal unit with a number and a title attached, which is also exactly the metadata the citation validator needs downstream. One decision, two problems.
+
+</TradeOff>
+
+<TradeOff chose="banning the phrase 'consult a lawyer'" over="letting the model hedge">
+
+Every legal chatbot says this, and it is the single most useless sentence any of them produce. The person asking is here precisely because they do not have a lawyer and cannot afford one. Telling them to get one is a way of appearing responsible while delivering nothing.
+
+It is banned in the prompt and stripped in post-processing. The system either grounds an answer in a statute or says it could not find one. Those are the two permitted outputs.
+
+</TradeOff>
+
+</TradeOffs>
+
+## What broke
+
+<PostMortem
+  title="Curly quotes let hallucinated quotations through the validator"
+  symptom="The verbatim-quote check passed in development and silently failed in production. Quoted spans that did not appear in any retrieved statute were being shipped as if they had been verified."
+  cause="The validator checked whether a quoted span was a substring of the retrieved text. The model wrote typographic quotation marks around its quotes. The source PDFs use straight ones. The substring comparison therefore ran on strings that differed by two invisible characters and returned false, and the failure path treated a non-match the same as an absent quote."
+  fix="Normalise both quote flavours before comparison, and add three-word span detection so a quotation cannot slip through by being shorter than the matcher expected."
+  cost="Invisible in development, because I was pasting source text in as my own test input. It only appeared in production, where the model's output and my source came from different places."
+  lesson="Test the validator with adversarial inputs, not with the inputs you already trust. I had tested that it accepted good answers. I had not tested that it rejected bad ones, which is its only job."
+/>
+
+The first version of this system had no guard at all: retrieve five chunks, let the model write. Asked about topics outside the corpus it confabulated fluently, with fake section numbers and fake quotations. Every layer since exists because a specific class of failure got past the previous one.
+
+<Note>
+
+The honest limitation is language. The corpus is English because the statutes are English, and most of the people who would benefit most speak Wolof, Mandinka, Fula or Jola first. That gap matters most for exactly the users with the least other recourse, women in rural areas dealing with the Domestic Violence Act among them. Retrieval can stay English; a translation layer around the input and output is the next real piece of work.
+
+Statute ingestion is also less automated than it sounds. Every Act needed its own preprocessing rules for footnotes baked into body text, OCR damage turning `s.14` into `s.l4`, and inconsistent numbering conventions. It is a manual job wearing the costume of a pipeline.
+
+</Note>
+
+## Is it up right now
+
+<Metrics />

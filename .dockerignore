@@ -1,0 +1,25 @@
+# Everything here would either bloat the build context or be rebuilt anyway.
+# The build context on a 2 GB droplet is not free: it is copied to the daemon
+# before the first instruction runs.
+
+.git
+.github
+node_modules
+.next
+out
+npm-debug.log*
+*.tsbuildinfo
+
+# Local environment. The image gets its configuration from Coolify.
+.env
+.env.local
+.env.*.local
+
+# Editor and OS noise
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# The print portfolio source, which is not part of the site build
+pdf

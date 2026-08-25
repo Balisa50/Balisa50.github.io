@@ -1,0 +1,37 @@
+{
+  "slug": "hireiq",
+  "title": "HireIQ",
+  "caption": "An interview is a loop, not a form. The follow-up policy decides whether an answer was thin enough to push on, and that edge is the whole product.",
+  "layers": [
+    { "name": "Candidate", "nodes": [
+      { "id": "chat", "label": "Candidate, in a conversation", "kind": "source" }
+    ] },
+    { "name": "API", "nodes": [
+      { "id": "api", "label": "FastAPI", "kind": "service" }
+    ] },
+    { "name": "Interview", "nodes": [
+      { "id": "nim", "label": "NVIDIA NIM, open weights", "kind": "model" },
+      { "id": "policy", "label": "Follow-up policy", "kind": "service" }
+    ] },
+    { "name": "Assess", "nodes": [
+      { "id": "score", "label": "Rubric scoring and ranking", "kind": "model" }
+    ] },
+    { "name": "Store", "nodes": [
+      { "id": "supabase", "label": "Supabase Postgres", "kind": "store" }
+    ] },
+    { "name": "Surface", "nodes": [
+      { "id": "pdf", "label": "WeasyPrint report", "kind": "service" },
+      { "id": "dash", "label": "Recruiter dashboard", "kind": "ui" }
+    ] }
+  ],
+  "edges": [
+    { "from": "chat", "to": "api" },
+    { "from": "api", "to": "nim" },
+    { "from": "nim", "to": "policy" },
+    { "from": "policy", "to": "api", "label": "ask again" },
+    { "from": "policy", "to": "score" },
+    { "from": "score", "to": "supabase" },
+    { "from": "supabase", "to": "pdf" },
+    { "from": "supabase", "to": "dash" }
+  ]
+}

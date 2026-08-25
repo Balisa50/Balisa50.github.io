@@ -1,0 +1,95 @@
+---
+title: FORGE
+lede: A learning platform where a week does not count until the engine has matched it against your actual commits and a deployed URL. It started as an app that cross-examined you, and the interrogation turned into verification.
+updated: 25 August 2026
+---
+
+I kept skipping days on my own learning and lying to myself about it. Streak apps do not fix that, because tapping "yes I studied" costs nothing and proves nothing. What I wanted was something that would push back when I tried to coast.
+
+The first version did that literally. A daily lock screen with a model on the other side of it that read your claim and cross-examined it: what specifically did you build, what was the bug, what did you try first, why did it not work. Vague claims got rejected. Faking specifics is harder than doing the work, which was the whole mechanism.
+
+What it is now is the same idea with the argument taken out of it. Thirteen career roadmaps, a mentor per learner, and a week that only closes once the engine has matched the claimed work against real GitHub commits and a live deployed URL. The model no longer has to decide whether you are telling the truth. The commit history already knows.
+
+## How it fits together
+
+<Architecture />
+
+<DiagramLegend />
+
+<Stats>
+  <Stat value="13" label="Career roadmaps" note="Data science, AI engineering, cybersecurity, full-stack and others. Twelve to forty-three weeks each." />
+  <Stat value="385" label="Curated video resources" note="Mapped to specific weeks rather than dumped in a reading list." />
+  <Stat value="~5" label="Mastery checks per week" note="Plus a mentor release and sign-off before the week counts." />
+  <Stat value="0" label="Self-reported completions" note="Progress is matched against commits and a reachable deployment, not against a checkbox." />
+</Stats>
+
+## Why these calls and not the obvious ones
+
+<TradeOffs>
+
+<TradeOff chose="proof of work against commits and a live URL" over="the model interrogating your claim">
+
+The interrogator was the more interesting demo and the weaker system. It could tell a specific claim from a vague one, which is a real signal, but it was still evaluating a story about work rather than the work. A sufficiently detailed lie passed.
+
+Commits and a reachable deployment are not a story. They are the artefact. The verification became cheaper, deterministic, and impossible to talk your way past, and the model went back to doing the thing models are good at, which here is explaining and generating practice material rather than adjudicating honesty.
+
+</TradeOff>
+
+<TradeOff chose="settings behind a PIN set in advance" over="settings the user can change">
+
+Every focus tool on both mobile platforms has the same hole: you can disable it from inside itself. The moment you most want the constraint gone is eleven at night after a bad day, which is exactly the moment the constraint is doing its job.
+
+The PIN is set while sober and checked server-side, so clearing app data or reinstalling does not help. I did not build this from theory. I built it because I tried to disable the app on day three.
+
+</TradeOff>
+
+<TradeOff chose="a router across providers" over="one model provider">
+
+A daily check-in is about two hundred tokens. Locking that to a single frontier provider is paying for a moat that does not exist at that size, and it adds a single point of failure for a product whose whole promise is that it fires every day without fail.
+
+Routing to whatever is cheapest above a quality floor cut the cost by an order of magnitude with no change I could detect in the output, and it means a provider outage degrades the day rather than ending it.
+
+</TradeOff>
+
+<TradeOff chose="streak resets with no buy-back" over="letting users recover a missed day">
+
+If yesterday can be bought back with twice the work today, people gamble on it and skip more. The loss has to be permanent or it is not a deterrent.
+
+The concession is three grace days a quarter, visible in the interface and visible to your accountability pod. Real life contains travel and illness and family emergencies, and a system with no give at all gets uninstalled in a week. A system with unlimited give does nothing. Three, counted and visible, is where it landed.
+
+</TradeOff>
+
+<TradeOff chose="deleting the leaderboard and the camera proctoring" over="keeping features I had already built">
+
+Both shipped. Both came out.
+
+The leaderboard turned the product into a competition and produced exactly the wrong incentive: people optimising streak length rather than real work, which is the failure the app exists to prevent. Camera proctoring was worse. It was invasive enough to exclude the privacy-conscious and religious users I most cared about, and it only ever proved you were physically present, not that you had done anything. Wrong layer of accountability, high cost.
+
+Removing working software is harder than adding it, and it is most of what separates a product from a pile of features.
+
+</TradeOff>
+
+</TradeOffs>
+
+## What broke
+
+<PostMortem
+  title="The interrogator accepted everything, and the fix was to make it fail more often"
+  symptom="Users, me first among them, were passing the daily check-in with claims like 'I studied for two hours'. The app was running, the streaks were growing, and it was measuring nothing."
+  cause="The system prompt asked the model to evaluate the answer without telling it what a bad answer looked like. Language models are agreeable by default. Given a plausible-sounding claim and no explicit standard, it accepted the claim, because accepting is the cooperative move and nothing in the prompt said otherwise."
+  fix="Rewrote the prompt to reject any claim lacking specifics and to require what was built, what failed and what was learned. Six or more iterations to find the line between skeptical and unpleasant."
+  cost="Pass rates dropped about forty percent, which was the intended outcome and looked like a regression on every metric a normal product would track."
+  lesson="If you want a model to be strict you have to define strictness in the prompt. It will not infer a standard from the fact that you obviously wanted one. And on a product like this the healthy metric moves down, which means the usual dashboard actively misleads you."
+/>
+
+<Note>
+
+The tone calibration was harder than the mechanism. Overshoot and the app is cruel and people leave; undershoot and it accepts anything. Where it settled is closer to a respectful old coach than a prosecutor: I hear you, tell me more, what was the actual bug.
+
+The related redesign was the re-entry flow. Breaking a streak used to show a sad face and a zero, which is demoralising rather than productive. It now opens as day one again with a single question about the first specific thing you will build. The failure is not hidden and it is not punished twice.
+
+</Note>
+
+## Is it up right now
+
+<Metrics />

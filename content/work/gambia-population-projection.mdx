@@ -1,0 +1,88 @@
+---
+title: The Gambia 2074
+lede: An independent population projection for a country with no death registration, built on the same methodology family the UN uses, and disagreeing with the UN by about 0.7 million because it starts from the 2024 census.
+updated: 25 August 2026
+---
+
+The Gambia has no complete civil registration. Deaths go largely unrecorded, there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, which is the standard input for mortality forecasting. Yet every long-range public decision runs on population projections: how many classrooms, how large the future labour force and pension bill, how many clinics to staff.
+
+The only figures available are the UN's, and those were finalised before The Gambia's first digital census in 2024. That census counts roughly 2.42 million people. The UN's 2023 figure is 2,728,905, about 13 percent higher, and it runs above every historical Gambian census as well.
+
+The naive version of this project fits Lee-Carter to whatever series you can find and publishes a point estimate. That is the version an examiner takes apart. So the data scarcity became the research question: how do you build a credible projection for a country with no death registration, and how much do the answers depend on the method and on the vintage of the data.
+
+## How it fits together
+
+<Architecture />
+
+<DiagramLegend />
+
+<Stats>
+  <Stat value="4.66M" label="Population in 2074" note="95 percent interval 4.35 to 4.98 million, re-based on the 2024 census." />
+  <Stat value="0.7M" label="Below the UN" note="Because the UN base was set before the census, not because the methods disagree." />
+  <Stat value="1%" label="Engine validation" note="Fed the UN's own inputs, the projection engine reproduces their published figures to within 0.3 to 0.9 percent through 2074." />
+  <Stat value="65.86" label="Life expectancy, 2023" note="The life table reproduces the UN's published value exactly." />
+  <Stat value="0.65 yr" label="Backtest mean error" note="Fit to 2010, predict 2011 to 2023. The truth falls inside the 95 percent range every year." />
+  <Stat value="77 to 49" label="Dependency ratio" note="Total dependants per 100 working-age adults, 2024 to 2074, while old-age dependency triples from 5 to 18." />
+</Stats>
+
+## Why these calls and not the obvious ones
+
+<TradeOffs>
+
+<TradeOff chose="the UN team's own open R package, pinned to a commit" over="the WPP data portal API">
+
+The portal's data endpoint is token-gated and returned 401 on every variant I tried. Rather than chase a token I found that the UN Population Division publishes the same series as plain text in the data-raw directory of their wpp2024 package on GitHub.
+
+Pinning a commit SHA, streaming each file and keeping only The Gambia's rows is more reproducible than the API would have been. No token to expire, an exact version anyone can check, and because the multi-country files never touch disk it also survived a machine with 50 MB free.
+
+</TradeOff>
+
+<TradeOff chose="three mortality models" over="one">
+
+The classical SVD fit is the transparent baseline. The Bayesian Poisson version is the principled fix where death counts are small and noisy, which is exactly this case. The coherent Li-Lee version pools The Gambia with seven West African neighbours so a small-population forecast cannot drift to a long-run mortality the region has never seen.
+
+They agree on 2074 life expectancy to within about 0.8 years. That agreement is itself a finding: the structural uncertainty across reasonable methods is smaller than the uncertainty the UN publishes.
+
+</TradeOff>
+
+<TradeOff chose="fixing the intercept and constraining the loadings to a simplex" over="estimating every Lee-Carter parameter freely">
+
+Estimating the intercept, the loadings and the time index jointly creates the classic identifiability ridge, and the sampler would not mix: r-hat sat around 1.02 no matter how long it ran.
+
+Fixing the intercept at the empirical mean log-rate is literally how Lee and Carter define it, and putting the 101-dimensional loading vector on a simplex through a Dirichlet prior removed the ridge. Maximum r-hat dropped to 1.010 and the effective sample size rose into the thousands for the parameters that matter, with full uncertainty still propagating through to life expectancy.
+
+</TradeOff>
+
+<TradeOff chose="validating the engine against a known answer first" over="trusting it because the code looked right">
+
+A cohort-component engine has a hundred places to get an index or a survivorship ratio subtly wrong, and the output looks plausible either way. So the engine was fed the UN's own mortality, fertility, sex ratio and migration, and checked against their published projection before it was allowed near the census.
+
+If it cannot rebuild a known answer, it has not earned the right to produce a new one.
+
+</TradeOff>
+
+</TradeOffs>
+
+## What broke
+
+<PostMortem
+  title="The number that looked like a bug was the headline"
+  symptom="Halfway through, the UN 2023 population sat about 13 percent above the 2024 census. My first assumption was that I had misread a column or mixed up a variant."
+  cause="Neither. The UN figure was finalised before The Gambia's first digital census was published, so it is a projection forward from older, weaker inputs. It also runs above every historical Gambian census, which is the consistency check that turned it from a suspicion into a finding."
+  fix="Reconciled the projection base to the census total and its broad age structure, then re-ran the cohort-component model over 1,000 simulated mortality and fertility futures, carrying the population as an age-by-simulation matrix so the whole thing vectorises and produces honest credible intervals."
+  lesson="I spent a day looking for the mistake in my code. The mistake was assuming the reference number is the true number. A discrepancy is only a bug until you have checked it against a third source, and this one turned into the most policy-relevant result in the project."
+/>
+
+The other two failures were smaller and both were about the environment rather than the model. A PyMC conda install died with no space left on device at 50 MB free, and the Bayesian model that supposedly needed a multi-gigabyte compiler toolchain ran fine from a lean pip install into system Python. Without a C compiler the sampler fell back to its slow path, so a four-chain run took about eight minutes, which taught me to validate on a short run and on synthetic data with known parameters before committing to a long one.
+
+<Note>
+
+What is still missing is the strongest claim I could make. The Farafenni and Basse surveillance systems have published life tables going back to 1981 and 2007, and digitising them would turn the validation chapter from "checked against the UN's reconstruction" into "checked against independent empirical Gambian data". I flagged that as a remaining data task rather than inventing numbers for it.
+
+</Note>
+
+## Is it up right now
+
+<Metrics />
+
+The projection itself is a research output rather than a service. The [full write-up is on this site](/research/gambia-2074), with the methods figure and the backtest.

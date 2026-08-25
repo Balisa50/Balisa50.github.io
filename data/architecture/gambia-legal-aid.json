@@ -1,0 +1,37 @@
+{
+  "slug": "gambia-legal-aid",
+  "title": "Gambia Legal Aid",
+  "caption": "A retrieval pipeline with a validator after the model rather than before it, because the failure worth catching is an invented citation.",
+  "layers": [
+    { "name": "Corpus", "nodes": [
+      { "id": "acts", "label": "13 Acts of Parliament", "kind": "source" }
+    ] },
+    { "name": "Index", "nodes": [
+      { "id": "chunk", "label": "Chunk and embed by section", "kind": "service" }
+    ] },
+    { "name": "Store", "nodes": [
+      { "id": "vector", "label": "Vector store", "kind": "store" }
+    ] },
+    { "name": "Answer", "nodes": [
+      { "id": "retrieve", "label": "Top-k retrieval", "kind": "service" },
+      { "id": "llm", "label": "LLM, with a fallback provider", "kind": "model" }
+    ] },
+    { "name": "Guard", "nodes": [
+      { "id": "cite", "label": "Citation validator", "kind": "service" },
+      { "id": "refuse", "label": "Refuse if the store is down", "kind": "service" }
+    ] },
+    { "name": "Surface", "nodes": [
+      { "id": "ui", "label": "Next.js chat", "kind": "ui" }
+    ] }
+  ],
+  "edges": [
+    { "from": "acts", "to": "chunk" },
+    { "from": "chunk", "to": "vector" },
+    { "from": "vector", "to": "retrieve" },
+    { "from": "retrieve", "to": "llm" },
+    { "from": "llm", "to": "cite" },
+    { "from": "vector", "to": "refuse", "optional": true },
+    { "from": "cite", "to": "ui", "label": "cited, or nothing" },
+    { "from": "refuse", "to": "ui" }
+  ]
+}

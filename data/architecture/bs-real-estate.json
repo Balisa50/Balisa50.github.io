@@ -1,0 +1,31 @@
+{
+  "slug": "bs-real-estate",
+  "title": "BS Real Estate",
+  "caption": "The admin side is the whole point. If the client has to call me to change a price, the build failed.",
+  "layers": [
+    { "name": "Access", "nodes": [
+      { "id": "admin", "label": "Admin login, one role", "kind": "source" },
+      { "id": "visitor", "label": "Public visitor", "kind": "source" }
+    ] },
+    { "name": "App", "nodes": [
+      { "id": "next", "label": "Next.js 16 App Router", "kind": "service" }
+    ] },
+    { "name": "Data", "nodes": [
+      { "id": "prisma", "label": "Prisma 7 on Postgres", "kind": "store" },
+      { "id": "media", "label": "Listing images", "kind": "store" }
+    ] },
+    { "name": "Surface", "nodes": [
+      { "id": "cms", "label": "Listings dashboard", "kind": "ui" },
+      { "id": "site", "label": "Property site", "kind": "ui" }
+    ] }
+  ],
+  "edges": [
+    { "from": "admin", "to": "next" },
+    { "from": "visitor", "to": "next" },
+    { "from": "next", "to": "prisma" },
+    { "from": "next", "to": "media" },
+    { "from": "prisma", "to": "cms" },
+    { "from": "prisma", "to": "site" },
+    { "from": "media", "to": "site" }
+  ]
+}

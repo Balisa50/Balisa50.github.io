@@ -1,0 +1,265 @@
+{
+  "slug": "stack",
+  "title": "The stack, arranged by where it runs",
+  "caption": "Interface, services, models, data, and the machines underneath. Read left to right: a request enters at the interface and the cost of answering it goes up with every column.",
+  "layers": [
+    {
+      "name": "Interface",
+      "id": "interface",
+      "nodes": [
+        {
+          "id": "nextjs",
+          "label": "Next.js 16",
+          "kind": "ui",
+          "depth": "daily",
+          "role": "App Router on every front end I have shipped. Server components mean the data-shaping code sits next to the query instead of in a client bundle.",
+          "projects": ["nova", "forge", "ayat", "vantage", "dalasi-pulse", "bs-real-estate", "credit-risk-scorecard", "life-insurance-risk", "gambia-legal-aid", "hireiq"]
+        },
+        {
+          "id": "typescript",
+          "label": "TypeScript",
+          "kind": "ui",
+          "depth": "daily",
+          "role": "Strict mode, no implicit any. The project data on this site is typed at the source, so a case study that references a project that does not exist fails the build rather than the page.",
+          "projects": ["nova", "forge", "ayat", "vantage", "bs-real-estate", "hireiq"]
+        },
+        {
+          "id": "tailwind",
+          "label": "Tailwind CSS",
+          "kind": "ui",
+          "depth": "daily",
+          "role": "Every colour on this site is a token in one config file. That is the only reason the dark-to-light rewrite was a config change instead of a fourteen-file edit.",
+          "projects": ["nova", "forge", "ayat", "bs-real-estate", "vantage"]
+        },
+        {
+          "id": "three",
+          "label": "Three.js",
+          "kind": "ui",
+          "depth": "working",
+          "role": "One Points cloud, one draw call, a custom vertex shader injected through onBeforeCompile. Used where 6,236 objects have to move at 60fps on a phone, and nowhere else.",
+          "projects": ["ayat"]
+        },
+        {
+          "id": "recharts",
+          "label": "Recharts",
+          "kind": "ui",
+          "depth": "working",
+          "role": "Dashboard charting where the numbers change. Static figures are rendered in matplotlib at analysis time instead, because a chart that never changes should not cost a chart library.",
+          "projects": ["credit-risk-scorecard", "life-insurance-risk"]
+        }
+      ]
+    },
+    {
+      "name": "Services",
+      "id": "services",
+      "nodes": [
+        {
+          "id": "fastapi",
+          "label": "FastAPI",
+          "kind": "service",
+          "depth": "daily",
+          "role": "The Python side of every split app. Where the model lives, because moving a PyTorch checkpoint into a Node process is a worse problem than one HTTP hop.",
+          "projects": ["nova", "hireiq", "gambia-legal-aid"]
+        },
+        {
+          "id": "routes",
+          "label": "Route handlers",
+          "kind": "service",
+          "depth": "daily",
+          "role": "Next.js server routes for anything that does not need Python. On this site they are all force-static so the same code can build for a server or for a bucket.",
+          "projects": ["vantage", "bs-real-estate", "forge"]
+        },
+        {
+          "id": "nextauth",
+          "label": "NextAuth v5",
+          "kind": "service",
+          "depth": "working",
+          "role": "Session and role handling. In FORGE the mentor and learner roles are what gate week release, so auth is business logic, not a login form.",
+          "projects": ["forge", "bs-real-estate"]
+        },
+        {
+          "id": "prisma",
+          "label": "Prisma 7",
+          "kind": "service",
+          "depth": "daily",
+          "role": "Schema-first, migrations in the repo. The schema is the document I reach for when I come back to a project after two months.",
+          "projects": ["forge", "bs-real-estate"]
+        }
+      ]
+    },
+    {
+      "name": "Models",
+      "id": "models",
+      "nodes": [
+        {
+          "id": "pytorch",
+          "label": "PyTorch",
+          "kind": "model",
+          "depth": "working",
+          "role": "CTGAN implemented from the 2019 paper rather than imported: mode-specific normalisation, a PacGAN critic, WGAN-GP, conditional training-by-sampling. CPU only, because there is no GPU here.",
+          "projects": ["nova"]
+        },
+        {
+          "id": "sklearn",
+          "label": "scikit-learn",
+          "kind": "model",
+          "depth": "daily",
+          "role": "Logistic regression where a scorecard has to be explained to a credit committee, and the train-on-synthetic-test-on-real classifier that scores NOVA output.",
+          "projects": ["credit-risk-scorecard", "nova"]
+        },
+        {
+          "id": "pymc",
+          "label": "PyMC",
+          "kind": "model",
+          "depth": "working",
+          "role": "Bayesian Poisson Lee-Carter with NUTS. Fixing the intercept at the empirical mean and putting b on a simplex is what finally made the chains mix.",
+          "projects": ["gambia-population-projection"]
+        },
+        {
+          "id": "st",
+          "label": "sentence-transformers",
+          "kind": "model",
+          "depth": "working",
+          "role": "Embeddings for retrieval and for the verse cloud. Run once at build time and shipped as vectors, which is why neither project pays for an inference server.",
+          "projects": ["ayat", "gambia-legal-aid"]
+        },
+        {
+          "id": "lifelines",
+          "label": "lifelines",
+          "kind": "model",
+          "depth": "working",
+          "role": "Kaplan-Meier and Cox proportional hazards for the life book. Concordance 0.77, reported on held-out policies.",
+          "projects": ["life-insurance-risk"]
+        },
+        {
+          "id": "tjs",
+          "label": "transformers.js",
+          "kind": "model",
+          "depth": "working",
+          "role": "The query embedding runs in the visitor browser. No inference endpoint means no bill and no cold start, and it is the reason AYAT costs nothing to keep online.",
+          "projects": ["ayat"]
+        },
+        {
+          "id": "llm",
+          "label": "Hosted LLM APIs",
+          "kind": "model",
+          "depth": "daily",
+          "role": "Open weights on NVIDIA NIM, with a second provider behind them. Every call site assumes the model id can retire, because one already did.",
+          "projects": ["hireiq", "vantage", "gambia-legal-aid", "ayat"]
+        }
+      ]
+    },
+    {
+      "name": "Data",
+      "id": "data",
+      "nodes": [
+        {
+          "id": "postgres",
+          "label": "PostgreSQL",
+          "kind": "store",
+          "depth": "daily",
+          "role": "The default. Relational until something proves it should not be.",
+          "projects": ["forge", "bs-real-estate", "hireiq"]
+        },
+        {
+          "id": "supabase",
+          "label": "Supabase",
+          "kind": "store",
+          "depth": "working",
+          "role": "Managed Postgres plus auth for HireIQ. Also the reason HireIQ is currently down at the data layer, which is its own lesson about depending on a free project that can be reclaimed.",
+          "projects": ["hireiq"]
+        },
+        {
+          "id": "vector",
+          "label": "Vector store",
+          "kind": "store",
+          "depth": "working",
+          "role": "Section-level chunks of thirteen Acts. Small enough that the honest engineering answer was a plain index, not a hosted vector database.",
+          "projects": ["gambia-legal-aid"]
+        },
+        {
+          "id": "pandas",
+          "label": "pandas and NumPy",
+          "kind": "store",
+          "depth": "daily",
+          "role": "Every pipeline that starts at a public API and ends at a model.",
+          "projects": ["dalasi-pulse", "gambia-population-projection", "credit-risk-scorecard", "nova"]
+        },
+        {
+          "id": "genjson",
+          "label": "Generated artefacts",
+          "kind": "store",
+          "depth": "daily",
+          "role": "Forecasts, coordinates and diagrams computed once at build time and committed. A generated file you can read in a diff is a generated file somebody checks.",
+          "projects": ["dalasi-pulse", "ayat", "gambia-population-projection"]
+        }
+      ]
+    },
+    {
+      "name": "Run",
+      "id": "run",
+      "nodes": [
+        {
+          "id": "docker",
+          "label": "Docker",
+          "kind": "service",
+          "depth": "working",
+          "role": "Multi-stage builds, CPU-only wheels, standalone output. Getting the NOVA image from 2.5 GB to 367 MB was a day of work and the difference between deployable and not.",
+          "projects": ["nova", "hireiq"]
+        },
+        {
+          "id": "coolify",
+          "label": "Coolify",
+          "kind": "service",
+          "depth": "learning",
+          "role": "Open-source platform-as-a-service on my own droplet. Git push, it rebuilds, it swaps the container.",
+          "projects": []
+        },
+        {
+          "id": "droplet",
+          "label": "DigitalOcean droplet",
+          "kind": "service",
+          "depth": "learning",
+          "role": "One small Ubuntu box. The point is not that it is better than Vercel, it is that I know what is on it.",
+          "projects": []
+        },
+        {
+          "id": "actions",
+          "label": "GitHub Actions",
+          "kind": "service",
+          "depth": "working",
+          "role": "Builds the static fallback of this site and pushes it to Pages, so there is always a free copy online.",
+          "projects": []
+        },
+        {
+          "id": "vercel",
+          "label": "Vercel",
+          "kind": "service",
+          "depth": "daily",
+          "role": "Where most of these projects still live. Free, fast, and the reason the infrastructure question was easy to postpone.",
+          "projects": ["nova", "vantage", "ayat", "bs-real-estate", "credit-risk-scorecard", "life-insurance-risk", "dalasi-pulse"]
+        },
+        {
+          "id": "kuma",
+          "label": "Uptime Kuma",
+          "kind": "service",
+          "depth": "learning",
+          "role": "Self-hosted monitoring. If I am going to claim uptime on a portfolio, something other than me has to be measuring it.",
+          "projects": []
+        }
+      ]
+    }
+  ],
+  "edges": [
+    { "from": "nextjs", "to": "fastapi", "label": "HTTP" },
+    { "from": "nextjs", "to": "routes" },
+    { "from": "routes", "to": "prisma" },
+    { "from": "fastapi", "to": "pytorch" },
+    { "from": "fastapi", "to": "st" },
+    { "from": "prisma", "to": "postgres", "label": "SQL" },
+    { "from": "pymc", "to": "genjson" },
+    { "from": "sklearn", "to": "genjson" },
+    { "from": "postgres", "to": "docker" },
+    { "from": "genjson", "to": "vercel" }
+  ]
+}

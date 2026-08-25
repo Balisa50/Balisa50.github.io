@@ -4,6 +4,8 @@ import { GeistMono } from "geist/font/mono";
 import { Newsreader } from "next/font/google";
 import "./globals.css";
 import { SkipLink } from "@/components/SkipLink";
+import { SiteNav } from "@/components/site/nav";
+import { SiteFooter } from "@/components/site/footer";
 import { PROFILE } from "@/lib/projects";
 
 // Display face. A serif carries the editorial register the layout is going
@@ -15,11 +17,11 @@ const serif = Newsreader({
   weight: ["400", "500"],
   style: ["normal", "italic"],
   variable: "--font-serif",
-  display: "swap",
+  display: "swap"
 });
 
 const description =
-  "Data science student in The Gambia. I work on retrieval and forecasting systems, and on the checks around them: RAG pipelines, applied NLP, and statistical modelling.";
+  "Data science student in The Gambia. I build retrieval and forecasting systems and the checks around them, and I keep them running. Eleven projects, each with its architecture, its trade-offs, and the failure it taught me.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://balisa50.github.io"),
@@ -32,8 +34,8 @@ export const metadata: Metadata = {
     "Abdoulie Balisa",
     "AI Systems Developer",
     "Data Science Student",
-    "Aspiring Actuary",
-    "LLM",
+    "RAG",
+    "Forecasting",
     "TypeScript",
     "Python",
     "Next.js",
@@ -71,26 +73,23 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // The colour of the page rather than of the first screen. The hero band is
+  // dark, but this is what the browser paints around the content as you scroll,
+  // and that is light everywhere else.
   themeColor: "#fafaf9",
   width: "device-width",
   initialScale: 1,
   colorScheme: "light"
 };
 
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
       <body className="bg-background font-sans text-text antialiased">
-        {/* The animated background, scanline sweep, warp navigation, console
-            easter egg and floating CTA were removed rather than restyled.
-            None of them carried information, they competed with the work for
-            attention, and they cost a Three.js bundle on first paint. */}
         <SkipLink />
-        {children}
+        <SiteNav />
+        <main id="main">{children}</main>
+        <SiteFooter />
 
         {/* Register the service worker (progressive enhancement) */}
         <script
