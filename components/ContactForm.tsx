@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2, Send, Check, AlertCircle, Linkedin } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
+import { WEB3FORMS_KEY, CONTACT_CONFIGURED } from "@/lib/contact";
 
 /**
  * The only way to reach me from this site.
@@ -23,7 +24,6 @@ import { PROFILE } from "@/lib/projects";
  */
 
 const ENDPOINT = "https://api.web3forms.com/submit";
-const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 type State = "idle" | "sending" | "sent" | "error";
 
@@ -38,8 +38,7 @@ function LinkedInFallback() {
   return (
     <div className="relative mt-8 max-w-xl border-l-2 border-accent pl-5">
       <p className="text-[15px] leading-relaxed text-text-secondary">
-        The message form is not configured on this build. LinkedIn reaches me directly in the
-        meantime.
+        The quickest way to reach me is LinkedIn. Message me there and I will come back to you.
       </p>
       <a
         href={PROFILE.linkedin}
@@ -58,7 +57,7 @@ export function ContactForm() {
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string>("");
 
-  if (!ACCESS_KEY) return <LinkedInFallback />;
+  if (!CONTACT_CONFIGURED) return <LinkedInFallback />;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,7 +76,7 @@ export function ContactForm() {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
-          access_key: ACCESS_KEY,
+          access_key: WEB3FORMS_KEY,
           subject: `${data.get("purpose")} — ${data.get("name")}`,
           from_name: "balisa50.github.io",
           name: data.get("name"),
