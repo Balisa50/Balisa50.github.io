@@ -15,7 +15,6 @@ export async function GET() {
     basics: {
       name: PROFILE.fullName,
       label: PROFILE.title,
-      email: PROFILE.email,
       url: "https://balisa50.github.io",
       summary:
         "ML/AI engineer and data scientist. Self-taught, shipping real products end-to-end: RAG, agentic pipelines, forecasting models, and polished Next.js front-ends. Comfortable across Python, TypeScript, and the infra that glues them.",

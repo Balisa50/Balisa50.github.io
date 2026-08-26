@@ -1,21 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Send, Check, AlertCircle } from "lucide-react";
+import { Loader2, Send, Check, AlertCircle, Linkedin } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 /**
- * A contact form on a site with no server.
+ * The only way to reach me from this site.
  *
- * This site is a static export on GitHub Pages. There is no route handler to
- * post to and no SMTP credential that could live anywhere safe, so the form
- * posts to Web3Forms, which is free, needs no card, and forwards submissions
- * to an inbox. The access key is public by design: it identifies the
- * destination inbox and cannot read anything.
+ * The section used to print an email address, a phone number and a copy-to-
+ * clipboard button. All three are trivially harvested from a static page, and
+ * a personal phone number on a public site is not recoverable once it is out.
+ * A form puts a human in front of the address: I see who is asking and what
+ * for, and I answer the ones worth answering.
  *
- * If the key is not configured the form does not render at all. A contact form
- * that silently drops messages is worse than no contact form, and the email
- * and phone next to it already work.
+ * There is no server here, so it posts to Web3Forms, which is free and needs
+ * no card. The access key is public by design: it names a destination inbox
+ * and cannot read anything, so it does not expose the address it forwards to.
+ *
+ * If the key is not configured the form is replaced by the LinkedIn route
+ * rather than disappearing. Removing the address and then shipping a form that
+ * does nothing would leave no way to make contact at all.
  */
 
 const ENDPOINT = "https://api.web3forms.com/submit";
@@ -23,19 +27,46 @@ const ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 type State = "idle" | "sending" | "sent" | "error";
 
+const PURPOSES = [
+  "A role or contract",
+  "A request for your CV",
+  "A question about a project",
+  "Something else"
+] as const;
+
+function LinkedInFallback() {
+  return (
+    <div className="relative mt-8 max-w-xl border-l-2 border-accent pl-5">
+      <p className="text-[15px] leading-relaxed text-text-secondary">
+        The message form is not configured on this build. LinkedIn reaches me directly in the
+        meantime.
+      </p>
+      <a
+        href={PROFILE.linkedin}
+        target="_blank"
+        rel="noreferrer noopener"
+        className="mt-3 inline-flex min-h-[44px] items-center gap-2 text-sm text-ink transition hover:text-accent"
+      >
+        <Linkedin className="h-4 w-4" aria-hidden="true" />
+        linkedin.com/in/{PROFILE.linkedinHandle}
+      </a>
+    </div>
+  );
+}
+
 export function ContactForm() {
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string>("");
 
-  if (!ACCESS_KEY) return null;
+  if (!ACCESS_KEY) return <LinkedInFallback />;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
 
-    // Honeypot. A real person never fills this in because it is not shown;
-    // a bot fills every field it finds. Cheaper and less hostile than a captcha.
+    // Honeypot. A person never fills this in because it is off-screen; a bot
+    // fills every field it finds. Cheaper and less hostile than a captcha.
     if (data.get("botcheck")) return;
 
     setState("sending");
@@ -47,10 +78,12 @@ export function ContactForm() {
         headers: { "Content-Type": "application/json", Accept: "application/json" },
         body: JSON.stringify({
           access_key: ACCESS_KEY,
-          subject: `Portfolio message from ${data.get("name")}`,
+          subject: `${data.get("purpose")} — ${data.get("name")}`,
           from_name: "balisa50.github.io",
           name: data.get("name"),
           email: data.get("email"),
+          purpose: data.get("purpose"),
+          organisation: data.get("organisation"),
           message: data.get("message")
         })
       });
@@ -63,7 +96,6 @@ export function ContactForm() {
       setState("sent");
       form.reset();
     } catch (err) {
-      // Never a dead end: the mailto below still works, and the message says so.
       setState("error");
       setError(err instanceof Error ? err.message : "Send failed");
     }
@@ -74,14 +106,9 @@ export function ContactForm() {
     "placeholder:text-text-faint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan";
 
   return (
-    <form onSubmit={onSubmit} className="relative mt-10 max-w-xl">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-text-secondary">
-        Or send it from here
-      </p>
-
-      {/* Not display:none. Some bots skip hidden inputs; an off-screen field
-          they will still fill. aria-hidden and tabIndex keep it away from
-          anyone using a keyboard or a screen reader. */}
+    <form onSubmit={onSubmit} className="relative mt-8 max-w-xl">
+      {/* Off-screen rather than display:none. Some bots skip hidden inputs but
+          will still fill one that is merely positioned away. */}
       <input
         type="checkbox"
         name="botcheck"
@@ -91,7 +118,7 @@ export function ContactForm() {
         aria-hidden="true"
       />
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="cf-name" className="block text-sm text-text-secondary">
             Your name
@@ -122,9 +149,37 @@ export function ContactForm() {
         </div>
       </div>
 
+      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div>
+          <label htmlFor="cf-org" className="block text-sm text-text-secondary">
+            Company or university
+          </label>
+          <input
+            id="cf-org"
+            name="organisation"
+            type="text"
+            maxLength={120}
+            autoComplete="organization"
+            className={`mt-1.5 ${field}`}
+          />
+        </div>
+        <div>
+          <label htmlFor="cf-purpose" className="block text-sm text-text-secondary">
+            What do you need?
+          </label>
+          <select id="cf-purpose" name="purpose" required defaultValue={PURPOSES[0]} className={`mt-1.5 ${field}`}>
+            {PURPOSES.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
       <div className="mt-4">
         <label htmlFor="cf-message" className="block text-sm text-text-secondary">
-          What are you working on?
+          A little context
         </label>
         <textarea
           id="cf-message"
@@ -150,23 +205,24 @@ export function ContactForm() {
           ) : (
             <>
               <Send className="h-4 w-4" aria-hidden="true" />
-              Send message
+              Send
             </>
           )}
         </button>
 
-        {/* aria-live so the outcome is announced, not just shown. */}
+        {/* aria-live so the outcome is announced rather than only shown. The
+            success text deliberately names no address. */}
         <p aria-live="polite" className="text-sm">
           {state === "sent" && (
             <span className="inline-flex items-center gap-1.5 text-status-live">
               <Check className="h-4 w-4" aria-hidden="true" />
-              Sent. I reply from {PROFILE.email}.
+              Sent. I read these and reply to the ones I can help with.
             </span>
           )}
           {state === "error" && (
             <span className="inline-flex items-center gap-1.5 text-status-progress">
               <AlertCircle className="h-4 w-4" aria-hidden="true" />
-              {error || "Something went wrong"}. Email me directly instead.
+              {error || "Something went wrong"}. LinkedIn works too.
             </span>
           )}
         </p>

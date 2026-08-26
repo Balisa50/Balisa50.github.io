@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Mail, Download } from "lucide-react";
+import { Mail, FileText } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 export function About() {
@@ -77,7 +77,7 @@ export function About() {
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <a
-            href={`mailto:${PROFILE.email}`}
+            href="#contact"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-cyan px-5 py-2.5 text-sm font-medium text-background transition hover:shadow-glow-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
           >
             <Mail className="h-4 w-4" aria-hidden="true" />
@@ -90,13 +90,12 @@ export function About() {
             See the work
           </a>
           <a
-            href="/cv/Abdoulie-Balisa-CV.pdf"
-            download="Abdoulie Balisa CV.pdf"
+            href="#contact"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cyan/40 bg-cyan/[0.06] px-5 py-2.5 text-sm font-medium text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-            aria-label="Download Abdoulie Balisa CV (PDF)"
+            aria-label="Request a copy of the CV"
           >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            Download CV
+            <FileText className="h-4 w-4" aria-hidden="true" />
+            Request the CV
           </a>
         </div>
       </div>

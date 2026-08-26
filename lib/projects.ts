@@ -233,8 +233,10 @@ export const PROFILE = {
   name: "Balisa",
   fullName: "Abdoulie Balisa",
   title: "AI Systems Developer · Data Science Student · Aspiring Actuary",
-  email: "[redacted, use the contact form]",
-  phone: "[redacted, use the contact form]",
+  // Email and phone are deliberately absent. They used to live here and were
+  // rendered into the page, the print portfolio and the public /api/resume
+  // payload, which is three places a scraper reads for free. Contact now goes
+  // through the form, which puts a human in front of the address.
   github: "https://github.com/Balisa50",
   githubHandle: "Balisa50",
   linkedin: "https://www.linkedin.com/in/abalisa",

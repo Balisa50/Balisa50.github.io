@@ -1,36 +1,31 @@
-"use client";
-
-import { Copy, Github, Linkedin, Mail, Phone, Check, MapPin } from "lucide-react";
-import { useState } from "react";
+import { Github, Linkedin, MapPin } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { ContactForm } from "./ContactForm";
 
+/**
+ * Contact, without publishing anything worth harvesting.
+ *
+ * This section used to carry a mailto link, a phone number, and a button that
+ * copied the address to the clipboard. On a static public page that is three
+ * gifts to a scraper, and a personal number cannot be taken back once it has
+ * been indexed. What is left is a form, and the two profiles that are already
+ * public and are meant to be.
+ *
+ * No longer a client component: the copy-to-clipboard button was the only
+ * thing here that needed state, and it went with the address.
+ */
 export function Contact() {
-  const [copied, setCopied] = useState(false);
-
-  const copyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(PROFILE.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* clipboard denied; do nothing */
-    }
-  };
-
   return (
     <section
       id="contact"
-      className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
+      className="relative mx-auto w-full max-w-shell scroll-mt-20 px-6 py-20 sm:px-10 md:py-28"
       aria-labelledby="contact-heading"
     >
-      <div
-        className="relative overflow-hidden"
-      >
+      <div className="relative overflow-hidden">
         {/* Decorative glow */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-cyan/20 blur-3xl"
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan/20 blur-3xl"
         />
         <div
           aria-hidden="true"
@@ -52,44 +47,10 @@ export function Contact() {
         </h2>
 
         <p className="relative mt-4 max-w-xl text-text-secondary">
-          Open to full-time roles and select contract work on ML-heavy products.
-          Fastest reply is email. Phone works too.
+          Open to full-time roles and select contract work on ML-heavy products. Tell me what you
+          are working on and I will come back to you. If you want the CV, ask here and I will send
+          it across.
         </p>
-
-        <div className="relative mt-8 flex flex-wrap items-center gap-3">
-            <a
-              href={`mailto:${PROFILE.email}?subject=Let%27s%20talk`}
-              className="inline-flex min-h-[48px] items-center gap-2 rounded-full bg-cyan px-6 py-3 text-sm font-medium text-background shadow-glow-cyan transition hover:shadow-glow-cyan-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              Email me
-            </a>
-            <a
-              href={`tel:${PROFILE.phone.replace(/\s+/g, "")}`}
-              className="inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-6 py-3 text-sm font-medium text-ink transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-            >
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              {PROFILE.phone}
-            </a>
-            <button
-              onClick={copyEmail}
-              className="group inline-flex min-h-[48px] items-center gap-2 rounded-full border border-rule bg-surface px-5 py-3 text-sm font-mono text-text-secondary transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
-              aria-label={`Copy email ${PROFILE.email} to clipboard`}
-              title={`${PROFILE.email} · PGP available on request`}
-            >
-              {copied ? (
-                <>
-                  <Check className="h-4 w-4 text-status-live" aria-hidden="true" />
-                  <span className="text-status-live">Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-4 w-4" aria-hidden="true" />
-                  {PROFILE.email}
-                </>
-              )}
-            </button>
-        </div>
 
         <ContactForm />
 
@@ -98,7 +59,7 @@ export function Contact() {
             href={PROFILE.github}
             target="_blank"
             rel="noreferrer noopener"
-            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:outline-none focus-visible:text-ink"
+            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:text-ink focus-visible:outline-none"
           >
             <span className="energy-icon grid place-items-center">
               <Github className="h-4 w-4" aria-hidden="true" />
@@ -109,7 +70,7 @@ export function Contact() {
             href={PROFILE.linkedin}
             target="_blank"
             rel="noreferrer noopener"
-            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:outline-none focus-visible:text-ink"
+            className="group inline-flex items-center gap-2 transition hover:text-ink focus-visible:text-ink focus-visible:outline-none"
           >
             <span className="energy-icon grid place-items-center">
               <Linkedin className="h-4 w-4" aria-hidden="true" />

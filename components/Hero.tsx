@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowDown, Github, Linkedin } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 /**
@@ -87,13 +87,6 @@ export function Hero() {
             >
               <Linkedin className="h-4 w-4" aria-hidden="true" />
               LinkedIn
-            </a>
-            <a
-              href={`mailto:${PROFILE.email}`}
-              className="inline-flex min-h-11 items-center gap-2 text-text-secondary transition-colors hover:text-ink"
-            >
-              <Mail className="h-4 w-4" aria-hidden="true" />
-              Email
             </a>
           </nav>
         </div>

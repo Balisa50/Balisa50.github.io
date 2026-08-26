@@ -224,9 +224,9 @@ export function CaseStudyView({
                 <Link href="/#projects" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-ink">
                   <ArrowLeft className="h-3 w-3" /> All projects
                 </Link>
-                <a href="mailto:[redacted, use the contact form]" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-ink">
+                <Link href="/#contact" className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.22em] text-text-secondary transition hover:text-ink">
                   Talk to me about this <ArrowRight className="h-3 w-3" />
-                </a>
+                </Link>
               </nav>
             )}
           </article>

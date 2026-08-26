@@ -81,8 +81,7 @@ export default function PrintPage() {
           </ul>
 
           <div className="cover-contact">
-            <Field label="Email" value={PROFILE.email} />
-            <Field label="Phone" value={PROFILE.phone} />
+            <Field label="Contact" value="balisa50.github.io/#contact" />
             <Field label="Location" value={PROFILE.location} />
             <Field label="GitHub" value="github.com/Balisa50" />
             <Field label="LinkedIn" value="linkedin.com/in/abalisa" />
@@ -352,8 +351,7 @@ export default function PrintPage() {
           </p>
           <Rule />
           <div className="cover-contact">
-            <Field label="Email" value={PROFILE.email} />
-            <Field label="Phone" value={PROFILE.phone} />
+            <Field label="Contact" value="balisa50.github.io/#contact" />
             <Field label="Location" value={PROFILE.location} />
             <Field label="GitHub" value="github.com/Balisa50" />
             <Field label="LinkedIn" value="linkedin.com/in/abalisa" />
