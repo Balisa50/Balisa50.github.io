@@ -37,7 +37,10 @@ export async function fetchAllStars(): Promise<RepoStars[]> {
       const res = await fetch(`${GITHUB_API}/repos/${p.githubRepo}`, {
         headers,
         // Next 15: revalidate every hour
-        next: { revalidate: 3600 }
+        next: { revalidate: 3600 },
+        // Runs at build and on revalidation. An unbounded call to GitHub means
+        // a slow API stalls the build rather than failing it.
+        signal: AbortSignal.timeout(10_000)
       });
       if (!res.ok) throw new Error(`${p.githubRepo}: ${res.status}`);
       const data = (await res.json()) as { stargazers_count?: number };
