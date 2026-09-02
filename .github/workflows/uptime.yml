@@ -1,0 +1,165 @@
+# Checks every live deployment on a schedule and opens a GitHub issue when one
+# stops answering. Runs on GitHub Actions so it costs nothing and needs no
+# third-party account.
+#
+# Two apps were dead for weeks before anyone noticed (HireIQ's database from
+# July, VANTAGE's feed). This exists so that stops happening.
+
+name: uptime
+
+on:
+  schedule:
+    # Every 15 minutes. GitHub runs scheduled workflows on a best-effort basis
+    # and can delay them under load, so treat this as "roughly every 15-30
+    # minutes" rather than a guarantee.
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe every endpoint
+        id: probe
+        shell: bash
+        run: |
+          # url|expected_status|label
+          # Crucible is password-gated and correctly answers 401. Treating that
+          # as an outage would train us to ignore this workflow.
+          ENDPOINTS=(
+            "https://relaygm.vercel.app|200|Relay"
+            "https://crucible-one.vercel.app|401|CRUCIBLE (password-gated)"
+            "https://hireiq-ab.vercel.app|200|HireIQ frontend"
+            "https://hireiq-1-8r1s.onrender.com/health|200|HireIQ backend"
+            "https://vantage-ab.vercel.app|200|VANTAGE"
+            "https://trywingman.vercel.app|200|Wingman"
+            "https://ayat-ab.vercel.app|200|AYAT"
+            "https://life-insurance-ab.vercel.app|200|Life Insurance Risk"
+            "https://nova-fin.vercel.app|200|NOVA frontend"
+            "https://nova-backend.fly.dev/|200|NOVA backend"
+            "https://balisa50.github.io|200|Portfolio"
+          )
+
+          failures=""
+          report=""
+
+          for entry in "${ENDPOINTS[@]}"; do
+            url="${entry%%|*}"
+            rest="${entry#*|}"
+            want="${rest%%|*}"
+            label="${rest#*|}"
+
+            # Render and Fly free tiers sleep, so a cold start can take most of
+            # a minute. Try twice with a generous ceiling before calling it down.
+            got=""
+            for attempt in 1 2; do
+              got=$(curl -s -o /dev/null -w '%{http_code}' \
+                       --max-time 60 --retry 0 -L "$url" 2>/dev/null || echo "000")
+              [ "$got" = "$want" ] && break
+              [ $attempt -eq 1 ] && sleep 20
+            done
+
+            if [ "$got" = "$want" ]; then
+              report="${report}- ok   ${label} (${got})"$'\n'
+            else
+              report="${report}- DOWN ${label} expected ${want}, got ${got} — ${url}"$'\n'
+              failures="${failures}${label}: expected ${want}, got ${got} (${url})"$'\n'
+            fi
+          done
+
+          echo "$report"
+          {
+            echo "report<<REPORT_EOF"
+            echo "$report"
+            echo "REPORT_EOF"
+            echo "failures<<FAIL_EOF"
+            echo "$failures"
+            echo "FAIL_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open or update an issue when something is down
+        if: steps.probe.outputs.failures != ''
+        uses: actions/github-script@v7
+        env:
+          FAILURES: ${{ steps.probe.outputs.failures }}
+          REPORT: ${{ steps.probe.outputs.report }}
+        with:
+          script: |
+            const title = 'Uptime: one or more deployments are down';
+            const body = [
+              'Automated check failed.',
+              '',
+              '**Down:**',
+              '```',
+              process.env.FAILURES.trim(),
+              '```',
+              '',
+              '**Full result:**',
+              '```',
+              process.env.REPORT.trim(),
+              '```',
+              '',
+              `Checked at ${new Date().toISOString()}.`,
+              'This issue closes automatically once everything answers again.',
+            ].join('\n');
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'uptime',
+            });
+
+            if (existing.data.length > 0) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.data[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['uptime'],
+              });
+            }
+
+      - name: Close the issue once everything recovers
+        if: steps.probe.outputs.failures == ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'uptime',
+            });
+            for (const issue of open.data) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `All endpoints answering as expected at ${new Date().toISOString()}. Closing.`,
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+              });
+            }
+
+      - name: Fail the run so the badge goes red
+        if: steps.probe.outputs.failures != ''
+        run: |
+          echo "Down:"
+          echo "${{ steps.probe.outputs.failures }}"
+          exit 1
