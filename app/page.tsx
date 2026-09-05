@@ -9,6 +9,7 @@ import { Certifications } from "@/components/Certifications";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 import { ProjectsGrid } from "@/components/ProjectsGrid";
+import { Papers } from "@/components/Papers";
 import { SectionReveal } from "@/components/SectionReveal";
 
 // ProjectsGrid used to be a dynamic() import behind a fixed 40vh placeholder.
@@ -29,6 +30,9 @@ export default function HomePage() {
         <Metrics />
         <SectionReveal>
           <ProjectsGrid />
+        </SectionReveal>
+        <SectionReveal>
+          <Papers />
         </SectionReveal>
         <SectionReveal>
           <Skills />
