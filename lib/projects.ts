@@ -233,10 +233,14 @@ export const PROFILE = {
   name: "Balisa",
   fullName: "Abdoulie Balisa",
   title: "AI Systems Developer · Data Science Student · Aspiring Actuary",
-  // Email and phone are deliberately absent. They used to live here and were
-  // rendered into the page, the print portfolio and the public /api/resume
-  // payload, which is three places a scraper reads for free. Contact now goes
-  // through the form, which puts a human in front of the address.
+  // The email is back, deliberately. It was removed once because a static page
+  // hands an address to any scraper that asks, and that is still true. The
+  // trade was worse: with no form key configured the contact section pointed at
+  // LinkedIn and nothing else, so the only way to reach me was through an
+  // account not everyone has. A public address I can filter beats a wall.
+  //
+  // The PHONE NUMBER stays absent. That one cannot be taken back once indexed.
+  email: "abdouliebalisa904@gmail.com",
   github: "https://github.com/Balisa50",
   githubHandle: "Balisa50",
   linkedin: "https://www.linkedin.com/in/abalisa",

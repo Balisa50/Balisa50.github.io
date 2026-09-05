@@ -1,5 +1,9 @@
-/* Portfolio service worker. Minimal, cache-first for static assets. */
-const CACHE = "portfolio-v3";
+/* Portfolio service worker. Offline fallback, never a stale asset. */
+
+/* Bumping this name is what evicts the previous cache on activate. Bump it
+   whenever the strategy below changes, so returning visitors are not left
+   being served by the old worker's rules. */
+const CACHE = "portfolio-v4";
 const ASSETS = [
   "/favicon.svg",
   "/manifest.webmanifest"
@@ -31,27 +35,25 @@ self.addEventListener("fetch", (event) => {
   if (url.pathname.startsWith("/_next/")) return;
   if (url.pathname.startsWith("/api/")) return;
 
-  // Network-first for HTML documents so we never serve a stale shell.
-  if (req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html")) {
-    event.respondWith(
-      fetch(req).catch(() => caches.match(req))
-    );
-    return;
-  }
-
+  // Network first, for documents and for assets alike.
+  //
+  // This used to be cache-first for everything that was not a document, which
+  // meant /figures/*.png were frozen in the cache the first time a visitor
+  // loaded them and never revalidated. Replacing a project screenshot changed
+  // nothing for anyone who had already been here: they kept seeing the old one
+  // until they hard-refreshed, because a hard refresh is the one thing that
+  // bypasses the worker. A screenshot of the wrong version of my own work is
+  // worse than a slower second visit, so the network decides and the cache is
+  // only the offline fallback.
   event.respondWith(
-    caches.match(req).then((cached) => {
-      if (cached) return cached;
-      return fetch(req)
-        .then((res) => {
-          // Cache successful GETs of same-origin static assets
-          if (res && res.ok && res.type === "basic") {
-            const clone = res.clone();
-            caches.open(CACHE).then((c) => c.put(req, clone)).catch(() => null);
-          }
-          return res;
-        })
-        .catch(() => undefined);
-    })
+    fetch(req)
+      .then((res) => {
+        if (res && res.ok && res.type === "basic") {
+          const clone = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, clone)).catch(() => null);
+        }
+        return res;
+      })
+      .catch(() => caches.match(req))
   );
 });

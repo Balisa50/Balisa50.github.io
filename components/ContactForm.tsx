@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Send, Check, AlertCircle, Linkedin } from "lucide-react";
+import { Loader2, Send, Check, AlertCircle, Mail } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { WEB3FORMS_KEY, CONTACT_CONFIGURED } from "@/lib/contact";
 
@@ -18,9 +18,9 @@ import { WEB3FORMS_KEY, CONTACT_CONFIGURED } from "@/lib/contact";
  * no card. The access key is public by design: it names a destination inbox
  * and cannot read anything, so it does not expose the address it forwards to.
  *
- * If the key is not configured the form is replaced by the LinkedIn route
- * rather than disappearing. Removing the address and then shipping a form that
- * does nothing would leave no way to make contact at all.
+ * If the key is not configured the form is replaced by the address itself
+ * rather than disappearing. It pointed at LinkedIn for a while, which assumed
+ * an account the reader might not have; an address assumes nothing.
  */
 
 const ENDPOINT = "https://api.web3forms.com/submit";
@@ -34,20 +34,18 @@ const PURPOSES = [
   "Something else"
 ] as const;
 
-function LinkedInFallback() {
+function EmailFallback() {
   return (
     <div className="relative mt-8 max-w-xl border-l-2 border-accent pl-5">
       <p className="text-[15px] leading-relaxed text-text-secondary">
-        The quickest way to reach me is LinkedIn. Message me there and I will come back to you.
+        The quickest way to reach me is email. Write to me directly and I will come back to you.
       </p>
       <a
-        href={PROFILE.linkedin}
-        target="_blank"
-        rel="noreferrer noopener"
+        href={`mailto:${PROFILE.email}`}
         className="mt-3 inline-flex min-h-[44px] items-center gap-2 text-sm text-ink transition hover:text-accent"
       >
-        <Linkedin className="h-4 w-4" aria-hidden="true" />
-        linkedin.com/in/{PROFILE.linkedinHandle}
+        <Mail className="h-4 w-4" aria-hidden="true" />
+        {PROFILE.email}
       </a>
     </div>
   );
@@ -57,7 +55,7 @@ export function ContactForm() {
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string>("");
 
-  if (!CONTACT_CONFIGURED) return <LinkedInFallback />;
+  if (!CONTACT_CONFIGURED) return <EmailFallback />;
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -221,7 +219,7 @@ export function ContactForm() {
           {state === "error" && (
             <span className="inline-flex items-center gap-1.5 text-status-progress">
               <AlertCircle className="h-4 w-4" aria-hidden="true" />
-              {error || "Something went wrong"}. LinkedIn works too.
+              {error || "Something went wrong"}. {PROFILE.email} works too.
             </span>
           )}
         </p>
