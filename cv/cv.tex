@@ -1,0 +1,265 @@
+% Abdoulie Balisa, curriculum vitae.
+%
+% Rebuilt September 2026. The previous PDF was compiled somewhere whose source
+% was never saved, so a one-line change meant retyping two pages. That has now
+% happened twice in this project, the print portfolio being the other, so this
+% file lives in the repository and the PDF is built from it.
+%
+%   pdflatex -output-directory=. cv.tex
+%
+% Or run build.sh, which compiles and copies the result into public/ so the
+% site serves the same file this source produces.
+%
+% Matched to the September 2026 layout: A4, Latin Modern at 10pt, 17mm margins,
+% name at 17.2pt.
+
+\documentclass[a4paper,10pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+% 15mm rather than the original 17mm. The working papers section is new and the
+% document has to stay at two pages; this recovers most of the difference.
+\usepackage[margin=15mm]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{microtype}
+
+\definecolor{linkblue}{HTML}{1A4E8A}
+\hypersetup{
+  colorlinks=true,
+  urlcolor=linkblue,
+  linkcolor=linkblue,
+  pdftitle={Abdoulie Balisa, Curriculum Vitae},
+  pdfauthor={Abdoulie Balisa},
+  pdfsubject={Data science, machine learning and statistical modelling},
+  pdfkeywords={statistics, machine learning, Bayesian inference, survival
+    analysis, conformal prediction, domain adaptation}
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+% The working papers section added roughly fourteen lines and pushed the
+% document to a third page carrying four lines of Leadership. Trimming content
+% line by line was recovering about a line at a time; a 4% leading reduction
+% recovers the page at once and is invisible at this size.
+\linespread{0.96}\selectfont
+
+% Section headings: small caps rule, tight above and below.
+\titleformat{\section}
+  {\normalsize\bfseries\uppercase}{}{0em}{}[\vspace{-0.6em}\rule{\textwidth}{0.4pt}]
+\titlespacing*{\section}{0pt}{0.8em}{0.4em}
+
+\setlist[itemize]{leftmargin=1.1em, itemsep=0.06em, topsep=0.18em, parsep=0pt}
+
+% An entry with a right-aligned date, then a second line of organisation and
+% place. Two rows rather than a tabular so long titles wrap instead of
+% colliding with the date.
+\newcommand{\entry}[4]{%
+  \noindent\textbf{#1}\hfill{#2}\\[0.1em]
+  \textit{#3}\hfill\textit{#4}\\[0.12em]
+}
+
+\newcommand{\project}[2]{%
+  \noindent\textbf{#1}\hfill{\small #2}\\[0.15em]
+}
+
+\begin{document}
+
+% ── header ──────────────────────────────────────────────────────────────────
+\begin{center}
+  {\fontsize{17.2}{20}\selectfont\bfseries ABDOULIE BALISA}\\[0.35em]
+  {\normalsize Data Scientist}\\[0.45em]
+  {\small +220 6526901 \textbar{} \href{mailto:abdouliebalisa904@gmail.com}{abdouliebalisa904@gmail.com} \textbar{} Kumasi, Ghana}\\[0.2em]
+  {\small \href{https://github.com/Balisa50}{github.com/Balisa50} \textbar{} \href{https://linkedin.com/in/abalisa}{linkedin.com/in/abalisa} \textbar{} \href{https://balisa50.github.io}{balisa50.github.io}}
+\end{center}
+
+\vspace{0.4em}
+
+% ── summary ─────────────────────────────────────────────────────────────────
+\section{Summary}
+
+Statistics undergraduate and Mastercard Foundation Scholar working in data
+science, machine learning and statistical modeling. Comfortable in Python, R
+and SQL, with project experience in predictive modeling, Bayesian inference,
+time-series forecasting, survival analysis and natural language processing.
+Three working papers, all asking whether a model or the uncertainty it reports
+survives being moved to a country it was never fitted on. I build projects end
+to end, from the data pipeline through the model to a working interface, and I
+document the validation as carefully as the result.
+
+% ── working papers ──────────────────────────────────────────────────────────
+% Placed above experience deliberately. These are the differentiator for
+% research applications, and page one is the page that gets read.
+\section{Working Papers}
+
+\textit{Manuscripts, unrefereed and not submitted. Full texts at
+\href{https://balisa50.github.io/\#papers}{balisa50.github.io}.}
+
+\vspace{0.45em}
+
+Balisa, A. (2026). \textit{Site-invariant representations for cough-audio
+screening: removing the confound does not recover disease signal.} Adversarial
+domain-invariance removes the recording site from cough representations, in
+eight of nine held-out countries ($p = 0.012$), while a null model using
+country prevalence alone outscores the classifier (0.741 against 0.489).
+Reported as a negative result.
+
+\vspace{0.35em}
+
+Balisa, A. (2026). \textit{Do prediction intervals for satellite-based poverty
+estimates survive a national border? A pre-registered evaluation in West
+Africa.} Twelve DHS surveys, 6,706 clusters, 155,796 households, with The
+Gambia withheld from every stage and evaluated once. Conformal coverage
+transfers on average and disperses 2.8 to 4.7 times more than sampling permits
+for an individual country.
+
+\vspace{0.35em}
+
+Balisa, A. (2026). \textit{Reconstructed mortality series understate forecast
+uncertainty: evidence from The Gambia and thirty countries.} Median innovation
+standard deviation is 2.95 where civil registration is complete and 1.02 where
+it is not (Mann--Whitney $p < 0.0001$), which accounts for prediction intervals
+three to five years wide against the United Nations' twenty.
+
+% ── skills ──────────────────────────────────────────────────────────────────
+\section{Technical Skills}
+
+\begin{itemize}
+  \item \textbf{Programming:} Python, R, SQL, TypeScript, MATLAB
+  \item \textbf{Statistics \& Modeling:} statistical inference, hypothesis
+    testing, regression analysis, Bayesian inference (PyMC, MCMC), survival
+    analysis, time-series forecasting, conformal prediction, Monte Carlo
+    simulation, stochastic processes
+  \item \textbf{Machine Learning:} scikit-learn, PyTorch, classification,
+    clustering, dimensionality reduction, generative models, domain adaptation,
+    feature engineering, model validation
+  \item \textbf{Data Analysis:} pandas, NumPy, SciPy, ETL pipelines, data
+    cleaning, exploratory data analysis, A/B testing
+  \item \textbf{NLP \& AI:} sentence embeddings, semantic search,
+    retrieval-augmented generation (RAG), large language models, prompt design
+  \item \textbf{Visualization \& BI:} Matplotlib, Seaborn, Plotly, Power BI,
+    Tableau
+  \item \textbf{Tools \& Deployment:} Git, Jupyter, FastAPI, Docker,
+    PostgreSQL, Next.js, \LaTeX{}
+\end{itemize}
+
+% ── experience ──────────────────────────────────────────────────────────────
+\section{Experience}
+
+\entry{Data Science and Machine Learning Developer}{2024 -- Present}{Independent}{Remote}
+\begin{itemize}
+  \item Built and deployed eleven data science and machine learning projects
+    end to end, each open-sourced and running in production. Detail below;
+    they are not restated here.
+  \item Work spans Bayesian forecasting, generative models for tabular data,
+    credit scoring, survival analysis and domain adaptation, with the
+    validation documented as carefully as the headline number
+  \item Repeatedly found and corrected errors in my own published results,
+    including a projection re-based after the 2024 census and a model whose
+    apparent accuracy was an artefact of the train-test split
+\end{itemize}
+
+\vspace{0.3em}
+\entry{Data Automation Assistant}{Mar -- Jun 2024}{Lujo Heights Real Estate}{Remote, Nigeria}
+\begin{itemize}
+  \item Built a lead-classification system from CRM engagement data that tagged
+    prospects as hot, warm or cold, replacing manual sorting by the sales team
+  \item Wrote Python ETL workflows and a dashboard for tracking sales conversion
+\end{itemize}
+
+\vspace{0.3em}
+\entry{Peer Tutor, Data Science and AI}{2024}{TechUp Africa}{Remote}
+\begin{itemize}
+  \item Taught Python, statistics and machine learning to student groups,
+    reviewed their code and supported them through project work
+\end{itemize}
+
+\vspace{0.3em}
+\entry{Freelance Web Developer}{2026}{BS Real Estate}{The Gambia}
+\begin{itemize}
+  \item Delivered a client property website with a private admin dashboard for
+    listing management (Next.js, Prisma, PostgreSQL), end to end
+\end{itemize}
+
+% ── projects ────────────────────────────────────────────────────────────────
+\section{Selected Projects}
+
+\project{The Gambia 2074: Bayesian Population Projection}{Python, PyMC, NumPy, pandas}
+\begin{itemize}
+  \item Projected national population to 2074 for a country with no death
+    registration, using Lee-Carter mortality in classical, Bayesian Poisson and
+    coherent multi-country forms feeding a cohort-component model
+  \item Validated the engine against the United Nations projection to within
+    1\%, and backtested the mortality forecast to a mean error of 0.65 years
+    over 13 held-out years
+  \item Identified that published UN figures sit about 13\% above the 2024
+    census, and re-based the projection accordingly
+    \hfill{\small \href{https://balisa50.github.io/research/gambia-2074}{balisa50.github.io/research/gambia-2074}}
+\end{itemize}
+
+\vspace{0.3em}
+\project{NOVA: Synthetic Financial Data Engine}{Python, PyTorch, FastAPI, Docker, Next.js}
+\begin{itemize}
+  \item Implemented a Conditional Tabular GAN from the original paper in
+    PyTorch, including mode-specific normalization, WGAN-GP and conditional
+    training-by-sampling, without using an existing library
+  \item Reported statistical similarity 0.94, correlation L1 0.05,
+    train-on-synthetic test-on-real 0.92 and a distance-to-closest-record
+    privacy ratio of 1.10
+  \item Added a rule-based generation mode for populations with no source
+    dataset \hfill{\small \href{https://nova-fin.vercel.app}{nova-fin.vercel.app}}
+\end{itemize}
+
+\vspace{0.3em}
+\project{Credit Risk Scorecard for West African Microfinance}{Python, scikit-learn, pandas}
+\begin{itemize}
+  \item Built a Basel II compliant scorecard with Weight of Evidence and
+    Information Value feature selection, logistic regression and points
+    conversion
+  \item Ran a full validation gauntlet (Gini, KS, ROC, PSI) on a time-based
+    holdout after finding that a random split understated population drift
+  \item Added multi-scenario stress testing for drought, currency crisis and
+    pandemic \hfill{\small \href{https://credit-risk-ab.vercel.app}{credit-risk-ab.vercel.app}}
+\end{itemize}
+
+\vspace{0.4em}
+\textbf{Additional projects:} Life Insurance Risk Model (Gompertz-Makeham
+mortality, Cox proportional hazards, Monte Carlo value at risk); AYAT
+(sentence embeddings, browser-side semantic search over 6,236 texts); Gambia
+Legal Aid (retrieval-augmented generation over statute with citation
+validation); DalasiPulse (Prophet and SARIMA ensemble). Full write-ups at
+\href{https://balisa50.github.io}{balisa50.github.io}.
+
+% ── education ───────────────────────────────────────────────────────────────
+\section{Education}
+
+\entry{BSc Statistics}{2024 -- Present}{Kwame Nkrumah University of Science and Technology (KNUST)}{Kumasi, Ghana}
+\begin{itemize}
+  \item Mastercard Foundation Scholar
+  \item Coursework: Probability Theory, Statistical Inference, Regression
+    Analysis, Stochastic Processes, Linear Algebra, Machine Learning, R
+    Programming
+\end{itemize}
+
+% ── certifications ──────────────────────────────────────────────────────────
+\section{Certifications}
+
+Associate Data Scientist, DataCamp (2024) \textbullet{} Data Science Career
+Track, DataCamp (2024) \textbullet{} AI Ethics, DataCamp (2024) \textbullet{}
+Data Science Bootcamp, Axia Africa (2024) \textbullet{} Software Engineering,
+PLP Academy (2025) \textbullet{} AI Engineering, Udemy (2026)
+
+% ── leadership ──────────────────────────────────────────────────────────────
+\section{Leadership}
+
+\entry{Vice President, previously Organising Secretary}{2025 -- Present}{GAMTECH, Gambian Students Association at KNUST}{Kumasi, Ghana}
+Lead the executive committee, assigning portfolios and holding the team to its
+delivery dates, and plan the year's events including orientation for newly
+arrived Gambian students. Previously Organising Secretary, managing meetings
+and official correspondence.
+
+\end{document}

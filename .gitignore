@@ -37,3 +37,6 @@ next-env.d.ts.bak
 .vscode/
 
 .vercel
+cv/*.aux
+cv/*.log
+cv/*.out
