@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { PROFILE, PROJECTS } from "@/lib/projects";
+import { PAPERS } from "@/lib/papers";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
@@ -70,6 +71,17 @@ export async function GET() {
           : p.status === "in-progress"
           ? `in-progress (${p.progress ?? 0}%)`
           : "planning"
+    })),
+    // JSON Resume has no field for unrefereed work, so `publications` is the
+    // closest fit. `publisher` therefore states what these actually are, so
+    // neither a parser nor a reader can mistake a manuscript for a refereed
+    // paper.
+    publications: PAPERS.map((paper) => ({
+      name: paper.title,
+      publisher: "Working paper, unrefereed, not submitted",
+      releaseDate: String(paper.year),
+      url: `https://balisa50.github.io${paper.pdf}`,
+      summary: paper.finding
     })),
     work: [
       {
