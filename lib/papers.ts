@@ -77,7 +77,7 @@ export const PAPERS: Paper[] = [
       "Lee-Carter in classical, Bayesian Poisson and coherent Li-Lee forms all place Gambian life expectancy in 2074 inside an interval far narrower than the United Nations reports. Three explanations are tested and the first two rejected: propagating disagreement between successive WPP revisions widens the interval by at most six per cent, and drift estimated on rolling windows varies no more than its own standard error. The absence of a long-run asymptote accounts for roughly fourteen per cent. The residual is multiplicative and independent of horizon, pointing at the innovation standard deviation. Across thirty countries the median is 2.95 where civil registration is complete and 1.02 where it is not; The Gambia sits at 1.02. A normalisation-invariant comparison gives a smaller separation, so the effect is bounded rather than pinned, and the country groups also differ in income and age structure.",
     year: 2026,
     pdf: "/papers/reconstructed-mortality-uncertainty.pdf",
-    pages: 11,
+    pages: 12,
     repo: "https://github.com/Balisa50/gambia-population-projection",
     repoPrivate: true,
     articleUrl: "/research/gambia-2074",
