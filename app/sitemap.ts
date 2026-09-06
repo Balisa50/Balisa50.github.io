@@ -8,7 +8,7 @@ export const dynamic = "force-static";
  * A fragment was never a separate URL, so this file used to list exactly one
  * page; each section is now indexable on its own and has to be declared.
  */
-const ROUTES = ["/", "/work", "/papers", "/stack", "/about", "/contact"];
+const ROUTES = ["/", "/work", "/papers", "/about", "/contact"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://balisa50.github.io";
