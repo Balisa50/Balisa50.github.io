@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Mail, FileText } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
@@ -76,27 +77,27 @@ export function About() {
         </div>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
-          <a
-            href="#contact"
+          <Link
+            href="/contact"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-cyan px-5 py-2.5 text-sm font-medium text-background transition hover:shadow-glow-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
           >
             <Mail className="h-4 w-4" aria-hidden="true" />
             Get in touch
-          </a>
-          <a
-            href="#projects"
+          </Link>
+          <Link
+            href="/work"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-rule bg-surface px-5 py-2.5 text-sm font-medium text-ink transition hover:border-rule-strong hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
           >
             See the work
-          </a>
-          <a
-            href="#contact"
+          </Link>
+          <Link
+            href="/contact"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cyan/40 bg-cyan/[0.06] px-5 py-2.5 text-sm font-medium text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
             aria-label="Request a copy of the CV"
           >
             <FileText className="h-4 w-4" aria-hidden="true" />
             Request the CV
-          </a>
+          </Link>
         </div>
       </div>
     </section>

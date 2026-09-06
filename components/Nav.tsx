@@ -1,22 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
 const LINKS: { href: string; label: string }[] = [
-  { href: "#projects", label: "Work" },
-  { href: "#papers", label: "Papers" },
-  { href: "#skills", label: "Stack" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" }
+  { href: "/work", label: "Work" },
+  { href: "/papers", label: "Papers" },
+  { href: "/stack", label: "Stack" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" }
 ];
 
+/**
+ * These were fragment links into one long page, resolved by an
+ * IntersectionObserver that watched five sections and underlined whichever was
+ * most visible. Each section is its own route now, so the active link is simply
+ * the current path and there is nothing to observe. The observer, the smooth
+ * scroll handler and the scroll-position guessing all went with it.
+ *
+ * `trailingSlash: true` in next.config means usePathname returns "/work/", so
+ * compare on a normalised copy rather than the raw value.
+ */
+const normalise = (p: string) => (p !== "/" && p.endsWith("/") ? p.slice(0, -1) : p);
+
 export function Nav() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState<string>("");
+
+  const current = normalise(pathname || "/");
 
   // Shadow / blur backdrop kicks in after a bit of scroll
   useEffect(() => {
@@ -24,29 +40,6 @@ export function Nav() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Observe sections to highlight the active link
-  useEffect(() => {
-    const ids = LINKS.map((l) => l.href.replace("#", ""));
-    const targets = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el));
-    if (targets.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // pick the most visible intersecting section
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) setActive(`#${visible.target.id}`);
-      },
-      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
-    );
-
-    targets.forEach((t) => observer.observe(t));
-    return () => observer.disconnect();
   }, []);
 
   // Lock scroll when mobile menu is open
@@ -58,12 +51,10 @@ export function Nav() {
     };
   }, [open]);
 
-  const handleClick = (href: string) => () => {
+  // A route change should never leave the panel covering the page it opened.
+  useEffect(() => {
     setOpen(false);
-    const el = document.querySelector(href);
-    if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  }, [pathname]);
 
   return (
     <header
@@ -78,12 +69,8 @@ export function Nav() {
         className="mx-auto flex h-14 w-full max-w-shell items-center justify-between px-6 sm:px-10"
         aria-label="Primary"
       >
-        <a
-          href="#main"
-          onClick={(e) => {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+        <Link
+          href="/"
           className="group inline-flex items-center gap-2 rounded-full px-2 py-1 font-mono text-sm font-semibold tracking-tight text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
         >
           <span className="relative inline-flex h-2 w-2">
@@ -92,33 +79,33 @@ export function Nav() {
           </span>
           {PROFILE.name.toLowerCase()}
           <span className="text-cyan">_</span>
-        </a>
+        </Link>
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-1 md:flex">
-          {LINKS.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleClick(l.href)();
-                }}
-                className={cn(
-                  "relative rounded-full px-3 py-1.5 text-sm text-text-secondary transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan",
-                  active === l.href && "text-ink"
-                )}
-              >
-                {l.label}
-                {active === l.href && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan to-transparent"
-                  />
-                )}
-              </a>
-            </li>
-          ))}
+          {LINKS.map((l) => {
+            const active = current === l.href;
+            return (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "relative rounded-full px-3 py-1.5 text-sm text-text-secondary transition hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan",
+                    active && "text-ink"
+                  )}
+                >
+                  {l.label}
+                  {active && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan to-transparent"
+                    />
+                  )}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
         {/* Mobile toggle */}
@@ -146,23 +133,24 @@ export function Nav() {
             onClick={(e) => e.stopPropagation()}
           >
             <ul className="mx-auto flex w-full max-w-shell flex-col gap-1 px-6 py-4 sm:px-10">
-              {LINKS.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleClick(l.href)();
-                    }}
-                    className={cn(
-                      "block rounded-lg px-3 py-3 text-base text-text-secondary transition hover:bg-surface hover:text-ink",
-                      active === l.href && "text-ink"
-                    )}
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
+              {LINKS.map((l) => {
+                const active = current === l.href;
+                return (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setOpen(false)}
+                      className={cn(
+                        "block rounded-lg px-3 py-3 text-base text-text-secondary transition hover:bg-surface hover:text-ink",
+                        active && "text-ink"
+                      )}
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { ArrowDown, Github, Linkedin } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Github, Linkedin } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 /**
@@ -59,16 +60,18 @@ export function Hero() {
             style={{ animationDelay: "0.24s" }}
             aria-label="Primary"
           >
-            <a
-              href="#projects"
+            <Link
+              href="/work"
               className="group inline-flex min-h-11 items-center gap-2 font-medium text-ink link-underline"
             >
               See the work
-              <ArrowDown
-                className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
+              {/* Pointed down while this scrolled to a section below. The work
+                  is a route now, so the arrow points the way the click goes. */}
+              <ArrowRight
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
               />
-            </a>
+            </Link>
             <a
               href={PROFILE.github}
               target="_blank"
