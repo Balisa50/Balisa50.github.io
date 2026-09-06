@@ -8,6 +8,11 @@ import { PROFILE } from "@/lib/projects";
 import { cn } from "@/lib/utils";
 
 const LINKS: { href: string; label: string }[] = [
+  // The wordmark on the left has always linked home, which is the convention
+  // and which people who know the convention use. It is not discoverable if you
+  // do not, and on a one-page site it never had to be: there was nowhere to go
+  // back to. Now there is, so home is a labelled destination like the rest.
+  { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
   { href: "/papers", label: "Papers" },
   { href: "/stack", label: "Stack" },
