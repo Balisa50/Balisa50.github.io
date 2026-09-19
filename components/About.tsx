@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -63,10 +63,15 @@ export function About() {
             written about.
           </p>
           <p>
-            Most of it started from something specific. Legal information that
-            is hard to look up. Families sending money home without much idea of
-            what the rate will be next month. None of these are solved, and some
-            of what I built works better than the rest.
+            Most of it started from something specific. The Gambia&apos;s
+            population figures come from the UN, and they were set before the
+            country&apos;s first digital census. Banks in West Africa sit on
+            customer data they are not allowed to share, and for rural borrowers
+            the data was never collected. A Qur&apos;an app that treats 6,236
+            verses as a linear list makes it easy to miss the way the book
+            cross-references itself. Each project is a version of one question:
+            what would it take to make this checkable? Some answer it better
+            than others, and every one of them is still open.
           </p>
           <p>
             I work in Python and TypeScript, with statistical modelling on the

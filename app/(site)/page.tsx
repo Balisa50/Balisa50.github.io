@@ -1,22 +1,16 @@
-import { Hero } from "@/components/Hero";
+﻿import { Hero } from "@/components/Hero";
 import { Metrics } from "@/components/Metrics";
+import { SelectedWork } from "@/components/SelectedWork";
 import { LegacyHashRedirect } from "@/components/LegacyHashRedirect";
 
-/**
- * The intro.
- *
- * Everything that used to stack below this now has its own route. What is left
- * is the introduction and the numbers under it: who I am, what I work on, and
- * enough signal to decide whether to click through. The work itself is one tap
- * away at /work rather than a scroll away, which is the whole point of the
- * split.
- */
+// The intro, then three projects. The full index lives at /work.
 export default function HomePage() {
   return (
     <>
       <LegacyHashRedirect />
       <Hero />
       <Metrics />
+      <SelectedWork />
     </>
   );
 }

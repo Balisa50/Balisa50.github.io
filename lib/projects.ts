@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Canonical project list. Single source of truth for the grid, status API,
  * and roadmap easter egg.
  */
@@ -12,31 +12,16 @@ export interface Project {
   tech: string[];
   github?: string;
   githubRepo?: string; // owner/repo for API calls
-  /**
-   * The repository exists but is not public, so `github` must not render as a
-   * link. Verified against the GitHub API on 2026-08-13: five of the twelve
-   * linked repos were private, so a reader clicking through got a 404 on work
-   * that does exist. Saying "private" is honest; a dead link reads as a
-   * project that was never really built.
-   */
   codePrivate?: boolean;
   demo?: string;
-  articleUrl?: string; // Read Article link (e.g. Medium post)
+  articleUrl?: string;
   status: ProjectStatus;
   progress?: number;
   launchLabel?: string;
   metric?: string;
   accent: "cyan" | "pink" | "violet";
   fallbackStars: number;
-  /** Lead entries get the full case-study row treatment in the editorial layout. */
   featured?: boolean;
-  /**
-   * A real output from the project: a chart, a report, a screen. These already
-   * existed for the print portfolio and were sitting unused on the site, which
-   * is why the homepage read as a wall of text. A figure earns its place by
-   * showing a result, so projects without one simply run text-only rather than
-   * getting a decorative stand-in.
-   */
   figure?: { src: string; alt: string };
 }
 
@@ -47,11 +32,10 @@ export const PROJECTS: Project[] = [
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "The Gambia has no working death-registration system, so its population figures come almost entirely from the UN, and those were set before the first digital census in 2024. Mortality is fitted with Lee-Carter in three forms: the standard SVD fit, a Bayesian one in PyMC, and a coherent one that pools The Gambia with its West African neighbours. Each feeds a cohort-component model. Run first on the UN's own inputs, that model reproduces their published figures to within 1 percent, which is what makes the independent run worth reading. Re-based on the census it gives 4.66 million by 2074, with a 95 percent interval of 4.35 to 4.98 million. That is about 0.7 million below the UN, whose base sits roughly 13 percent above the census count. Over the same period total dependency falls from 77 to 49 per 100 working-age adults while old-age dependency rises from 5 to 18. Every input is public.",
+      "The Gambia has no death-registration system, so its population figures come almost entirely from the UN, and those were set before the first digital census in 2024. This is an independent, census-based projection out to 2074. It reaches 4.66 million, about 0.7 million below the UN, with a 95 percent interval of 4.35 to 4.98 million. Run first on the UN's own inputs, the same model reproduces their published figures to within 1 percent, which is what makes the independent run worth reading. Mortality is fitted three ways (SVD Lee-Carter, a Bayesian version in PyMC, and a coherent one that pools The Gambia with its West African neighbours), each feeding a cohort-component model. Over the same period the dependency ratio falls from 77 to 49 while old-age dependency triples. Every input is public.",
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
-    codePrivate: true,
     articleUrl: "https://balisa50.github.io/research/gambia-2074",
     status: "live",
     metric: "~4.66M by 2074 (4.35 to 4.98M), within 1% of the UN",
@@ -65,7 +49,7 @@ export const PROJECTS: Project[] = [
     title: "NOVA",
     tagline: "A synthetic-data engine for finance, from domain rules or from real data",
     description:
-      "Banks in West Africa hold customer data they are not allowed to share, and for rural borrowers and the informal economy much of it was never collected in the first place. NOVA generates stand-in data two ways. In Create mode you set the columns, distributions and rules, such as a new account making a large international transfer being likely fraud, and it builds records from nothing, using seven financial presets or your own. Rules run through a whitelist evaluator, so what a user types cannot execute. In Copy mode a Conditional Tabular GAN, written from scratch in PyTorch rather than pulled from SDV, learns an existing dataset and produces rows that match its structure without copying anyone. Each batch is checked four ways: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record 1.10, with 1.1 percent near-duplicates. FastAPI backend on Hugging Face Spaces, Next.js front end on Vercel.",
+      "Banks in West Africa hold customer data they cannot share, and for rural borrowers and the informal economy the data was never collected in the first place. NOVA generates stand-in data two ways: from a description of the columns and their rules, or from a real dataset via a Conditional Tabular GAN written from scratch in PyTorch. Every batch passes four checks: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record 1.10 with 1.1 percent near-duplicates. The rule engine runs through a whitelist evaluator so user input cannot execute. FastAPI backend on Hugging Face Spaces, Next.js studio on Vercel.",
     tech: ["Python", "PyTorch", "CTGAN", "FastAPI", "Next.js 16", "scikit-learn"],
     github: "https://github.com/Balisa50/nova",
     githubRepo: "Balisa50/nova",
@@ -82,7 +66,7 @@ export const PROJECTS: Project[] = [
     title: "Gambia Legal Aid",
     tagline: "RAG chatbot for Gambian law",
     description:
-      "A question-answering system over 13 Gambian Acts of Parliament. Every answer names the section it came from. A validator checks each citation against the retrieved text before the answer ships: invented section numbers are stripped, quotation marks are only allowed around text that appears verbatim in the statute, and a claim attached to the wrong section is caught by comparing it against that section title. When the legislation store is unreachable it refuses outright rather than answering from the model's memory, and the provider chain falls through to a second model so a retired model id degrades the answer instead of ending the conversation.",
+      "Lawyers in The Gambia are expensive, the statutes are scattered across PDFs most people never find, and a hallucinated answer in a legal question does real harm. This is a retrieval-augmented question-answering system over 13 Gambian Acts of Parliament. Every answer names the section it came from, and a validator checks each citation against the retrieved text before the answer ships: invented section numbers are stripped, quotation marks are only allowed around text that appears verbatim in the statute, and a claim attached to the wrong section is caught against that section's title. When the legislation store is unreachable it refuses outright rather than answering from the model's memory.",
     tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
     github: "https://github.com/Balisa50/gamba-legal-aid",
     githubRepo: "Balisa50/gamba-legal-aid",
@@ -100,7 +84,7 @@ export const PROJECTS: Project[] = [
     title: "Credit Risk Scorecard",
     tagline: "Basel II scorecard for West African microfinance",
     description:
-      "Full credit scoring pipeline: WoE/IV feature selection, logistic regression with Basel II points conversion, Gini/KS/PSI validation, and multi-scenario stress testing. Built on 12,000 synthetic West African microfinance loans.",
+      "Microfinance loan officers in West Africa make lending decisions on intuition, because the analytical infrastructure that would give them a second opinion is not there. This is a full Basel II scorecard pipeline built from scratch on 12,000 synthetic West African loans: WoE/IV feature selection, logistic regression with points conversion, and the validation gauntlet a regulator would want to see. Gini 0.27 and KS 0.21 on a later-vintage holdout sit below production thresholds, and the ceiling is set by the synthetic generator rather than the fitting: no feature clears Strong information value, so the scorecard cannot separate better than its inputs allow. Across vintages PSI stayed at 0.002 while realised defaults rose from 12.3 to 15.9 percent, because the deterioration came from a macro shock no feature measures.",
     tech: ["Python", "scikit-learn", "Pandas", "Next.js", "Recharts"],
     github: "https://github.com/Balisa50/credit-risk-scorecard",
     githubRepo: "Balisa50/credit-risk-scorecard",
@@ -225,21 +209,16 @@ export const PROJECTS: Project[] = [
     status: "live",
     metric: "Cox PH C-index 0.77 · 5k Monte Carlo sims",
     accent: "violet",
-    fallbackStars: 0
+    fallbackStars: 0,
+    featured: true
   }
 ];
+
 
 export const PROFILE = {
   name: "Balisa",
   fullName: "Abdoulie Balisa",
-  title: "AI Systems Developer · Data Science Student · Aspiring Actuary",
-  // The email is back, deliberately. It was removed once because a static page
-  // hands an address to any scraper that asks, and that is still true. The
-  // trade was worse: with no form key configured the contact section pointed at
-  // LinkedIn and nothing else, so the only way to reach me was through an
-  // account not everyone has. A public address I can filter beats a wall.
-  //
-  // The PHONE NUMBER stays absent. That one cannot be taken back once indexed.
+  title: "Statistical AI Engineer. I build forecasting, risk, and retrieval systems for African data.",
   email: "abdouliebalisa904@gmail.com",
   github: "https://github.com/Balisa50",
   githubHandle: "Balisa50",
@@ -303,7 +282,7 @@ export const SKILLS: SkillGroup[] = [
 ];
 
 /* ----------------------------------------------------------------- */
-/*  Certifications - add entries below (name, issuer, date, url)     */
+/*  Certifications                                                   */
 /* ----------------------------------------------------------------- */
 
 export interface Certificate {
@@ -430,7 +409,7 @@ export const EXPERIENCE: Experience[] = [
       "Wired up n8n workflows to route leads automatically so the sales team stopped doing it by hand.",
       "Left them with a working system and a brief doc, done in three weeks, no ongoing dependency."
     ]
-  },
+  }
 ];
 
 /* ----------------------------------------------------------------- */
