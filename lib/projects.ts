@@ -101,7 +101,7 @@ export const PROJECTS: Project[] = [
     title: "FORGE",
     tagline: "Mentor-driven learning platform with proof-of-work verification",
     description:
-      "A learning platform where each learner works through one of 13 career roadmaps with a mentor: data science, AI engineering, cybersecurity, full-stack and others, 12 to 43 weeks each, with about five mastery checks a week and 385 video resources. A week only counts once the engine has matched it against the learner's actual GitHub commits and deployed URLs, so nothing is self-reported. Mentors release each week and sign it off, and finishers get a signed certificate an employer can check. It also carries an Actuarial Exam P and FM engine that generates tiered, non-repeating SOA-style questions with interactive diagrams.",
+      "A learning platform where a week only counts once it has been proven. Each learner works through one of 13 career roadmaps with a mentor, 12 to 43 weeks long, but the engine matches the week against the learner's actual GitHub commits and deployed URLs before it registers. Nothing is self-reported. Mentors release and sign off each week, and finishers get a signed certificate an employer can check. It also carries an Actuarial Exam P and FM engine that generates tiered, non-repeating SOA-style questions with interactive diagrams.",
     tech: ["Next.js", "TypeScript", "Prisma", "PostgreSQL", "NextAuth v5", "KaTeX"],
     github: "https://github.com/Balisa50/forge",
     githubRepo: "Balisa50/forge",
@@ -118,7 +118,7 @@ export const PROJECTS: Project[] = [
     title: "HireIQ",
     tagline: "A conversation in place of an application form",
     description:
-      "Candidates answer in a conversation rather than a form. Each interview is run by a model on NVIDIA-hosted open weights that asks a follow-up when an answer is thin, and the hiring team gets a ranked, scored report per candidate. It covers the whole path: posting the role, generating the questions, adapting the follow-ups, scoring, and a PDF report at the end.",
+      "Application forms can't ask a follow-up when an answer is thin, so hiring teams sort through polished CVs and miss the candidates who can actually do the work. HireIQ runs a conversation instead. A model on NVIDIA-hosted open weights adapts the next question to the previous answer, and the hiring team gets a ranked, scored report per candidate. The full path is covered: posting the role, generating the questions, adapting the follow-ups, scoring, and a PDF report at the end.",
     tech: ["Python", "FastAPI", "NVIDIA NIM", "Next.js 14", "Supabase", "WeasyPrint"],
     github: "https://github.com/Balisa50/hireiq",
     githubRepo: "Balisa50/hireiq",
@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
     title: "AYAT",
     tagline: "A Qur'an that rearranges itself around your question",
     description:
-      "All 6,236 verses embedded with sentence-transformers, projected to 3D with UMAP and rendered as a live particle galaxy in Three.js. Ask a question and the corpus physically reorganises: the query is embedded in the browser, verses converge on an axis of meaning measured from the results themselves, and the rest opens outward. Ask something it has nothing for and it says so instead of returning a plausible list. No inference server, so it costs nothing to run.",
+      "Every Qur'an app treats the book as a list of 6,236 numbered cells to scroll through, and misses the way it cross-references itself. AYAT embeds all 6,236 verses with sentence-transformers, projects them to 3D with UMAP, and renders them as a live particle galaxy in Three.js. Ask a question and the corpus physically reorganises around it, converging on an axis of meaning measured from the results themselves. Ask something it has nothing for and it says so instead of returning a plausible list. No inference server, so it runs at no cost.",
     tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "transformers.js", "Next.js 16", "Three.js", "LLM API"],
     github: "https://github.com/Balisa50/ayat",
     githubRepo: "Balisa50/ayat",
@@ -152,7 +152,7 @@ export const PROJECTS: Project[] = [
     title: "VANTAGE",
     tagline: "A technology brief that assembles itself",
     description:
-      "Collects technology stories from six regions, writes each one up and scores it, then publishes with nobody in the loop. Covers startups, policy, big tech, markets and infrastructure. The score exists so you can skim the feed instead of reading all of it.",
+      "Tech news runs in the hundreds of thousands of articles a day, most of it noise. VANTAGE collects stories from six regions, writes each one up in an editorial voice, scores it by signal strength, and publishes with nobody in the loop. Startup, policy, big tech, markets and infrastructure. The score exists so the feed can be skimmed rather than read in full. Runs unattended on a single daily cron.",
     tech: ["Next.js", "TypeScript", "AI synthesis", "Vercel"],
     github: "https://github.com/Balisa50/vantage",
     githubRepo: "Balisa50/vantage",
@@ -168,7 +168,7 @@ export const PROJECTS: Project[] = [
     title: "Dalasi Pulse",
     tagline: "FX and remittance forecasting for The Gambia",
     description:
-      "Forecasts the Dalasi against major currencies and models remittance flows. Pipelines pull live rates from the Central Bank of The Gambia JSON API plus World Bank macro data into a Next.js dashboard.",
+      "Remittances are about 20 percent of The Gambia's GDP, but ordinary families have no way of knowing what the Dalasi will do next month. Dalasi Pulse forecasts the currency against major pairs and models remittance corridors, pulling live rates from the Central Bank of The Gambia JSON API alongside World Bank macro data. Six-month forecasts carry confidence intervals, and a plain-language paragraph translates the chart for anyone who does not read one.",
     tech: ["Python", "Pandas", "Next.js", "CBG API", "World Bank data"],
     github: "https://github.com/Balisa50/dalasi-pulse",
     githubRepo: "Balisa50/dalasi-pulse",
@@ -184,7 +184,7 @@ export const PROJECTS: Project[] = [
     title: "BS Real Estate",
     tagline: "Website and admin CMS for a Gambian property firm",
     description:
-      "A property site for a client in The Gambia, with a private dashboard the team uses to manage their own listings without calling a developer. Next.js 16 and Prisma 7, a blue and gold brand, admin-only login, and their real listings throughout rather than placeholder content.",
+      "A property site for a Gambian client, built so their team manages their own listings without calling a developer. Private admin dashboard, admin-only login, and their real listings throughout rather than placeholder content. Next.js 16 and Prisma 7, a blue and gold brand.",
     tech: ["Next.js 16", "Prisma 7", "TypeScript", "Tailwind"],
     github: "https://github.com/Balisa50/bs-real-estate",
     githubRepo: "Balisa50/bs-real-estate",
@@ -201,7 +201,7 @@ export const PROJECTS: Project[] = [
     title: "Life Insurance Risk Model",
     tagline: "Actuarial risk model for Sub-Saharan Africa",
     description:
-      "Gompertz-Makeham mortality model, Kaplan-Meier survival analysis, Cox PH (concordance 0.77), actuarial premium pricing, and Monte Carlo VaR simulation with pandemic stress testing across 5,000 scenarios.",
+      "Gompertz-Makeham mortality model, Kaplan-Meier survival analysis, Cox PH (concordance 0.77), actuarial premium pricing, and Monte Carlo VaR simulation with pandemic stress testing across 5,000 scenarios. Standard actuarial models calibrated on US and UK data under-represent the constant background hazard from accidents and infectious disease that matters in Sub-Saharan Africa, so the Makeham term carries real weight here rather than being a footnote.",
     tech: ["Python", "lifelines", "NumPy", "Next.js", "Recharts"],
     github: "https://github.com/Balisa50/life-insurance-risk",
     githubRepo: "Balisa50/life-insurance-risk",
