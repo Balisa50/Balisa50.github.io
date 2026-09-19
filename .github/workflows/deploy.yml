@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+﻿name: Deploy to GitHub Pages
 
 on:
   push:
@@ -20,22 +20,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build static export
-        run: npm run build
+        run: pnpm build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Contact form destination. NEXT_PUBLIC_* is inlined at build time, so
-          # it has to be here rather than only in the deployment environment.
-          # Until this secret exists the form simply does not render, and the
-          # email and phone links carry the section on their own.
           NEXT_PUBLIC_WEB3FORMS_KEY: ${{ secrets.NEXT_PUBLIC_WEB3FORMS_KEY }}
 
       - name: Upload Pages artifact
