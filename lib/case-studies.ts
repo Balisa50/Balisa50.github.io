@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Case studies, the engineering memo behind each project.
  *
  * Each project is presented as eight sections that mirror how I actually
@@ -145,7 +145,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Re-base the whole projection on the 2024 census, and vectorise it over 1,000 simulations.",
         reason:
-          "WPP's 2023 population is ~13% above the new census, so starting from WPP would bake in the overcount. I reconciled the base to the census total and its broad age structure, then ran the cohort-component model over 1,000 simulated mortality and fertility futures, carrying the population as an (age × simulation) matrix so the whole thing vectorises and produces honest credible intervals, not a single line.",
+          "WPP's 2023 population is ~13% above the new census, so starting from WPP would bake in the overcount. I reconciled the base to the census total and its broad age structure, then ran the cohort-component model over 1,000 simulated mortality and fertility futures, carrying the population as an (age Ã— simulation) matrix so the whole thing vectorises and produces honest credible intervals, not a single line.",
       },
     ],
     pivots: [
@@ -372,7 +372,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Tech news is unreadable. The volume per day is in the hundreds of thousands of articles globally, and most of it is noise, patch notes, gadget sales, recycled press releases, identical takes on the same Reuters wire. I wanted a feed that did the synthesis for me, scored each story by signal strength, and let me skim only what mattered across six regions. I also wanted it to read like an actual editorial voice, Ben Thompson, Matt Levine, The Economist, not like a Twitter bot summarising headlines.",
     research: [
-      "Read 100+ Stratechery articles to internalise Ben Thompson's structure: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. Translated this into an explicit system prompt with banned phrases ('In a move that…', 'It's worth noting…') and required structures.",
+      "Read 100+ Stratechery articles to internalise Ben Thompson's structure: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. Translated this into an explicit system prompt with banned phrases ('In a move thatâ€¦', 'It's worth notingâ€¦') and required structures.",
       "Studied NewsAPI's free tier limits in detail before architecting anything. 100 requests/day, language=en filter, 10 articles per query. That number determined the entire pipeline: I couldn't fan-out to all six regions in parallel, I had to chain them through a single daily run.",
       "Read Vercel's Hobby plan limits carefully. Crons run once per day max. Edge function timeout is 60s. These two constraints shaped everything: chain-of-regions through a single cron, every region fits inside 60s, drop the slowest sub-pipelines.",
       "Studied the provider's pricing tiers across model families. Sonnet is 3x the cost of Haiku. For a synthesise-and-score pipeline running unattended, Haiku's quality at one-third the cost was the right trade, I lost subtle nuance, kept the editorial voice via the strict prompt.",
@@ -404,7 +404,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Strict editorial system prompt with explicit banned phrases.",
         reason:
-          "The whole point of VANTAGE is that articles read like editorial, not like 'AI synthesised this for you'. The system prompt is ~400 words of explicit constraints: every headline is a verdict, follow the money first, name names, no em-dashes (use commas/colons/periods only), no 'it's worth noting' / 'interestingly' / 'in a move that…', short paragraphs (2-3 sentences), end with a falsifiable prediction. The output reads sharp because the prompt is sharp.",
+          "The whole point of VANTAGE is that articles read like editorial, not like 'AI synthesised this for you'. The system prompt is ~400 words of explicit constraints: every headline is a verdict, follow the money first, name names, no em-dashes (use commas/colons/periods only), no 'it's worth noting' / 'interestingly' / 'in a move thatâ€¦', short paragraphs (2-3 sentences), end with a falsifiable prediction. The output reads sharp because the prompt is sharp.",
       },
       {
         call: "Use Haiku for the pipeline, not Sonnet.",
@@ -434,7 +434,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns major AI labs news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global to escape NewsAPI's relevancy bias.",
     ],
     outcome: [
-      "6 regions × 6 categories = 36 distinct content streams",
+      "6 regions Ã— 6 categories = 36 distinct content streams",
       "Single daily cron, fully autonomous, runs on Vercel free tier",
       "Articles scored 1-100 by signal strength",
       "Each article structured: headline (verdict), what happened, why it matters, who wins/loses, what to watch (with falsifiable prediction)",
@@ -479,7 +479,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Section title allowlist with claim-matching, not just number allowlist.",
         reason:
-          "An early bug had the model citing the right number but for the wrong reason, 'Section 15 (Powers of tribunal) for a claim about notice periods' when notice was actually Section 14. Numbers matched, semantics didn't. Fixed by passing the full allowlist as `15. Powers of tribunal\\n14. Notice of termination\\n…` so the model could see WHY each number existed and match the claim to the right title (commit 2102d0e).",
+          "An early bug had the model citing the right number but for the wrong reason, 'Section 15 (Powers of tribunal) for a claim about notice periods' when notice was actually Section 14. Numbers matched, semantics didn't. Fixed by passing the full allowlist as `15. Powers of tribunal\\n14. Notice of termination\\nâ€¦` so the model could see WHY each number existed and match the claim to the right title (commit 2102d0e).",
       },
       {
         call: "TF-IDF ranking + topic anchors + low temperature, layered.",
@@ -489,7 +489,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Multi-word anchor filtering when building the SQL OR clause.",
         reason:
-          "The retrieval query was being built dynamically as `text ILIKE '%anchor1%' OR text ILIKE '%anchor2%'…`. Multi-word anchors like 'unfair dismissal' were getting passed in but Postgres ILIKE treated them as literal strings, fine. The problem: low-signal terms ('the', 'and') were polluting the OR clause and matching everything. Filtered to drop those when high-signal terms were present (commit 05a9f64).",
+          "The retrieval query was being built dynamically as `text ILIKE '%anchor1%' OR text ILIKE '%anchor2%'â€¦`. Multi-word anchors like 'unfair dismissal' were getting passed in but Postgres ILIKE treated them as literal strings, fine. The problem: low-signal terms ('the', 'and') were polluting the OR clause and matching everything. Filtered to drop those when high-signal terms were present (commit 05a9f64).",
       },
       {
         call: "Stream the answer word-by-word AFTER validation, not during generation.",
@@ -543,7 +543,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "dalasi-pulse": {
     slug: "dalasi-pulse",
     problem:
-      "Remittances are ~20% of The Gambia's GDP. Every Gambian family has someone abroad sending money home. The Central Bank of The Gambia has internal forecasts of FX rates and remittance inflows; ordinary Gambians don't. There is no public-facing forecast of what the Dalasi will do next month, no dashboard showing diaspora corridors, no calculator for 'what will £100 be worth when I receive it'. I built the citizens' version: a public dashboard that shows what the Dalasi is doing, where remittances are coming from, and what the next six months look like, so a family deciding when to send or receive can plan instead of guess.",
+      "Remittances are ~20% of The Gambia's GDP. Every Gambian family has someone abroad sending money home. The Central Bank of The Gambia has internal forecasts of FX rates and remittance inflows; ordinary Gambians don't. There is no public-facing forecast of what the Dalasi will do next month, no dashboard showing diaspora corridors, no calculator for 'what will Â£100 be worth when I receive it'. I built the citizens' version: a public dashboard that shows what the Dalasi is doing, where remittances are coming from, and what the next six months look like, so a family deciding when to send or receive can plan instead of guess.",
     research: [
       "Read the Central Bank of The Gambia's annual reports (2019-2024) to understand which currencies matter for the Dalasi's stability (USD, EUR, GBP, CHF, JPY) and how seasonality plays in (remittance peaks during Ramadan, Eid, school-year start in September).",
       "Read World Bank KNOMAD methodology on bilateral remittance estimation. The data is corridor-level: UK to GM, US to GM, ES to GM, DE to GM, and so on. Knowing the methodology was crucial because it's mostly imputed from migration stocks + sender-country incomes, not from actual transaction data.",
@@ -577,7 +577,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Daily GitHub Actions refresh + auto-commit, not Vercel cron.",
         reason:
-          "Vercel Hobby cron runs once per day but at a server-determined time. Actions cron runs at a precise schedule, has free unlimited minutes for public repos, and produces a visible workflow log. The Actions job: fetch CBG rates, then recompute Prophet/SARIMA, then commit `data/processed/*.csv`, then push, then Vercel auto-deploys the updated build. The ~25 commits visible in `git log` (`Refresh forecasts 2026-04-12`, `2026-04-13`, …) are this loop running on autopilot.",
+          "Vercel Hobby cron runs once per day but at a server-determined time. Actions cron runs at a precise schedule, has free unlimited minutes for public repos, and produces a visible workflow log. The Actions job: fetch CBG rates, then recompute Prophet/SARIMA, then commit `data/processed/*.csv`, then push, then Vercel auto-deploys the updated build. The ~25 commits visible in `git log` (`Refresh forecasts 2026-04-12`, `2026-04-13`, â€¦) are this loop running on autopilot.",
       },
       {
         call: "Bypass Next.js fetch cache + use browser-like headers when querying CBG.",
@@ -587,12 +587,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Plain-language interpretation alongside the chart.",
         reason:
-          "A line chart with a forecast band is not enough for the average user. Added a plain-English interpretation paragraph: 'The Dalasi has weakened ~3% against the Pound this year. Forecasts suggest moderate stability through the next 6 months with a wider band around Eid. £100 today buys GMD 8,750, your model suggests it'll buy 8,400-9,100 next month.' The chart is for analysts; the prose is for everyone else (commit ac5e78f).",
+          "A line chart with a forecast band is not enough for the average user. Added a plain-English interpretation paragraph: 'The Dalasi has weakened ~3% against the Pound this year. Forecasts suggest moderate stability through the next 6 months with a wider band around Eid. Â£100 today buys GMD 8,750, your model suggests it'll buy 8,400-9,100 next month.' The chart is for analysts; the prose is for everyone else (commit ac5e78f).",
       },
       {
         call: "Live-status badge with CBG date stamp, polled every 15 minutes.",
         reason:
-          "Users don't trust financial data without knowing when it last updated. Added a 'Live · CBG date 2026-05-08' badge that polls the API every 15 minutes. If the date is more than 24 hours stale, it visibly flags it. Honest provenance over fake real-time-ness (commit db5e7b1).",
+          "Users don't trust financial data without knowing when it last updated. Added a 'Live Â· CBG date 2026-05-08' badge that polls the API every 15 minutes. If the date is more than 24 hours stale, it visibly flags it. Honest provenance over fake real-time-ness (commit db5e7b1).",
       },
     ],
     pivots: [
@@ -612,7 +612,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "25 years of daily CBG rates",
       "6-month-horizon forecasts with confidence intervals (SARIMA, walk-forward validated against a random-walk baseline)",
       "Bilateral remittance corridor breakdown (UK, US, Spain and Germany to GM)",
-      "'£100 next month' calculator for diaspora users",
+      "'Â£100 next month' calculator for diaspora users",
       "60-day daily forecasts + monthly sending calendar",
       "Plain-language interpretation paragraph",
       "Daily auto-refresh via GitHub Actions, deploys on commit",
@@ -765,7 +765,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Cold-start CORS warmup gate.",
         reason:
-          "Render free tier sleeps the backend after 15 min idle. First candidate after a sleep hits a 30-second cold start that ALSO causes CORS failures (preflight fails before the function is up). Built a `/health` warmup gate that the frontend pings before showing the chat UI. UI shows 'getting interview ready…' for the cold-start window, then transitions cleanly. Hides the bug from the user without papering over it (commit 0c55a07).",
+          "Render free tier sleeps the backend after 15 min idle. First candidate after a sleep hits a 30-second cold start that ALSO causes CORS failures (preflight fails before the function is up). Built a `/health` warmup gate that the frontend pings before showing the chat UI. UI shows 'getting interview readyâ€¦' for the cold-start window, then transitions cleanly. Hides the bug from the user without papering over it (commit 0c55a07).",
       },
     ],
     pivots: [
@@ -909,9 +909,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
           "Implementing Cox PH from scratch is a rabbit hole, Breslow ties, partial likelihood, baseline hazard estimation. lifelines is rock-solid for the regression part. I implemented Gompertz-Makeham fitting myself (where the learning was) and used lifelines for Cox where I just needed a working tool. Pick your battles. The point of the project was to learn, but learning everything from scratch is a different project.",
       },
       {
-        call: "Add age × risk-class interaction term to Cox PH.",
+        call: "Add age Ã— risk-class interaction term to Cox PH.",
         reason:
-          "First Cox PH had C-index of 0.62, below industry standard. The marginal effect of being a smoker is different at age 25 vs age 65. Adding the interaction term (age × risk_class) jumped C-index to 0.77. The interaction was obvious in retrospect: a 25-year-old smoker has different relative risk than a 65-year-old smoker. Cox PH's 'proportional hazards' assumption is violated when interactions matter, and I had to learn that by debugging a low C-index.",
+          "First Cox PH had C-index of 0.62, below industry standard. The marginal effect of being a smoker is different at age 25 vs age 65. Adding the interaction term (age Ã— risk_class) jumped C-index to 0.77. The interaction was obvious in retrospect: a 25-year-old smoker has different relative risk than a 65-year-old smoker. Cox PH's 'proportional hazards' assumption is violated when interactions matter, and I had to learn that by debugging a low C-index.",
       },
       {
         call: "Monte Carlo VaR with 5,000 scenarios + pandemic shock.",
@@ -960,6 +960,79 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I'd add a reserves projection module, given current policies and the mortality model, what's the IBNR (incurred but not reported) estimate? That's the actuary's bread and butter and I skipped it. Also need to add LGD/EAD analogues for life products (sum-assured at risk). Adding next iteration.",
     takeaway:
       "You learn actuarial science by writing the math. The textbook tells you Gompertz-Makeham; doing the gradient descent yourself shows you why the second term matters in the data you actually have. When the assumptions are violated (proportional hazards, no interaction), the model tells you with a low C-index, listen to it.",
+  }
+      {
+        call: "Select-and-ultimate mortality, not ultimate-only.",
+        reason:
+          "A life that has just passed underwriting is healthier than the general population of the same age, because the sick were declined or rated. That advantage wears off over a select period. I used a 5-year select period with mortality starting at 45% of ultimate and ramping back linearly. Ignoring selection overstates mortality in the early durations, which is exactly where a term policy has most of its exposure, so the mistake is not a rounding error."
+      },
+      {
+        call: "Two competing decrements, converted properly.",
+        reason:
+          "Mortality and lapse compete for the same life in the same year. If you treat them as independent you over-remove people. The standard conversion is `(aq)_d = q_d(1 - q_w/2)`, and I wrote it that way rather than approximating. Only 34.8% of the book is expected to reach the end of its term, and a reviewer who multiplies the independent rates would get a different number."
+      },
+      {
+        call: "In the survival analysis, a lapse is a censoring event and never a claim.",
+        reason:
+          "When a policyholder walks away, they are alive. Counting that as a death would bias the mortality estimate upward and would produce a model that fits the data it is given and is wrong about the world. The distinction is trivial to state and easy to get wrong in code, so it is the first thing the tests check."
+      },
+      {
+        call: "Cox PH with the proportional hazards assumption tested, not assumed.",
+        reason:
+          "Cox PH's central assumption is that hazards are proportional across time. If it holds, the model is clean. If it does not, the coefficients are still computed and are subtly wrong. I ran the Schoenfeld residual test on all five covariates rather than trusting that the model was well-specified: 1 of 5 breached at p < 0.05, BMI at p = 0.034. That is not a bug, it is the expected consequence of entering BMI as a single linear term when the underlying generator treats it as a threshold effect, and I said so in the limitations rather than burying it."
+      },
+      {
+        call: "Fix the annuity factor bug by weighting both sides of the equivalence principle by the same in-force curve.",
+        reason:
+          "The first version of the premium used an annuity-certain, `(1 - v^n)/d`, which assumes premiums keep arriving for the full term whether the policyholder is alive or not. That factor is too large, so the level premium it produced was too small. A test now guards against the regression: the annuity factor must stay strictly below the annuity-certain, forever. The point of the test is not the current number, it is the shape of the mistake I made."
+      },
+      {
+        call: "Monte Carlo with 5,000 simulations per scenario, and the 1.0x row is the baseline itself rather than a re-sample.",
+        reason:
+          "The tail is the deliverable. VaR at the 99.5th percentile and TVaR at the same point are what Solvency II asks for. Running the baseline twice would produce two numbers that differ by sampling noise, and the table would look like it has two results when it has one. The 1.0x row is the baseline run copied, not a second sample, so the headline and the table report one number. Baseline VaR comes out at $8.19m against mean claims of $6.04m; under a 1.6x mortality shock, mean claims are $9.59m. Capital held against a 1-in-200 normal year does not cover an average severe-pandemic year, which is a finding rather than a modelling artefact."
+      },
+      {
+        call: "Test identities, not numbers.",
+        reason:
+          "A test asserting that the average premium is $306 would break every time an assumption is retuned and would tell me nothing about whether the basis is sound. The 29 tests assert the things that must hold regardless of the parameters: that the life table balances, that adult hazard doubles on the 7.4-year Gompertz schedule the parameters imply, that two competing decrements can never remove more than everyone, that selection never makes a freshly underwritten life look worse than ultimate, and that the annuity factor stays strictly below the annuity-certain. CI runs the tests, runs the pipeline end to end, and fails if a fresh seeded run does not reproduce the committed results within a 0.1% relative tolerance. That tolerance is deliberate: the Cox fit goes through an iterative optimiser and the BLAS layer differs between Windows and Linux, so exact equality would fail for reasons that do not matter. Structure is still compared exactly."
+      },
+      {
+        call: "Ship the tests with the model, and make `--data` a first-class path.",
+        reason:
+          "Anyone with a real book should be able to swap in a CSV and get real exposure, real sums assured and real pricing without touching the pipeline. `pipeline/example_book.csv` is a working 500-policy file; the loader rejects bad input before any modelling runs, listing every problem at once with the CSV row number. Small books are handled out loud: below roughly ten deaths per covariate the Cox fit is flagged as unreliable, and below six deaths no coefficients are reported at all. A handful of deaths otherwise yields a concordance of 1.0 through complete separation, which looks like a perfect model and is not one."
+      },
+    ],
+    pivots: [
+      "The annuity factor was wrong. It used to be an annuity-certain, which assumes premiums keep arriving for the full term, alive or not. That factor is too large, so the level premium it produced was too small. Fixing it meant weighting both sides of the equivalence principle by the same in-force curve. There is now a test that asserts the annuity factor stays strictly below the annuity-certain, so the mistake cannot come back quietly.",
+      "The first Cox fit entered BMI as a single linear term. That was wrong for the generator, which treats BMI as a threshold effect above 30 and below 18.5. The consequence was exactly what you would expect if you knew to expect it: BMI came out insignificant and was the one covariate to breach proportional hazards (p = 0.034). I flagged it in the limitations rather than quietly band it, because banding or a spline is the right fix and I have not built it yet.",
+      "The first Monte Carlo ran the baseline as one of the scenarios. That produced a table with two rows that were the same thing, and a headline number that did not match either row exactly. The fix is small and the reason is worth stating: the 1.0x row is now the baseline run itself rather than a second sample of it. The table and the headline report one number instead of two that differ by noise."
+    ],
+    weaknesses: [
+      "I did not know how to handle two competing decrements properly. Treating mortality and lapse as independent produces rates that over-remove lives; the standard conversion to dependent rates is small and easy to miss. Reading the actuarial basis notes for a term assurance made the shape of the mistake visible.",
+      "Select-and-ultimate mortality is a concept I understood in the abstract and only internalised by writing the q[x]+t table out. The select period is not a small correction, it changes the pricing in the early durations materially, which is where most of the exposure sits for a term policy.",
+      "The 99.5th percentile VaR calibration is a regulatory convention, not a fact about the world. It took reading the Solvency II guidance to understand that the number is chosen, and that reporting VaR without TVaR hides what happens beyond the quantile. The case study reports both so the tail is visible.",
+      "Reproducibility across platforms is harder than it sounds. The last decimal of the Cox fit depends on the BLAS the platform ships, so exact comparison between Windows and Linux is impossible without a tolerance. A 0.1% relative tolerance is the right band, but arriving at that number took a broken CI run to understand.",
+      "A model built on synthetic data can be internally consistent and externally wrong in ways that no test will catch. I did not know how to sit with that until I wrote the limitations section and realised the honest thing is to say the synthetic run does not measure real mortality experience, in the first paragraph, not the last."
+    ],
+    outcome: [
+      "Gompertz-Makeham mortality table with infant and child terms on top, life expectancy at birth 68.8 years",
+      "5-year select-and-ultimate table with mortality starting at 45% of ultimate and ramping back linearly",
+      "Lapse model with 14% first-year and 4% ultimate rates, converted to dependent rates with the standard formula",
+      "10,000 synthetic policyholders aged 20 to 64, total sum assured $493.7m, hazard multipliers for smoking, sex, BMI and health score",
+      "Kaplan-Meier curves overall and split by sex, smoker status and health score",
+      "Cox proportional hazards with concordance 0.765 held out, Schoenfeld residual test on all five covariates",
+      "Net single premium as discounted expected claim at 6%, converted to level annual premium and loaded 15% for expenses",
+      "Average annual gross premium $306, ranging from $61 in the 20-30 band to $682 in the 51-65 band; smokers average $431 against non-smokers at $262",
+      "Lapse credit of 15.7% reported alongside the no-lapse price, so the size of the persistency bet stays visible",
+      "5,000-scenario Monte Carlo with baseline and three mortality shocks (1.25x, 1.6x, 2.5x), reporting VaR and TVaR at the 99.5th percentile",
+      "Baseline VaR $8.19m against mean claims of $6.04m; under a 1.6x shock, mean claims $9.59m",
+      "29 identity-based tests, reproducible seeded pipeline, CI that fails if the dashboard drifts from the model",
+      "`--data` flag for loading a real book from CSV, with row-level input validation and small-book flags"
+    ],
+    regret:
+      "The honest gap is data. Everything here is synthetic, and no amount of care makes a synthetic model measure real mortality experience. The mortality table has a plausible regional shape but is generated from the parametric form, not graduated from Gambian or any other observed data, and the select factors and lapse rates are assumptions rather than estimates. The first thing anyone with a real book should do is replace them. On the technical side, BMI should be banded or splined rather than a single linear term, which would fix both its insignificance and its proportional-hazards breach; the reserve is defined as VaR minus mean, which is arithmetic rather than actuarial and would need a separate, more prudent basis; and reinsurance, commission, mortality improvement and surrender values are all absent, which a real basis would not allow.",
+    takeaway:
+      "You learn actuarial science by writing the math. The textbook gives you Gompertz-Makeham; implementing the gradient descent shows you why the second term matters in the data you actually have. When the assumptions are violated, the model tells you with a low C-index or a failed proportional-hazards test, and the honest thing is to write down which one it was rather than retune until the number looks better."
   }
 };
 
