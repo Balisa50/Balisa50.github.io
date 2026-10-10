@@ -89,7 +89,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I started out thinking synthetic data meant copying. Building the criteria engine changed that. The more useful thing is generating data that should exist but does not. Different problem, different tool. I would not have seen it if I had stopped at the GAN.",
     ],
     outcome: [
-      "A fifth measure the headline four leave out: a classifier tells real from synthetic 89% of the time against a 0.50 baseline. Called a diagnostic rather than a gate. It is the most informative number about the generator.",
+      "A fifth measure the headline four leave out: a classifier tells real from synthetic 89% of the time against a 0.50 baseline. Reported as a diagnostic rather than a gate.",
       "A structural-causal ground-truth set: 10,000 rows by 29 columns of realistic West African microfinance data, with all ten correlations and seven integrity constraints verified on every generation",
       "A CTGAN implemented from scratch in PyTorch. Mode-specific normalisation, PacGAN critic, WGAN-GP, conditional training-by-sampling, early stopping. No SDV or ctgan import.",
       "All four validation metrics pass: statistical similarity 0.94, correlation L1 0.05, TSTR 0.92 (AUC ratio 0.94), and distance-to-closest-record privacy 1.10 with 1.1 percent near-duplicates",
@@ -145,7 +145,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Re-base the whole projection on the 2024 census, and vectorise it over 1,000 simulations.",
         reason:
-          "WPP's 2023 population is ~13% above the new census, so starting from WPP would bake in the overcount. I reconciled the base to the census total and its broad age structure, then ran the cohort-component model over 1,000 simulated mortality and fertility futures, carrying the population as an (age × simulation) matrix so the whole thing vectorises and produces honest credible intervals, not a single line.",
+          "WPP's 2023 population is ~13% above the new census, so starting from WPP would bake in the overcount. I reconciled the base to the census total and its broad age structure, then ran the cohort-component model over 1,000 simulated mortality and fertility futures, carrying the population as an (age × simulation) matrix, which vectorises the run and produces credible intervals rather than a single line.",
       },
     ],
     pivots: [
@@ -172,7 +172,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I haven't yet digitised the Farafenni and Basse HDSS published life tables or run a GBD cross-check. Both would turn the validation chapter from 'validated against the UN's reconstruction' into 'validated against independent empirical Gambian data'. I flagged them as remaining data tasks rather than inventing numbers. I'd also fit the Bayesian model sex-specifically for the projection and add the UN's own bayesPop as a fourth benchmark.",
     takeaway:
-      "The most important result: the UN figure is about 13% too high for The Gambia. That came from taking the new census seriously and checking every step against a known answer before believing it.",
+      "The UN figure is about 13% too high for The Gambia. That came from taking the new census seriously and checking every step against a known answer before believing it.",
   },
   "gambia-political-risk": {
     slug: "gambia-political-risk",
@@ -404,7 +404,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Strict editorial system prompt with explicit banned phrases.",
         reason:
-          "The whole point of VANTAGE is that articles read like editorial, not like 'AI synthesised this for you'. The system prompt is ~400 words of explicit constraints: every headline is a verdict, follow the money first, name names, no em-dashes (use commas/colons/periods only), no 'it's worth noting' / 'interestingly' / 'in a move that…', short paragraphs (2-3 sentences), end with a falsifiable prediction. The output reads sharp because the prompt is sharp.",
+          "VANTAGE exists so articles read like editorial, not like a language model explaining the news. The system prompt is ~400 words of explicit constraints: every headline is a verdict, follow the money first, name names, no em-dashes (use commas/colons/periods only), no 'it's worth noting' / 'interestingly' / 'in a move that…', short paragraphs (2-3 sentences), end with a falsifiable prediction. The output reads sharp because the prompt is sharp.",
       },
       {
         call: "Use Haiku for the pipeline, not Sonnet.",
@@ -562,7 +562,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Reverse-engineer the CBG's undocumented JSON endpoint as the primary data source.",
         reason:
-          "The Central Bank publishes daily indicative rates as a webpage with no documented API. Opened the network tab and found `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates as JSON, no auth required. Official, authoritative, free. Found by curiosity, not documentation. Built the entire pipeline on it; cross-validated against `exchangerate.host` as a backup. The trick is being willing to look in places nobody put 'API' in the URL.",
+          "The Central Bank publishes daily indicative rates as a webpage with no documented API. Opened the network tab and found `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates as JSON, no auth required. Official, authoritative, free. Found by curiosity, not documentation. Built the entire pipeline on it; cross-validated against `exchangerate.host` as a backup. Found by opening devtools, not by reading docs.",
       },
       {
         call: "SARIMA only, and the holiday model is still unbuilt.",
@@ -844,12 +844,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Multi-scenario stress tests: drought, currency crisis, pandemic.",
         reason:
-          "Real lenders need to know: what happens to default rates under shock? I implemented stress tests that multiply default probabilities by scenario-specific factors (drought: 1.5x for agriculture loans, currency crisis: 1.3x across the board, pandemic: 2.0x for services). The output shows band-by-band default-rate impact and capital-requirement implications. The stress test runs the whole book through the scenario, not just the score distribution.",
+          "Real lenders need to know: what happens to default rates under shock? I implemented stress tests that multiply default probabilities by scenario-specific factors (drought: 1.5x for agriculture loans, currency crisis: 1.3x across the board, pandemic: 2.0x for services). The output shows band-by-band default-rate impact and capital-requirement implications. The stress test runs the whole book through the scenario.",
       },
       {
         call: "Basel II points conversion with explicit factor + offset.",
         reason:
-          "Logistic regression coefficients are abstract. Points conversion turns them into a 300-850 score every loan officer can use. Picked factor 28.85 / offset 487.123 (industry standard) so the score doubles odds at every 20-point increment. This is the layer that makes the model actually usable by humans.",
+          "Logistic regression coefficients are abstract. Points conversion turns them into a 300-850 score every loan officer can use. Picked factor 28.85 / offset 487.123 (industry standard) so the score doubles odds at every 20-point increment. The points card is what a loan officer actually sees.",
       },
     ],
     pivots: [
