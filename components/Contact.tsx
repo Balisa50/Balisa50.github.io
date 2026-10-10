@@ -10,9 +10,6 @@ import { ContactForm } from "./ContactForm";
  * gifts to a scraper, and a personal number cannot be taken back once it has
  * been indexed. What is left is a form, and the two profiles that are already
  * public and are meant to be.
- *
- * No longer a client component: the copy-to-clipboard button was the only
- * thing here that needed state, and it went with the address.
  */
 export function Contact() {
   return (
@@ -22,7 +19,6 @@ export function Contact() {
       aria-labelledby="contact-heading"
     >
       <div className="relative overflow-hidden">
-        {/* Decorative glow */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan/20 blur-3xl"
@@ -40,16 +36,12 @@ export function Contact() {
           id="contact-heading"
           className="relative mt-3 text-balance text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-tight tracking-tight"
         >
-          Have a hard problem?{" "}
-          <span className="bg-gradient-to-r from-cyan via-white to-cyan bg-clip-text text-transparent">
-            Let&apos;s talk.
-          </span>
+          Open to internships and early-career roles.
         </h2>
 
         <p className="relative mt-4 max-w-xl text-text-secondary">
-          Open to full-time roles and select contract work on ML-heavy products. Tell me what you
-          are working on and I will come back to you. If you want the CV, ask here and I will send
-          it across.
+          Tell me what you are working on, or what the role is. If you want the
+          CV, ask here and I will send it across.
         </p>
 
         <ContactForm />
