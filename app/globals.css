@@ -138,6 +138,8 @@ body {
    white rectangle reads as a hole, so each figure gets a hairline and a matching
    inset rather than sitting directly on the background. */
 .figure {
+  border-radius: 16px;
+  overflow: hidden;
   background: #fff;
   border: 1px solid var(--rule);
   padding: 10px;

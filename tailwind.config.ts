@@ -89,6 +89,10 @@ const config: Config = {
           "100%": { opacity: "1" }
         }
       },
+      borderRadius: {
+        card: "20px",
+        pill: "999px"
+      },
       boxShadow: {
         "glow-cyan": "none",
         "glow-cyan-lg": "none",
