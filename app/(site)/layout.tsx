@@ -1,4 +1,5 @@
 import { Nav } from "@/components/Nav";
+import { MobileWordmark } from "@/components/MobileWordmark";
 import { BottomNav } from "@/components/BottomNav";
 import { Footer } from "@/components/Footer";
 
@@ -21,6 +22,7 @@ import { Footer } from "@/components/Footer";
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col">
+      <MobileWordmark />
       <Nav />
       <main
         id="main"
