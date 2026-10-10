@@ -1,4 +1,4 @@
-import { Github, Linkedin, MapPin } from "lucide-react";
+import { Github, Linkedin, MapPin, Send } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { ContactForm } from "./ContactForm";
 
@@ -23,12 +23,9 @@ export function Contact() {
           aria-hidden="true"
           className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cyan/20 blur-3xl"
         />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-pink/10 blur-3xl"
-        />
 
-        <span className="relative font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+        <span className="relative inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+          <Send className="h-3.5 w-3.5" aria-hidden="true" />
           Contact
         </span>
 

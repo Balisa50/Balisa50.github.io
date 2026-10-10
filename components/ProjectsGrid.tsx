@@ -1,5 +1,6 @@
 "use client";
 
+import { Layers } from "lucide-react";
 import { PROJECTS, type Project } from "@/lib/projects";
 import { ProjectRow } from "./ProjectRow";
 
@@ -33,8 +34,7 @@ const CATEGORIES: Category[] = [
   {
     id: "shipped",
     title: "Also shipped",
-    blurb:
-      "Smaller builds and client work. Each one delivered.",
+    blurb: "Smaller builds and client work. Each one delivered.",
     slugs: ["vantage", "forge", "bs-real-estate"],
   },
 ];
@@ -64,11 +64,15 @@ export function ProjectsGrid() {
       aria-labelledby="projects-heading"
     >
       <div className="mb-16 flex flex-col items-start gap-4">
+        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+          <Layers className="h-3.5 w-3.5" aria-hidden="true" />
+          Work
+        </span>
         <h2
           id="projects-heading"
           className="display text-[clamp(2rem,4.5vw,3.25rem)]"
         >
-          Work
+          Three disciplines, one identity
         </h2>
         <p className="measure text-[15px] leading-relaxed text-text-secondary">
           {PROJECTS.length} projects across statistics, AI systems, and client

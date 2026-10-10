@@ -9,8 +9,7 @@ import { PROFILE } from "@/lib/projects";
  * Built on a 12-column grid with the text held to columns 1-7, so the name, the
  * paragraph and every section heading below share one left edge. That single
  * alignment is most of what separates a page that looks composed from one that
- * looks assembled, and it was the thing missing before: each block set its own
- * max-width and nothing lined up.
+ * looks assembled.
  *
  * Sized to hand over to the work quickly. A full-viewport header would push the
  * first project below the fold, and the projects are the argument.
@@ -29,6 +28,13 @@ export function Hero() {
               aria-hidden="true"
             />
             Open to internships · {PROFILE.location}
+          </p>
+
+          <p
+            className="hero-item mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-text-faint"
+            style={{ animationDelay: "0.04s" }}
+          >
+            BSc Statistics, KNUST · Mastercard Foundation Scholar
           </p>
 
           <h1
@@ -65,8 +71,6 @@ export function Hero() {
               className="group inline-flex min-h-11 items-center gap-2 font-medium text-ink link-underline"
             >
               See the work
-              {/* Pointed down while this scrolled to a section below. The work
-                  is a route now, so the arrow points the way the click goes. */}
               <ArrowRight
                 className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
                 aria-hidden="true"
@@ -94,21 +98,6 @@ export function Hero() {
           </nav>
         </div>
 
-        {/*
-          Portrait, right of the name.
-
-          No frame, no border, no corners. The photograph's own backdrop was a
-          cool grey-blue (#E7EBF1) against a warm page, so any container just
-          drew attention to the mismatch. Instead the image itself was prepared:
-          the outer pixels trimmed (the phone export left dark artefact lines
-          down the edges), the backdrop repainted to the page colour on a
-          smoothstep ramp, and the edges feathered to transparency with a longer
-          dissolve at the bottom so the crop through his shirt is not a line.
-          It is a PNG with alpha, so it sits on the page rather than on top of it.
-
-          Hidden below lg, where there is no second column and it would only
-          push the intro down the screen.
-        */}
         <div className="hidden lg:col-span-4 lg:col-start-9 lg:block">
           <Image
             src="/portrait.png"

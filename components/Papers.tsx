@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, FileText, Github, Lock } from "lucide-react";
+import { ArrowUpRight, FileText, Github, Lock, BookOpen } from "lucide-react";
 import { PAPERS } from "@/lib/papers";
 
 /**
@@ -26,7 +26,8 @@ export function Papers() {
       aria-labelledby="papers-heading"
     >
       <div className="mb-12 flex flex-col items-start gap-3 md:mb-16">
-        <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+          <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
           Working Papers
         </span>
         <h2
@@ -65,8 +66,6 @@ export function Papers() {
                 {paper.title}
               </h3>
 
-              {/* The finding, not the abstract. A reader deciding whether to
-                  open a PDF needs the result, not the setup. */}
               <p className="max-w-3xl border-l-2 border-cyan/40 pl-4 text-[15px] leading-relaxed text-ink">
                 {paper.finding}
               </p>
@@ -88,44 +87,22 @@ export function Papers() {
                 </ul>
               )}
 
-              <ul className="flex flex-wrap gap-x-3 gap-y-1" aria-label="Methods">
-                {paper.methods.map((m) => (
-                  <li key={m} className="font-mono text-[11px] text-text-secondary">
-                    {m}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-1 flex flex-wrap items-center gap-x-6 gap-y-2">
-                <a
-                  href={paper.pdf}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className="group inline-flex items-center gap-1.5 text-sm text-ink transition hover:text-cyan"
-                >
-                  <FileText className="h-3.5 w-3.5" aria-hidden="true" />
-                  Read the paper
-                  <ArrowUpRight
-                    className="h-3 w-3 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                    aria-hidden="true"
-                  />
-                </a>
-
-                {paper.articleUrl && (
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                {paper.pdf && (
                   <a
-                    href={paper.articleUrl}
-                    className="group inline-flex items-center gap-1.5 text-sm text-text-secondary transition hover:text-cyan"
+                    href={paper.pdf}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="group inline-flex items-center gap-1.5 text-sm text-ink transition hover:text-cyan"
                   >
-                    Long-form version
+                    <FileText className="h-3.5 w-3.5" aria-hidden="true" />
+                    Read the PDF
                     <ArrowUpRight
-                      className="h-3 w-3 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                       aria-hidden="true"
                     />
                   </a>
                 )}
-
-                {/* A private repo renders as text. A dead link reads as work
-                    that was never really done. */}
                 {paper.repo && !paper.repoPrivate && (
                   <a
                     href={paper.repo}
@@ -136,13 +113,13 @@ export function Papers() {
                     <Github className="h-3.5 w-3.5" aria-hidden="true" />
                     Code
                     <ArrowUpRight
-                      className="h-3 w-3 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                       aria-hidden="true"
                     />
                   </a>
                 )}
-                {paper.repo && paper.repoPrivate && (
-                  <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary">
+                {paper.repoPrivate && (
+                  <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary opacity-70">
                     <Lock className="h-3.5 w-3.5" aria-hidden="true" />
                     Code private
                   </span>

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, FileText, ArrowRight } from "lucide-react";
+import { Mail, FileText, ArrowRight, User } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 export function About() {
@@ -13,7 +13,8 @@ export function About() {
       aria-labelledby="about-heading"
     >
       <div className="flex flex-col items-start gap-4">
-        <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-cyan">
+          <User className="h-3.5 w-3.5" aria-hidden="true" />
           About
         </span>
 
@@ -68,8 +69,7 @@ export function About() {
             I work in Python and TypeScript. I read Lee-Carter, Cox, and the
             Basel II framework the same way I read Next.js docs. I am working
             toward actuarial exams, and applying for internships in data
-            analytics, statistics, actuarial science, machine learning, and
-            quantitative finance.
+            analytics, statistics, or actuarial science.
           </p>
         </div>
 
