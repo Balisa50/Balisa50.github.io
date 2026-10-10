@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 const LINKS: { href: string; label: string }[] = [
   // The wordmark on the left has always linked home, which is the convention
