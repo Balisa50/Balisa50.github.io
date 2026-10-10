@@ -32,7 +32,7 @@ export const PROJECTS: Project[] = [
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "The Gambia has no death-registration system, so its population figures come almost entirely from the UN, and those were set before the first digital census in 2024. This is an independent, census-based projection out to 2074. It reaches 4.66 million, about 0.7 million below the UN, with a 95 percent interval of 4.35 to 4.98 million. Run first on the UN's own inputs, the same model reproduces their published figures to within 1 percent, which is what makes the independent run worth reading. Mortality is fitted three ways (SVD Lee-Carter, a Bayesian version in PyMC, and a coherent one that pools The Gambia with its West African neighbours), each feeding a cohort-component model. Over the same period the dependency ratio falls from 77 to 49 while old-age dependency triples. Every input is public.",
+      "The Gambia has no death registration system, so its population figures come from the UN alone, locked in before the first digital census. I built an independent projection that reaches 4.66 million by 2074, about 0.7 million below the UN. The engine reproduces the UN's published figures to within 1 percent when fed their inputs, using three forms of Lee-Carter mortality over 1,000 futures. Every input is public.",
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
@@ -49,7 +49,7 @@ export const PROJECTS: Project[] = [
     title: "NOVA",
     tagline: "A synthetic-data engine for finance, from domain rules or from real data",
     description:
-      "Banks in West Africa hold customer data they cannot share, and for rural borrowers and the informal economy the data was never collected in the first place. NOVA generates stand-in data two ways: from a description of the columns and their rules, or from a real dataset via a Conditional Tabular GAN written from scratch in PyTorch. Every batch passes four checks: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, and distance-to-closest-record 1.10 with 1.1 percent near-duplicates. The rule engine runs through a whitelist evaluator so user input cannot execute. FastAPI backend on Hugging Face Spaces, Next.js studio on Vercel.",
+      "Banks in West Africa hold customer data they cannot share, and for rural borrowers the data was never collected. NOVA generates synthetic data two ways: from a description of the columns and their rules, or from a real dataset via a Conditional Tabular GAN written from scratch in PyTorch. Every batch passes four checks: statistical similarity 0.94, correlation L1 0.05, train-on-synthetic-test-on-real 0.92, distance-to-closest-record 1.10.",
     tech: ["Python", "PyTorch", "CTGAN", "FastAPI", "Next.js 16", "scikit-learn"],
     github: "https://github.com/Balisa50/nova",
     githubRepo: "Balisa50/nova",
@@ -66,7 +66,7 @@ export const PROJECTS: Project[] = [
     title: "Gambia Legal Aid",
     tagline: "RAG chatbot for Gambian law",
     description:
-      "Lawyers in The Gambia are expensive, the statutes are scattered across PDFs most people never find, and a hallucinated answer in a legal question does real harm. This is a retrieval-augmented question-answering system over 13 Gambian Acts of Parliament. Every answer names the section it came from, and a validator checks each citation against the retrieved text before the answer ships: invented section numbers are stripped, quotation marks are only allowed around text that appears verbatim in the statute, and a claim attached to the wrong section is caught against that section's title. When the legislation store is unreachable it refuses outright rather than answering from the model's memory.",
+      "Lawyers in The Gambia are expensive, the statutes are scattered across PDFs, and a hallucinated answer in a legal question does real harm. I built a RAG system over 13 Acts of Parliament where every answer names the section it came from. A validator checks each citation against the retrieved text: invented section numbers are stripped, quotes are only allowed around verbatim text, and a claim attached to the wrong section is caught against the section title.",
     tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
     github: "https://github.com/Balisa50/gamba-legal-aid",
     githubRepo: "Balisa50/gamba-legal-aid",
@@ -84,7 +84,7 @@ export const PROJECTS: Project[] = [
     title: "Credit Risk Scorecard",
     tagline: "Basel II scorecard for West African microfinance",
     description:
-      "Microfinance loan officers in West Africa make lending decisions on intuition, because the analytical infrastructure that would give them a second opinion is not there. This is a full Basel II scorecard pipeline built from scratch on 12,000 synthetic West African loans: WoE/IV feature selection, logistic regression with points conversion, and the validation gauntlet a regulator would want to see. Gini 0.27 and KS 0.21 on a later-vintage holdout sit below production thresholds, and the ceiling is set by the synthetic generator rather than the fitting: no feature clears Strong information value, so the scorecard cannot separate better than its inputs allow. Across vintages PSI stayed at 0.002 while realised defaults rose from 12.3 to 15.9 percent, because the deterioration came from a macro shock no feature measures.",
+      "Microfinance loan officers in West Africa make lending decisions on intuition because the analytical infrastructure is not there. I built a Basel II scorecard from scratch: Gini 0.27, KS 0.21 on a later-vintage holdout. Below production thresholds, and the ceiling is set by the synthetic generator, not the fitting. PSI stayed at 0.002 while realised defaults rose from 12.3 to 15.9 percent, because the shock came from a macro factor no feature measures.",
     tech: ["Python", "scikit-learn", "Pandas", "Next.js", "Recharts"],
     github: "https://github.com/Balisa50/credit-risk-scorecard",
     githubRepo: "Balisa50/credit-risk-scorecard",
@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
     title: "AYAT",
     tagline: "A Qur'an that rearranges itself around your question",
     description:
-      "Every Qur'an app treats the book as a list of 6,236 numbered cells to scroll through, and misses the way it cross-references itself. AYAT embeds all 6,236 verses with sentence-transformers, projects them to 3D with UMAP, and renders them as a live particle galaxy in Three.js. Ask a question and the corpus physically reorganises around it, converging on an axis of meaning measured from the results themselves. Ask something it has nothing for and it says so instead of returning a plausible list. No inference server, so it runs at no cost.",
+      "Every Qur'an app treats the book as a list of 6,236 numbered cells, and reading it linearly hides the way it cross-references itself. I embedded every verse with sentence-transformers, projected them to 3D with UMAP, and rendered them as a live particle galaxy in Three.js. Query embedding runs in the browser with the same MiniLM model the pipeline uses. 6,236 verses reproject in about 22 ms. Ask something the corpus has nothing for and it says so.",
     tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "transformers.js", "Next.js 16", "Three.js", "LLM API"],
     github: "https://github.com/Balisa50/ayat",
     githubRepo: "Balisa50/ayat",
@@ -201,7 +201,7 @@ export const PROJECTS: Project[] = [
     title: "Life Insurance Risk Model",
     tagline: "Actuarial risk model for Sub-Saharan Africa",
     description:
-      "Gompertz-Makeham mortality model, Kaplan-Meier survival analysis, Cox PH (concordance 0.77), actuarial premium pricing, and Monte Carlo VaR simulation with pandemic stress testing across 5,000 scenarios. Standard actuarial models calibrated on US and UK data under-represent the constant background hazard from accidents and infectious disease that matters in Sub-Saharan Africa, so the Makeham term carries real weight here rather than being a footnote.",
+      "Standard actuarial models were calibrated on US and UK data, and they under-represent the constant background hazard that dominates mortality in Sub-Saharan Africa. I built the model from the mortality table up: Gompertz-Makeham, select-and-ultimate, Cox PH, and Monte Carlo VaR over 5,000 scenarios. Cox PH C-index 0.765 on a held-out 30 percent. Baseline VaR $8.19 million against mean claims of $6.04 million, and under a 1.6x mortality shock mean claims reach $9.59 million, above the 1-in-200 capital line.",
     tech: ["Python", "lifelines", "NumPy", "Next.js", "Recharts"],
     github: "https://github.com/Balisa50/life-insurance-risk",
     githubRepo: "Balisa50/life-insurance-risk",
