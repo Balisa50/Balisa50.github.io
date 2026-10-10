@@ -217,6 +217,10 @@ html[data-theme="dark"] {
   --text-faint: #78716C;
   --accent: #60A5FA;
   --accent-soft: #1E3A8A;
+  --surface: #131316;
+  --card: #131316;
+  --border: #26262A;
+  --rule-strong: #3F3F46;
 }
 
 /* Primary body copy under dark. Body text is the one thing that cannot be
