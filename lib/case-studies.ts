@@ -316,7 +316,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Use Haiku for the pipeline, not Sonnet.",
         reason:
-          "Sonnet was overkill. Article synthesis is high-volume, low-stakes-per-token (you can re-generate tomorrow if today's is mediocre). Haiku at 1/3 the cost lets the pipeline run sustainably on the budget I had. The strict editorial system prompt does the heavy lifting, Haiku follows it well enough for the format.",
+          "Article synthesis is high-volume and low-stakes-per-token (you can re-generate tomorrow if today's is mediocre). Haiku at 1/3 the cost lets the pipeline run sustainably on the budget I had. The strict editorial system prompt does the heavy lifting, Haiku follows it well enough for the format.",
       },
       {
         call: "Region-by-region article cap (1 per region per run).",
