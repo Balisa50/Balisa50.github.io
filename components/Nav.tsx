@@ -14,6 +14,7 @@ const LINKS: { href: string; label: string }[] = [
   // back to. Now there is, so home is a labelled destination like the rest.
   { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
+  { href: "/build-log", label: "Build log" },
   { href: "/papers", label: "Papers" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" }
