@@ -23,20 +23,20 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--bg)",
+        background: "#FAFAF9",
         // A half-step down from the page, for the rare block that needs to sit
         // back. Never used as a card fill.
-        surface: "var(--surface, #F4F4F2)",
-        card: "var(--card, #F4F4F2)",
+        surface: "#F4F4F2",
+        card: "#F4F4F2",
 
         // Two hairline weights: one to separate rows, one to separate sections.
-        border: "var(--border, #E7E5E4)",
-        rule: "var(--rule, #E7E5E4)",
-        "rule-strong": "var(--rule-strong, #D6D3D1)",
+        border: "#E7E5E4",
+        rule: "#E7E5E4",
+        "rule-strong": "#D6D3D1",
 
         // Type ramp. `ink` is reserved for display type and anything that must
         // read as the darkest thing on the page.
-        ink: "var(--ink)",
+        ink: "#0C0A09",
         text: {
           DEFAULT: "#1C1917",
           secondary: "#57534E",
