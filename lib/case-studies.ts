@@ -105,14 +105,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "gambia-population-projection": {
     slug: "gambia-population-projection",
     problem:
-      "The Gambia has no complete civil registration. Deaths go largely unrecorded, so there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, the standard input for mortality forecasting. Yet every long-range public decision, how many classrooms to build, how large the future labour force and pension bill will be, how many clinics to staff, runs on population projections. The only figures available are the UN's, and those were finalised before The Gambia's first-ever digital census in 2024. I wanted to build an independent, census-based, uncertainty-quantified projection that a Gambian could actually verify and a planner could actually use, using the same methodology family the UN Population Division uses, but rebuilt from scratch on open data.",
+      "The Gambia has no complete civil registration. Deaths go largely unrecorded, so there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, the standard input for mortality forecasting. Every long-range public decision still runs on population projections: how many classrooms to build, how large the future labour force and pension bill will be, how many clinics to staff. The only figures available are the UN's. Those were finalised before The Gambia's first-ever digital census in 2024. I wanted to build an independent projection, census-based, uncertainty-quantified, that a Gambian could verify and a planner could use. Same methodology family the UN Population Division uses. Rebuilt from scratch on open data.",
     research: [
-      "Read Lee & Carter's 1992 original paper before writing any model. The single-index log-bilinear structure (log m(x,t) = a_x + b_x k_t) is the backbone of every mortality forecast the UN publishes, so I implemented the classical SVD version first as a transparent baseline.",
-      "Read Brouhns, Denuit & Vermunt (2002) on the Poisson log-bilinear approach. The standard SVD assumes homoskedastic Gaussian errors on log-rates, which is wrong where death counts are small and noisy, exactly The Gambia's case. Poisson-on-deaths is the principled fix and the basis for the Bayesian version.",
+      "Read Lee & Carter's 1992 original paper before writing any model. The single-index log-bilinear structure (log m(x,t) = a_x + b_x k_t) is the backbone of every mortality forecast the UN publishes. I implemented the classical SVD version first as a transparent baseline.",
+      "Read Brouhns, Denuit & Vermunt (2002) on the Poisson log-bilinear approach. The standard SVD assumes homoskedastic Gaussian errors on log-rates, which is wrong where death counts are small and noisy. Exactly The Gambia's case. Poisson-on-deaths is the principled fix and the basis for the Bayesian version.",
       "Read Li & Lee (2005) on coherent forecasting. A single small-population forecast can drift to implausible long-run mortality; the coherent extension forecasts a country jointly with a reference group so it can't diverge. That paper is the reason I fetched seven West-African neighbours, not just The Gambia.",
       "Read Raftery et al. (2012, PNAS), the Bayesian hierarchical method the UN actually adopted for WPP in 2015. I needed to understand it before benchmarking against WPP rather than just citing it.",
-      "Read Preston, Heuveline & Guillot's 'Demography' Ch. 6 for the cohort-component method, survivorship ratios from life tables, Leslie-matrix accounting, the open-age interval.",
-      "Checked the Human Mortality Database (Gambia absent) and then found the thing that made the project feasible: the Farafenni Health & Demographic Surveillance System has run since 1981 and Basse since 2007, rare multi-decade empirical mortality data for a sub-Saharan country.",
+      "Read Preston, Heuveline & Guillot's 'Demography' Ch. 6 for the cohort-component method: survivorship ratios from life tables, Leslie-matrix accounting, the open-age interval.",
+      "Checked the Human Mortality Database (Gambia absent). Found the thing that made the project feasible: the Farafenni Health & Demographic Surveillance System has run since 1981, Basse since 2007. Rare multi-decade empirical mortality data for a sub-Saharan country.",
     ],
     constraints: [
       "No civil registration, no national age-specific death-rate series, The Gambia is absent from the HMD. Any model runs on reconstructed or surveillance data, and pretending otherwise would be indefensible to an examiner.",
@@ -125,7 +125,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Make the data-scarcity limitation the research question, not a footnote.",
         reason:
-          "The naive version of this project, fit Lee-Carter to whatever series you can find and publish a point estimate, is exactly the thing a sharp examiner sinks. So I reframed: how do you build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage? That framing turned the biggest weakness into the contribution.",
+          "The naive version of this project is to fit Lee-Carter to whatever series you can find and publish a point estimate. That is exactly the thing a sharp examiner sinks. So I reframed: how do you build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage?",
       },
       {
         call: "Pin the data to the UN team's open R package, not the token-gated API.",
@@ -140,7 +140,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Validate the projection engine against WPP before trusting it with my own inputs.",
         reason:
-          "A cohort-component engine has a hundred places to get an index or a survivorship ratio subtly wrong. So I fed it WPP's own mortality, fertility, sex-ratio and migration and checked that it reproduced WPP's published projection. It matched to within 0.3 to 0.9% through 2074. Only then did I swap in the census base and my own mortality. If it can't rebuild a known answer, I shouldn't trust it with a new one.",
+          "A cohort-component engine has a hundred places to get an index or a survivorship ratio subtly wrong. So I fed it WPP's own mortality, fertility, sex-ratio and migration and checked that it reproduced WPP's published projection. It matched to within 0.3 to 0.9% through 2074. Only then did I swap in the census base and my own mortality.",
       },
       {
         call: "Re-base the whole projection on the 2024 census, and vectorise it over 1,000 simulations.",
@@ -149,10 +149,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
-      "The UN WPP /data API returned 401 across every variant I tried. Instead of chasing a token, I reverse-engineered the download site, found it builds file URLs from a runtime manifest, and then discovered the cleaner source entirely: the UN team's `PPgp/wpp2024` package on GitHub. Pinned a commit, streamed and filtered to Gambia. A blocker became a more citable, more reproducible pipeline.",
+      "The UN WPP /data API returned 401 across every variant I tried. Instead of chasing a token, I reverse-engineered the download site, found it builds file URLs from a runtime manifest, and then discovered the cleaner source entirely: the UN team's `PPgp/wpp2024` package on GitHub. Pinned a commit, streamed and filtered to Gambia. The blocker turned into a more citable, more reproducible pipeline.",
       "The PyMC conda environment failed mid-install with 'No space left on device', the disk was at 50 MB. I cleared regenerable caches, confirmed system Python already had numpy/scipy/pandas, and installed PyMC lean via pip into system Python rather than the multi-GB conda toolchain. The Bayesian model that 'needed' conda ran fine on a 200-line pip install.",
       "The first Bayesian fit would not converge. The 101-dimensional Dirichlet plus a free a_x left a ridge in the posterior. Fixing a_x at the empirical mean (the classical definition) dropped max r-hat from ~1.02 to 1.010 and lifted the effective sample size into the thousands for the parameters that matter.",
-      "Halfway through I noticed WPP's 2023 population (2,728,905) sits about 13% above the 2024 census (around 2.42M), and runs above every historical Gambian census too. WPP was finalised before the census came out, so I rebuilt the projection on the census base. That gap became the most policy-relevant result in the project.",
+      "Halfway through I noticed WPP's 2023 population (2,728,905) sits about 13% above the 2024 census (around 2.42M), and runs above every historical Gambian census too. WPP was finalised before the census came out, so I rebuilt the projection on the census base.",
     ],
     weaknesses: [
       "This was my first time fitting Lee-Carter in a fully Bayesian framework. I learned why the identifiability constraints (sum of b = 1, sum of k = 0) exist the hard way, by watching chains refuse to mix until I imposed them properly.",
@@ -163,7 +163,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Eleven reproducible modules, from data fetch and life tables through the classical, Bayesian and coherent mortality models to the projection engine and validation",
       "Life table reproduces WPP's published e0(2023) of 65.86 exactly",
       "Lee-Carter backtest (fit up to 2010, predict 2011 to 2023): 0.65-year mean error, with the truth inside the 95% range every year",
-      "The three mortality methods agree on life expectancy in 2074 to within about 0.8 years, all of them tighter than WPP's range, which is a finding in itself about structural uncertainty",
+      "The three mortality methods agree on life expectancy in 2074 to within about 0.8 years. All three are tighter than WPP's range.",
       "Cohort-component engine validated to within 1% of WPP's published projection",
       "Population reaches 4.66M by 2074 (range 4.35 to 4.98M), about 0.7M below WPP because it is re-based on the census",
       "The demographic dividend quantified: the dependency ratio falls from 77 to 49 while old-age dependency triples",
@@ -172,17 +172,17 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I haven't yet digitised the Farafenni and Basse HDSS published life tables or run a GBD cross-check. Both would turn the validation chapter from 'validated against the UN's reconstruction' into 'validated against independent empirical Gambian data'. I flagged them as remaining data tasks rather than inventing numbers. I'd also fit the Bayesian model sex-specifically for the projection and add the UN's own bayesPop as a fourth benchmark.",
     takeaway:
-      "The most important result, that the UN figure is about 13% too high for The Gambia, came from taking the new census seriously and checking every step against a known answer before believing it.",
+      "The most important result: the UN figure is about 13% too high for The Gambia. That came from taking the new census seriously and checking every step against a known answer before believing it.",
   },
   "gambia-political-risk": {
     slug: "gambia-political-risk",
     problem:
-      "The Gambia has no public-facing political risk index. International indices (Moody's, EIU, Fitch) cover the country annually, with proprietary methodology and a paywall most Gambians can't afford. Citizens, diaspora investors, and small businesses making real decisions about risk in The Gambia have nothing they can read in real time. International ratings also tend to lag, they downgrade after a crisis, not before. I wanted to build a transparent, weekly, public index grounded in what Gambian newsrooms are actually publishing, the kind of leading indicator a serious analyst would build for a country they care about.",
+      "The Gambia has no public-facing political risk index. International indices (Moody's, EIU, Fitch) cover the country annually, with proprietary methodology and a paywall most Gambians can't afford. Citizens, diaspora investors, and small businesses making real decisions about risk in The Gambia have nothing they can read in real time. International ratings also tend to lag, they downgrade after a crisis, not before. I wanted to build a transparent, weekly, public index grounded in what Gambian newsrooms are actually publishing.",
     research: [
-      "Read the methodology of EIU's Political Stability Index, Fitch Solutions Country Risk Reports, and the World Bank's Worldwide Governance Indicators. Most blend expert opinion with macro data. None use real-time news. That's the gap.",
+      "Read the methodology of EIU's Political Stability Index, Fitch Solutions Country Risk Reports, and the World Bank's Worldwide Governance Indicators. Most blend expert opinion with macro data. None use real-time news.",
       "Read 'Text as Data' (Grimmer, Stewart, Roberts 2022) end-to-end before designing the pipeline. The book's lesson on validation, that a model has to be tested against something the researchers couldn't see during training, drove the manual-labelling and event-annotation steps.",
       "Studied Hutto & Gilbert's VADER paper to understand what the lexicon-based baseline could and couldn't do. VADER was designed for social media; news headlines are slightly different register but close enough for a baseline.",
-      "Read Sanh et al. 2019 on distilBERT and HuggingFace's distilbert-base-uncased-finetuned-sst-2-english model card. SST-2 was trained on movie reviews, so I expected weaker transfer to political news, that's exactly what manual evaluation has to confirm or refute.",
+      "Read Sanh et al. 2019 on distilBERT and HuggingFace's distilbert-base-uncased-finetuned-sst-2-english model card. SST-2 was trained on movie reviews, so I expected weaker transfer to political news. That is what the manual evaluation is designed to confirm or refute.",
       "Read Blei, Ng, Jordan 2003 (LDA) and Roder, Both, Hinneburg 2015 on topic-coherence metrics (c_v specifically). c_v correlates better with human topic-quality judgements than perplexity, so it's the right metric to optimise k.",
       "Studied UMAP (McInnes, Healy, Melville 2018) before picking it over t-SNE for cluster visualisation. UMAP preserves global structure; t-SNE is local-only. I wanted to see whether LDA topics and K-Means clusters agreed at a global level, so global structure matters.",
       "Read about The Gambia's actual political timeline (Jammeh era 1994-2017, the 2016 election that ended it, Barrow's first term, the 2021 re-election, the 2022 National Assembly elections, COVID's economic shock) to know which events the index would have to capture during validation.",
@@ -191,7 +191,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "All four sources have to be scraped politely. Aggressive scraping gets the IP blacklisted, which is unrecoverable since they're small publications with one IP block away from killing the project.",
       "Free-tier compute throughout. No GPU, no managed vector DB, no paid embedding API.",
       "Model choices have to fit on a laptop and on Render's free tier (512 MB RAM after the runtime).",
-      "Hallucination in this domain would be reputationally fatal, the index has to be defensible at every step, not a black box.",
+      "Hallucination in this domain would be reputationally fatal. The index has to be defensible at every step.",
       "English-only corpus. Wolof, Mandinka, Fula print isn't accessible. The index measures the English-language political conversation specifically, and the README has to acknowledge that limitation.",
     ],
     decisions: [
@@ -218,7 +218,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Stream the LLM provider / HuggingFace responses chunked, but validate AFTER, not during.",
         reason:
-          "Same lesson as Gambia Legal Aid. If a sentiment label appears mid-stream and turns out to be wrong on validation, the user already saw it. I generate the full response, validate (label is in the SST-2 binary set, score is in [0,1]), then return. Trust over speed.",
+          "Same lesson as Gambia Legal Aid. If a sentiment label appears mid-stream and turns out to be wrong on validation, the user already saw it. I generate the full response, validate (label is in the SST-2 binary set, score is in [0,1]), then return.",
       },
       {
         call: "LDA on TF-IDF for interpretability + K-Means on embeddings for tightness, cross-validate.",
@@ -248,7 +248,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     weaknesses: [
       "I had not used HuggingFace's transformers pipeline at scale before. First attempt loaded the full distilBERT model on every API call, cold start was 30+ seconds. Refactored to lazy-load on first /analyze request and cache the pipeline in module-level state. Cold start is now once per Render instance lifetime, not per request.",
-      "I underestimated how messy real Gambian news HTML would be. The Point and Foroyaa share WordPress markup; Gainako and Standard have hand-rolled custom themes with inconsistent class names. Wrote per-source extractors after the generic approach kept missing 30% of articles. Sometimes the cheap solution (hand-tune four selectors) beats the elegant one.",
+      "I underestimated how messy real Gambian news HTML would be. The Point and Foroyaa share WordPress markup; Gainako and Standard have hand-rolled custom themes with inconsistent class names. Wrote per-source extractors after the generic approach kept missing 30% of articles.",
       "I had not implemented coherence scoring before. Read Roder et al. 2015 to understand c_v specifically (it combines NPMI with sliding-window co-occurrence and cosine similarity). Used gensim's CoherenceModel rather than implementing from scratch, but read the source to understand what it was computing.",
       "Manual labelling of 200 articles is harder than it sounds. Ambiguous tone, sarcasm, headlines that read positive but cover a negative event, all require careful judgement. Built a labelling rubric (positive = the event/decision is good for The Gambia; negative = bad for The Gambia; neutral = factual reporting with no clear valence) and applied it consistently. Inter-rater consistency would be the next step if I had a labelling team.",
     ],
@@ -263,18 +263,18 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Render config for the API + Vercel-ready dashboard",
     ],
     regret:
-      "I'd add a multilingual ingestion path next, Wolof and Mandinka coverage matters because those languages dominate radio and informal political conversation in The Gambia. The technical bar is a translation pipeline plus accepting that the source quality (transcribed audio vs newspaper text) is messier. The single most useful extension to the index. Also planning to compare PRI against EIU / Fitch annual ratings as a long-term ground truth once a year of data has accumulated.",
+      "I'd add a multilingual ingestion path next. Wolof and Mandinka coverage matters because those languages dominate radio and informal political conversation in The Gambia. The technical bar is a translation pipeline plus accepting that the source quality (transcribed audio vs newspaper text) is messier. I am also planning to compare the PRI against EIU and Fitch annual ratings as a long-term ground truth once a year of data has accumulated.",
     takeaway:
-      "When the data is messy and the stakes are visible (a public political index for a country with no other public index), every layer of the pipeline has to be defensible on its own. Scraping has to be polite, preprocessing has to be reproducible, sentiment has to be evaluated against ground truth, the index has to drop during real crises. Cut corners anywhere and the whole thing collapses.",
+      "When the data is messy and the output is public, every layer of the pipeline has to be defensible on its own. Scraping has to be polite. Preprocessing has to be reproducible. Sentiment has to be evaluated against ground truth. The index has to drop during real crises.",
   },
   "ayat": {
     slug: "ayat",
     problem:
-      "I had been reading the Qur'an my whole life through scrolling apps that treat the book as a list of 6,236 numbered cells. Every Quran app does the same thing: scroll, tap, scroll, tap. But the Qur'an is not linear. It loops. It cross-references itself. Surah 2 borrows imagery from Surah 12, Surah 12 mirrors structures from Surah 7. Reading it linearly is like reading a hypertext document with all the links removed. I wanted to make those connections physically visible, in a way that would let a reader feel the book's geometry instead of just see its text.",
+      "I had been reading the Qur'an my whole life through scrolling apps that treat the book as a list of 6,236 numbered cells. Every Quran app does the same thing: scroll, tap, scroll, tap. But the Qur'an is not linear. It loops. It cross-references itself. Surah 2 borrows imagery from Surah 12. Surah 12 mirrors structures from Surah 7. Reading it linearly is like reading a hypertext document with all the links removed. I wanted to make those connections physically visible. Let a reader feel the book's geometry instead of just see its text.",
     research: [
       "Read the original UMAP paper (McInnes, Healy 2018) before picking it over t-SNE. UMAP preserves global structure better, which is what I needed, themes have to land near each other across the whole corpus, not just locally.",
       "Studied which sentence-transformer model to use. Tried `all-mpnet-base-v2` (768-dim, slower) and `all-MiniLM-L6-v2` (384-dim, faster). Compared cluster coherence on a 200-verse sample. MiniLM lost ~3% on coherence but ran 2.5x faster on CPU. Picked MiniLM because the corpus is fixed and the speed lets me iterate on clustering parameters at no cost.",
-      "Read existing Quran apps in detail before designing UX (Quran.com, Tarteel, Muslim Pro, Bayyinah). Identified what they all share: the verse list. Identified what none of them have: a spatial sense of the corpus. That gap was the whole opportunity.",
+      "Read existing Quran apps in detail before designing UX (Quran.com, Tarteel, Muslim Pro, Bayyinah). Identified what they all share: the verse list. Identified what none of them have: a spatial sense of the corpus.",
       "Studied Three.js batching strategies. Naive Three.js creates one DrawCall per object, fine for 50 cubes, fatal for 6,236 verses on a phone. Read three example codebases, two using InstancedMesh and one using a Points cloud, and compared what each actually costs per particle before writing my own.",
       "Read Aupetit and Espadoto's work on user-steerable projections (arXiv 2506.15479, June 2025) before designing the query-driven layout. Their approach zero-shot-classifies every item with an LLM, then re-runs UMAP. Reported throughput is 2.4-3.6 items/sec, which for 6,236 verses is roughly half an hour per question. That number is what pushed me to steer the projection geometrically from the query vector alone and spend exactly one model call afterwards, on labelling, instead of six thousand.",
       "Read about the Meccan vs Medinan classification. Surahs were revealed in two distinct phases (Meccan: 13 years, cosmic, urgent, short; Medinan: 10 years, legislative, communal, long). Realised this was free metadata I could use for color, a layer of meaning that a religious reader would already recognize.",
@@ -290,7 +290,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Embed once in Python, ship a static JSON. Never embed at runtime.",
         reason:
-          "The corpus is fixed forever, 6,236 verses, never changes. So I run sentence-transformers locally, project to 3D with UMAP, cluster with HDBSCAN, then dump the result as a JSON file the frontend just downloads. No vector DB, no embedding API at runtime, zero per-user cost. This is the single decision that makes the entire app free to operate.",
+          "The corpus is fixed forever, 6,236 verses, never changes. So I run sentence-transformers locally, project to 3D with UMAP, cluster with HDBSCAN, then dump the result as a JSON file the frontend just downloads. No vector DB, no embedding API at runtime, zero per-user cost.",
       },
       {
         call: "One WebGL point cloud, not HTML/SVG/canvas.",
@@ -300,7 +300,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Color verses by Meccan vs Medinan revelation, not by cluster ID.",
         reason:
-          "Cluster IDs are abstract. A religious reader looking at the galaxy needs the visualisation to mean something they already understand. Coloring by revelation period gives the cosmos an immediate readable narrative, early Meccan verses (cosmic, urgent) cluster together, late Medinan verses (legislative, communal) cluster together. The data tells a story before anyone clicks anything.",
+          "Cluster IDs are abstract. A religious reader looking at the galaxy needs the visualisation to mean something they already understand. Coloring by revelation period gives the cosmos an immediate readable narrative, early Meccan verses (cosmic, urgent) cluster together, late Medinan verses (legislative, communal) cluster together. The map reads before anyone clicks anything.",
       },
       {
         call: "Ship the full 384-dim embeddings rather than reuse the PCA-64 already in the file.",
@@ -315,17 +315,17 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Let an unanswerable question return nothing.",
         reason:
-          "Every search interface returns something. Type anything into any Qur'an app and you get a confident ranked list, which quietly implies an answer exists and these are it, and that is the most common way software misleads people about scripture. Because the 384-dim scores are absolutely calibrated I can set a floor with a measured basis rather than a guess: 20 deliberately off-topic queries score 0.187 to 0.442 on their best match, 14 on-topic ones score 0.412 to 0.735. Below the floor the galaxy stays dark and the readout says the Qur'an doesn't frame it that way. Refusing to answer is a feature I had to build deliberately.",
+          "Every search interface returns something. Type anything into any Qur'an app and you get a confident ranked list, which quietly implies an answer exists and these are it, and that is the most common way software misleads people about scripture. Because the 384-dim scores are absolutely calibrated I can set a floor with a measured basis rather than a guess: 20 deliberately off-topic queries score 0.187 to 0.442 on their best match, 14 on-topic ones score 0.412 to 0.735. Below the floor the galaxy stays dark and the readout says the Qur'an does not frame it that way.",
       },
       {
         call: "AI tafsir cached per verse globally, not per user.",
         reason:
-          "Once the model has analysed verse 2:255, that analysis is the same for every user. I cache it server-side keyed on `surah:ayah`, so the second user pays nothing. With ~6,236 verses, the entire tafsir corpus costs about $30 to generate once, then is free forever. The caching layer is the difference between a hobby project and a sustainable one.",
+          "Once the model has analysed verse 2:255, that analysis is the same for every user. I cache it server-side keyed on `surah:ayah`, so the second user pays nothing. With ~6,236 verses, the entire tafsir corpus costs about $30 to generate once, then is free forever.",
       },
       {
         call: "Custom pill dropdown for reciter selection, not native <select>.",
         reason:
-          "Native selects render inconsistently across mobile browsers, different on iOS, Android Chrome, Samsung Internet. I needed a dropdown that visually matched the cosmos aesthetic and wrapped its width to the reciter's name (some names are long, 'Mahmoud Khalil Al Husary'). I went through three iterations: bleed-off-screen bug, clipping inside parent containers, then portal-rendered with smart up/down placement. Tiny detail, hours of work, dramatic UX upgrade.",
+          "Native selects render inconsistently across mobile browsers, different on iOS, Android Chrome, Samsung Internet. I needed a dropdown that visually matched the cosmos aesthetic and wrapped its width to the reciter's name (some names are long, 'Mahmoud Khalil Al Husary'). I went through three iterations: bleed-off-screen bug, clipping inside parent containers, then portal-rendered with smart up/down placement. A small detail, hours of work, a real UX upgrade.",
       },
       {
         call: "Theme search animates the matched stars, dims the rest, and locks clicks.",
@@ -334,8 +334,8 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
-      "The feature I was proudest of designing did not survive measurement, and killing it was the right call. The plan was that a question would fan the matching verses into a ring of labelled arcs, so 'mercy' would separate into mercy-as-forgiveness, mercy-as-provision, mercy-as-withheld-punishment. I built a demo on synthetic vectors and it looked beautiful. Then I checked it against the actual corpus. The residual after removing the query direction is essentially one-dimensional: across five queries the first eigenvalue carries 22-33% of the variance and the second only 4-6%, indistinguishable from the third and fourth. My two-axis fan was spreading verses along one real direction and one axis of pure noise. I tried clustering the matched set instead, and k-means silhouette scored 0.03-0.07 for every k from 2 to 6, which is near zero, meaning the groups overlap almost entirely. This corpus is semantically continuous, not clumpy, which is the same property that made HDBSCAN call 78% of it noise. So two thirds of my own proposal was wrong.",
-      "What survived that measurement is better than what I designed. One axis of difference is real and reads as a genuine polarity: for 'mercy' it runs from divine attribute (The Most Merciful) to mercy enacted (protect them from evil consequences); for 'patience in hardship' from the counsel to be patient to the affliction itself; for 'forgiving my father' from literal kin to repentance before God. So the galaxy spreads answers along one named axis instead of a fictional ring, and the two ends are labelled by one cached model call rather than the arcs I could not produce. The visualisation now claims exactly as much structure as the data actually contains.",
+      "The feature I was proudest of designing did not survive measurement, and killing it was the right call. The plan was that a question would fan the matching verses into a ring of labelled arcs, so 'mercy' would separate into mercy-as-forgiveness, mercy-as-provision, mercy-as-withheld-punishment. I built a demo on synthetic vectors and it looked beautiful. Then I checked it against the actual corpus. The residual after removing the query direction is essentially one-dimensional: across five queries the first eigenvalue carries 22-33% of the variance and the second only 4-6%, indistinguishable from the third and fourth. My two-axis fan was spreading verses along one real direction and one axis of pure noise. I tried clustering the matched set instead, and k-means silhouette scored 0.03-0.07 for every k from 2 to 6, which is near zero, meaning the groups overlap almost entirely. This corpus is semantically continuous rather than clumpy, which is the same property that made HDBSCAN call 78% of it noise.",
+      "What survived that measurement is better than what I designed. One axis of difference is real and reads as a genuine polarity: for 'mercy' it runs from divine attribute (The Most Merciful) to mercy enacted (protect them from evil consequences); for 'patience in hardship' from the counsel to be patient to the affliction itself; for 'forgiving my father' from literal kin to repentance before God. So the galaxy spreads answers along one named axis instead of a fictional ring, and the two ends are labelled by one cached model call rather than the arcs I could not produce. The visualisation now claims only as much structure as the data contains.",
       "First version did the embedding + clustering at request time on Vercel Edge. It worked but took 8 seconds on cold start. Moved everything to a one-shot Python pipeline that writes the static file at build time. Cold start is now instant. Documented in commit 9520c55: galaxy physics, video reset, debounce, shooting stars all stabilised together.",
       "Originally fetched the AI analysis on every verse open. Realised most users skim, so I made it click-to-reveal, the analysis only fetches when the user explicitly asks for it. Cut my LLM spend by ~70%. This pattern became the default for every AI feature in v2.",
       "First tour implementation had a race condition where the next step would fire before the previous step's animation finished. Caused card overlap on mobile (commit 0309957). Fixed by holding tour state in a state machine with explicit transitions instead of setTimeout chains.",
@@ -363,9 +363,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Guided onboarding tour with state-machine transitions",
     ],
     regret:
-      "I proposed the labelled-arc feature publicly before I had tested whether the structure existed. The write-up was confident, the demo was persuasive, and the whole thing rested on synthetic vectors with the clusters planted in them by construction. If I had run the eigenvalue check first, an afternoon's work, I would have designed the one-dimensional version from the start instead of arriving at it by demolition. I now treat a convincing demo on synthetic data as evidence of nothing.",
+      "I proposed the labelled-arc feature publicly before I had tested whether the structure existed. The write-up was confident, the demo was persuasive, and the whole thing rested on synthetic vectors with the clusters planted in them by construction. If I had run the eigenvalue check first, an afternoon's work, I would have designed the one-dimensional version from the start.",
     takeaway:
-      "When the corpus is fixed, do the expensive work once and ship the artefact, and when the per-user cost is zero you can run forever on free tiers. But the thing this project actually taught me is narrower and more useful: measure the claim your design depends on before you build on it. Two thirds of my proposal died to an eigenvalue check and a silhouette score, and the feature that shipped is more honest for it. The Qur'an is the only book I know that asks the reader to find connections across its 114 chapters. Software should reward that, and it should also admit when there is no connection to find.",
+      "When the corpus is fixed, do the expensive work once and ship the artefact. When the per-user cost is zero, the app runs on free tiers forever. The narrower lesson: measure the claim your design depends on before you build on it. Two thirds of the proposed feature died to an eigenvalue check and a silhouette score.",
   },
   "vantage": {
     slug: "vantage",
