@@ -174,99 +174,6 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     takeaway:
       "The UN figure is about 13% too high for The Gambia. That came from taking the new census seriously and checking every step against a known answer before believing it.",
   },
-  "gambia-political-risk": {
-    slug: "gambia-political-risk",
-    problem:
-      "The Gambia has no public-facing political risk index. International indices (Moody's, EIU, Fitch) cover the country annually, with proprietary methodology and a paywall most Gambians can't afford. Citizens, diaspora investors, and small businesses making real decisions about risk in The Gambia have nothing they can read in real time. International ratings also tend to lag, they downgrade after a crisis, not before. I wanted to build a transparent, weekly, public index grounded in what Gambian newsrooms are actually publishing.",
-    research: [
-      "Read the methodology of EIU's Political Stability Index, Fitch Solutions Country Risk Reports, and the World Bank's Worldwide Governance Indicators. Most blend expert opinion with macro data. None use real-time news.",
-      "Read 'Text as Data' (Grimmer, Stewart, Roberts 2022) end-to-end before designing the pipeline. The book's lesson on validation, that a model has to be tested against something the researchers couldn't see during training, drove the manual-labelling and event-annotation steps.",
-      "Studied Hutto & Gilbert's VADER paper to understand what the lexicon-based baseline could and couldn't do. VADER was designed for social media; news headlines are slightly different register but close enough for a baseline.",
-      "Read Sanh et al. 2019 on distilBERT and HuggingFace's distilbert-base-uncased-finetuned-sst-2-english model card. SST-2 was trained on movie reviews, so I expected weaker transfer to political news. That is what the manual evaluation is designed to confirm or refute.",
-      "Read Blei, Ng, Jordan 2003 (LDA) and Roder, Both, Hinneburg 2015 on topic-coherence metrics (c_v specifically). c_v correlates better with human topic-quality judgements than perplexity, so it's the right metric to optimise k.",
-      "Studied UMAP (McInnes, Healy, Melville 2018) before picking it over t-SNE for cluster visualisation. UMAP preserves global structure; t-SNE is local-only. I wanted to see whether LDA topics and K-Means clusters agreed at a global level, so global structure matters.",
-      "Read about The Gambia's actual political timeline (Jammeh era 1994-2017, the 2016 election that ended it, Barrow's first term, the 2021 re-election, the 2022 National Assembly elections, COVID's economic shock) to know which events the index would have to capture during validation.",
-    ],
-    constraints: [
-      "All four sources have to be scraped politely. Aggressive scraping gets the IP blacklisted, which is unrecoverable since they're small publications with one IP block away from killing the project.",
-      "Free-tier compute throughout. No GPU, no managed vector DB, no paid embedding API.",
-      "Model choices have to fit on a laptop and on Render's free tier (512 MB RAM after the runtime).",
-      "Hallucination in this domain would be reputationally fatal. The index has to be defensible at every step.",
-      "English-only corpus. Wolof, Mandinka, Fula print isn't accessible. The index measures the English-language political conversation specifically, and the README has to acknowledge that limitation.",
-    ],
-    decisions: [
-      {
-        call: "Scrape with BeautifulSoup + requests, not Scrapy.",
-        reason:
-          "Scrapy is overkill for four publications and adds a heavy framework dependency. BeautifulSoup + requests is enough, easier to read, and handles the per-site selector quirks naturally. Each publication has its own scraper function with site-specific selectors and a fall-through to generic <p> tags if a class isn't found.",
-      },
-      {
-        call: "Hand-curated section selectors per source, not generic boilerplate stripping.",
-        reason:
-          "Generic boilerplate-removal libraries (newspaper3k, trafilatura) miss site-specific markup or include navigation. For four sites I can test by hand, hardcoded selectors per source give cleaner extraction. The trade-off: the scraper breaks if a site redesigns. Acceptable, I can fix selectors faster than I can debug a black-box library.",
-      },
-      {
-        call: "Sentence-transformers all-MiniLM-L6-v2 over mpnet-base.",
-        reason:
-          "MiniLM is 384-dim vs mpnet's 768-dim, ~22 MB vs ~120 MB on disk. Quality on retrieval benchmarks is roughly 95% of mpnet. For a corpus of ~5k articles where I run embeddings on a laptop, MiniLM's speed advantage matters more than mpnet's quality bump.",
-      },
-      {
-        call: "VADER + distilBERT side-by-side, evaluate on 200 manually-labelled articles, pick the winner.",
-        reason:
-          "Lexicon vs transformer is a classic comparison. VADER is fast, instant, no GPU. distilBERT is more contextual but trained on movie reviews, so transfer to news is uncertain. Rather than guess which works better, I label 200 random articles by hand and let the F1 score decide. The winner drives the PRI; the loser becomes a sanity-check baseline.",
-      },
-      {
-        call: "Stream the LLM provider / HuggingFace responses chunked, but validate AFTER, not during.",
-        reason:
-          "Same lesson as Gambia Legal Aid. If a sentiment label appears mid-stream and turns out to be wrong on validation, the user already saw it. I generate the full response, validate (label is in the SST-2 binary set, score is in [0,1]), then return.",
-      },
-      {
-        call: "LDA on TF-IDF for interpretability + K-Means on embeddings for tightness, cross-validate.",
-        reason:
-          "LDA gives interpretable topic-word distributions (you can label the topics by reading the top words). K-Means on embeddings gives semantically tighter clusters but no human-readable summary. Used together they cross-validate: a stable topic should appear in both. If a topic appears only in LDA, I check the top words for spurious lexical clustering. If it appears only in K-Means, I read sample articles to understand what's holding them together.",
-      },
-      {
-        call: "FastAPI for the service, not Flask.",
-        reason:
-          "FastAPI is async-native, has Pydantic validation built in, and matches the Python backend stack I use across HireIQ, ColdPilot, Gambia Legal Aid. Flask would mean adding Marshmallow or Pydantic-Flask for validation and bolting on async. FastAPI is the cleaner default for new services.",
-      },
-      {
-        call: "Next.js 16 + Recharts dashboard, not Streamlit.",
-        reason:
-          "Streamlit is fast to prototype, but the result feels like a dashboard built in 30 minutes. For a public-facing tool that will be linked from my portfolio, the design language has to match the rest of my work. Next.js + Recharts gives me real control over the UI, deploys for free on Vercel, and reuses skills from every other project I've built.",
-      },
-      {
-        call: "Validate the PRI against known events AND macro data, not just face validity.",
-        reason:
-          "The index has to drop during the 2016 transition, the 2017 Jammeh exile, the COVID-19 declaration, and the 2021 election cycle. If it doesn't, the weighting is wrong and I re-tune. On top of that, Pearson correlation with World Bank GDP growth and remittance inflows. If the index has positive face validity but zero macro correlation, that's a sign the news cycle and the economy are decoupled (possible) or the index is measuring noise (more likely). Two-layer validation.",
-      },
-    ],
-    pivots: [
-      "Initial plan was Flask + Streamlit per the brief I was given. I made the call to switch to FastAPI + Next.js because they match the rest of my stack, and explained why in the README so the swap is defensible to anyone reviewing the original spec.",
-      "Originally planned to scrape with Selenium for JavaScript-rendered content. Tested the four sites; all four serve server-rendered HTML, BeautifulSoup is enough. Saved a heavy Selenium dependency and Chromium install.",
-      "First risk-index draft used unweighted average of the four signals. Plotted it; the result was too noisy and didn't drop sharply during the 2016 election. Re-weighted to 40/30/20/10 based on signal-to-noise on the validation events. The weights are now justified explicitly in the README rather than hidden as magic numbers.",
-    ],
-    weaknesses: [
-      "I had not used HuggingFace's transformers pipeline at scale before. First attempt loaded the full distilBERT model on every API call, cold start was 30+ seconds. Refactored to lazy-load on first /analyze request and cache the pipeline in module-level state. Cold start is now once per Render instance lifetime, not per request.",
-      "I underestimated how messy real Gambian news HTML would be. The Point and Foroyaa share WordPress markup; Gainako and Standard have hand-rolled custom themes with inconsistent class names. Wrote per-source extractors after the generic approach kept missing 30% of articles.",
-      "I had not implemented coherence scoring before. Read Roder et al. 2015 to understand c_v specifically (it combines NPMI with sliding-window co-occurrence and cosine similarity). Used gensim's CoherenceModel rather than implementing from scratch, but read the source to understand what it was computing.",
-      "Manual labelling of 200 articles is harder than it sounds. Ambiguous tone, sarcasm, headlines that read positive but cover a negative event, all require careful judgement. Built a labelling rubric (positive = the event/decision is good for The Gambia; negative = bad for The Gambia; neutral = factual reporting with no clear valence) and applied it consistently. Inter-rater consistency would be the next step if I had a labelling team.",
-    ],
-    outcome: [
-      "End-to-end pipeline scaffolded: scraper, then preprocessor, then features, then sentiment, then topics, then weekly PRI",
-      "9 Jupyter notebooks documenting every step with markdown explanations",
-      "FastAPI service with three endpoints (/analyze, /risk-index, /risk-index/current)",
-      "Next.js + Recharts dashboard with PRI line chart, current score, and analyse-text widget",
-      "VADER + distilBERT side-by-side architecture, evaluation harness ready for the 200-article labelling pass",
-      "LDA + K-Means cross-validating topics, UMAP visualisation",
-      "PRI validation framework: event annotations + Pearson correlation with World Bank macro data",
-      "Render config for the API + Vercel-ready dashboard",
-    ],
-    regret:
-      "I'd add a multilingual ingestion path next. Wolof and Mandinka coverage matters because those languages dominate radio and informal political conversation in The Gambia. The technical bar is a translation pipeline plus accepting that the source quality (transcribed audio vs newspaper text) is messier. I am also planning to compare the PRI against EIU and Fitch annual ratings as a long-term ground truth once a year of data has accumulated.",
-    takeaway:
-      "When the data is messy and the output is public, every layer of the pipeline has to be defensible on its own. Scraping has to be polite. Preprocessing has to be reproducible. Sentiment has to be evaluated against ground truth. The index has to drop during real crises.",
-  },
   "ayat": {
     slug: "ayat",
     problem:
@@ -370,7 +277,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "vantage": {
     slug: "vantage",
     problem:
-      "Tech news is unreadable. The volume per day is in the hundreds of thousands of articles globally, and most of it is noise, patch notes, gadget sales, recycled press releases, identical takes on the same Reuters wire. I wanted a feed that did the synthesis for me, scored each story by signal strength, and let me skim only what mattered across six regions. I also wanted it to read like editorial, the register of Ben Thompson or The Economist, not a Twitter bot summarising headlines.",
+      "Tech news is unreadable. The volume per day is in the hundreds of thousands of articles globally, and most of it is noise, patch notes, gadget sales, recycled press releases, identical takes on the same Reuters wire. I wanted a feed that did the synthesis for me, scored each story by signal strength, and let me skim only what mattered across six regions. I also wanted it to read like editorial, in the register of Ben Thompson or The Economist.",
     research: [
       "Read 100+ Stratechery articles to internalise Ben Thompson's structure: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. Translated this into an explicit system prompt with banned phrases ('In a move that…', 'It's worth noting…') and required structures.",
       "Studied NewsAPI's free tier limits in detail before architecting anything. 100 requests/day, language=en filter, 10 articles per query. That number determined the entire pipeline: I couldn't fan-out to all six regions in parallel, I had to chain them through a single daily run.",
@@ -404,7 +311,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Strict editorial system prompt with explicit banned phrases.",
         reason:
-          "VANTAGE exists so articles read like editorial, not like a language model explaining the news. The system prompt is ~400 words of explicit constraints: every headline is a verdict, follow the money first, name names, no em-dashes (use commas/colons/periods only), no 'it's worth noting' / 'interestingly' / 'in a move that…', short paragraphs (2-3 sentences), end with a falsifiable prediction. The output reads sharp because the prompt is sharp.",
+          "VANTAGE exists so articles read like editorial, not like a language model explaining the news. The system prompt is ~400 words of explicit constraints: every headline is a verdict, follow the money first, name names, no em-dashes (use commas/colons/periods only), no 'it's worth noting' / 'interestingly' / 'in a move that…', short paragraphs (2-3 sentences), end with a falsifiable prediction.",
       },
       {
         call: "Use Haiku for the pipeline, not Sonnet.",
@@ -424,13 +331,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     pivots: [
       "First version stored articles forever. Quickly the feed had 800 articles and the page took 4 seconds to load. Added the /api/expire route to delete >48h. Then ran out of credits, disabled deletion. The feed now persists historic articles intentionally.",
-      "Pipeline timeout was a recurring battle. First attempt with full prompt at 4000 tokens timed out. Trimmed prompt, then still timed out. Switched Haiku, then fitted. Then added Reddit + HN sub-pipelines, then timed out again. Dropped them. Final: lean RSS-only ingestion, 2500 tokens, Haiku, fits 60s. Half the iterations were: add capability, blow timeout, remove capability.",
+      "Pipeline timeout was a recurring battle. First attempt with full prompt at 4000 tokens timed out. Trimmed prompt, then still timed out. Switched Haiku, then fitted. Then added Reddit + HN sub-pipelines, then timed out again. Dropped them. Final: lean RSS-only ingestion, 2500 tokens, Haiku, fits 60s. Half the iterations were add capability, blow timeout, remove capability.",
       "NEXT_PUBLIC_SITE_URL was hardcoded to a stale Vercel auto-URL (`vantage-three-chi.vercel.app`) that broke after a project rename. The chain-of-regions silently died because `fetch().catch(() => {})` swallowed the DNS error. No alarm fired; the feed just stopped updating regional content. Took me weeks to notice because global was still working.",
       "Found a stray `OneDrive/Desktop/FORGE/` folder accidentally committed inside the vantage repo (probably a Windows OneDrive sync mishap). Vercel build failed with a TypeScript error pointing into FORGE's `prisma.config.ts`. Removed the folder, added it to .gitignore.",
     ],
     weaknesses: [
       "I didn't fully understand SSE streaming when I started. Vercel Edge has different streaming semantics than Node. Spent a day debugging why chunks were buffering instead of arriving incrementally. Fix was using `controller.enqueue(encoder.encode(chunk))` instead of trying to write to the response body directly.",
-      "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch, then JSON parse, then embedding lookup, then the model call, then DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) was a forcing function.",
+      "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch, then JSON parse, then embedding lookup, then the model call, then DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) took a while.",
       "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns major AI labs news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global regions to escape NewsAPI's relevancy bias.",
     ],
     outcome: [
@@ -443,7 +350,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Graceful degradation: when credits exhaust, articles persist instead of dying silently",
     ],
     regret:
-      "I'd add an embedding-based 'find me articles like this one' next step. Right now the user picks a region and category. Semantic similarity would be more useful than topical buckets. Same trick I used in AYAT would work here.",
+      "I'd add an embedding-based 'find me articles like this one' next step. Right now the user picks a region and category. Semantic similarity would be more useful than topical buckets. The same approach from AYAT would work here.",
     takeaway:
       "De-duplicating before the model call cut roughly 70% of the LLM spend. The free-tier constraints (60s timeout, 100 requests a day, 500 MB database) shaped the whole pipeline: chain-of-regions instead of parallel fetch, RSS instead of scraping, Haiku instead of Sonnet.",
   },
@@ -474,7 +381,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Multi-layer hallucination guard: section allowlist + verbatim quote validation + banned phrases.",
         reason:
-          "Standard RAG guards against hallucination by retrieving good context. Mine goes further. After retrieval I build a per-Act allowlist mapping section number to section title. The prompt instructs the model to cite ONLY numbers from this allowlist, AND to quote any direct text VERBATIM as a substring of the retrieved chunks. Post-generation validator: every cited section number is checked against the allowlist; every quoted span is checked as a substring of context. Anything that fails is hard-rejected, the system retries with explicit feedback ('you cited section 15 but only sections 14, 18, 22 are valid; quoted text was not in context'). If the retry also fails, the system refuses to answer rather than ship a bad citation.",
+          "Standard RAG guards against hallucination by retrieving good context. This pipeline adds a per-Act allowlist mapping section number to section title. The prompt instructs the model to cite ONLY numbers from this allowlist, AND to quote any direct text VERBATIM as a substring of the retrieved chunks. Post-generation validator: every cited section number is checked against the allowlist; every quoted span is checked as a substring of context. Anything that fails is hard-rejected, the system retries with explicit feedback ('you cited section 15 but only sections 14, 18, 22 are valid; quoted text was not in context'). If the retry also fails, the system refuses to answer rather than ship a bad citation.",
       },
       {
         call: "Section title allowlist with claim-matching, not just number allowlist.",
@@ -494,12 +401,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Stream the answer word-by-word AFTER validation, not during generation.",
         reason:
-          "Standard SSE streaming would write tokens as the model produces them. But if a hallucinated citation appears mid-stream, you can't pull it back, the user already read it. Instead I generate the full answer, validate it, THEN stream it word-by-word for the typewriter effect. Slightly slower start (the user waits ~3s for first token instead of ~1s), but every word that appears is already validated. Trust over speed (commit dc4ae3f).",
+          "Standard SSE streaming would write tokens as the model produces them. But if a hallucinated citation appears mid-stream, you can't pull it back, the user already read it. Instead I generate the full answer, validate it, then stream it word-by-word for the typewriter effect. Slightly slower start (the user waits ~3s for first token instead of ~1s), but every word that appears has already been validated (commit dc4ae3f).",
       },
       {
         call: "Banned-phrase list: no 'consult a lawyer', no 'review your contract'.",
         reason:
-          "These phrases are noise. They're what useless lawyer-bots say to dodge accountability. The user is here BECAUSE they don't have a lawyer. Banned them at the prompt level AND at the post-processing level. If the model slipped them in, the post-processor stripped them. The system has to act AS the lawyer or it fails the brief (commits 5f68053, 61a93b1).",
+          "The user is here because they do not have a lawyer, so 'consult a lawyer' is not useful advice. Banned at the prompt level and at the post-processing level. If the model slips them in, the post-processor strips them (commits 5f68053, 61a93b1).",
       },
       {
         call: "Section number extraction via 'NUMBER. Title' inline regex, not block parsing.",
@@ -513,10 +420,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
-      "First version retrieved top-5 chunks unconditionally and let the model write whatever. Tested it on questions outside the corpus, it confabulated convincingly, citing fake section numbers with fake quotes. Built the citation-anchor + verbatim-quote check as the gate. Pass rate dropped sharply. Trust went up.",
+      "First version retrieved top-5 chunks unconditionally and let the model write whatever. Tested it on questions outside the corpus, it confabulated convincingly, citing fake section numbers with fake quotes. Built the citation-anchor and verbatim-quote check as the gate. Pass rate dropped sharply.",
       "Initial chunking was naive 1000-char windows. A user asked about marriage law and got back chunks from a tax statute that happened to share a phrase. Switched to section-aware chunking: parse the statute's section markers, chunk on them, each chunk is a self-contained legal unit (commit 22f5c6f).",
       "Curly quotes vs straight quotes broke the validator silently. the model would output the curly version of a quoted span and the substring check against straight-quote source text would fail to match. Tightened the regex to normalise both flavours and added 3-word span detection (commit 8cb717a). The bug was invisible in dev (where I copy-pasted source) and only appeared in production where the model's outputs differed from my inputs.",
-      "Added a hard-fail validation that REFUSES to ship the answer if the retry also produces hallucinated citations. Logging shows the user 'I couldn't find this in the statutes I have' instead of returning a confidently wrong answer. The metric I optimise is fabricated citations per million queries, and hard fail is the only way to drive it to zero (commit 5d5a1e4).",
+      "Added a hard-fail validation that REFUSES to ship the answer if the retry also produces hallucinated citations. Logging shows the user 'I couldn't find this in the statutes I have' instead of returning a confidently wrong answer. The metric I optimise is fabricated citations per million queries, and hard fail is the way to drive it to zero (commit 5d5a1e4).",
       "Surfaced 400-status messages in the UI. Originally the client showed 'Something went wrong' for every failure. Legal-validation rejection now shows 'I couldn't ground this in the statutes I have' instead of 'Something went wrong' (commit 5f68053).",
     ],
     weaknesses: [
@@ -538,7 +445,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I'd add multilingual support, Wolof, Mandinka, Fula, Jola. Most of my target users speak those before English. The retrieval layer can stay English (the source statutes are English) but input/output translation around it would dramatically expand the audience. Especially for women in rural areas dealing with the Domestic Violence Act, who often don't have written English literacy.",
     takeaway:
-      "Hallucination prevention is a stack: better retrieval, allowlists, verbatim validation, banned phrases, hard-fail on retry. Each layer catches what the previous one missed.",
+      "Hallucination prevention is a stack: better retrieval, allowlists, verbatim validation, banned phrases, hard-fail on retry.",
   },
   "dalasi-pulse": {
     slug: "dalasi-pulse",
@@ -894,7 +801,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     constraints: [
       "No real African insurance data, most insurers don't share, and what's published is too aggregate to fit individual-level models.",
       "Pandemic was recent. Any stress test had to take that seriously without overfitting to a one-time event.",
-      "Aspirational target: Cox PH C-index above 0.75 (industry good).",
+      "Target: Cox PH C-index above 0.75 (industry good).",
       "Actuarial work is regulated. Black-box ML does not pass review.",
     ],
     decisions: [
@@ -911,7 +818,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Add age × risk-class interaction term to Cox PH.",
         reason:
-          "First Cox PH had C-index of 0.62, below industry standard. The marginal effect of being a smoker is different at age 25 vs age 65. Adding the interaction term (age × risk_class) jumped C-index to 0.77. A 25-year-old smoker has a different relative risk than a 65-year-old smoker. Cox PH's proportional-hazards assumption is violated when interactions matter, and the low C-index is what surfaced it.",
+          "First Cox PH had C-index of 0.62, below industry standard. The marginal effect of being a smoker is different at age 25 vs age 65. Adding the interaction term (age × risk_class) jumped C-index to 0.77. Cox PH's proportional-hazards assumption is violated when interactions matter, and the low C-index is what surfaced it.",
       },
       {
         call: "Monte Carlo VaR with 5,000 scenarios + pandemic shock.",
@@ -926,7 +833,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Vectorise Monte Carlo in NumPy, not pandas.",
         reason:
-          "First implementation looped over 5,000 scenarios in a pandas DataFrame. Took 4 minutes per run. Rewrote in NumPy with vectorised sampling. 8 seconds, same results, 30x faster.",
+          "First implementation looped over 5,000 scenarios in a pandas DataFrame. Took 4 minutes per run. Rewrote in NumPy with vectorised sampling. Same results, 30x faster, 8 seconds per run.",
       },
       {
         call: "Mobile-first dashboard with responsive percentile cells.",
@@ -943,7 +850,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     weaknesses: [
       "I had not used scipy.optimize for MLE before this project. Spent a day learning the BFGS optimiser's quirks and how to set initial parameter estimates so it converges.",
       "Censoring and truncation are subtle. My first survival fit ignored left-truncation (delayed entry into the risk pool), which biased the hazard rate downward. Re-read Klein & Moeschberger, fixed the entry-time handling.",
-      "Cox PH's proportional-hazards assumption is exactly that, an assumption. When violated, the model is wrong in subtle ways. Diagnosing it via Schoenfeld residuals took me longer than it should have. Now I check residuals as part of every fit.",
+      "Cox PH's proportional-hazards assumption is exactly that, an assumption. When violated, the model is wrong in subtle ways. Schoenfeld residuals are what surface a violation. I check them as part of every fit.",
       "Variance reduction in Monte Carlo (control variates, antithetic variables) reduced the run time and stabilised the tail estimates once implemented.",
     ],
     outcome: [
@@ -952,14 +859,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Kaplan-Meier curves with log-rank tests across risk groups",
       "5,000-scenario Monte Carlo VaR (95%, 99%)",
       "Pandemic stress test calibrated to COVID excess-mortality data",
-      "Age-band-specific shock multipliers (more honest than uniform multipliers)",
+      "Age-band-specific shock multipliers",
       "Vectorised NumPy implementation (8s for full Monte Carlo)",
       "Live Next.js + Recharts mobile-responsive dashboard",
     ],
     regret:
       "I'd add a reserves projection module: given current policies and the mortality model, what's the IBNR (incurred but not reported) estimate? I also need to add LGD and EAD analogues for life products (sum-assured at risk).",
     takeaway:
-      "The textbook explains Gompertz-Makeham. Writing the gradient descent yourself shows why the second term matters in the data you actually have. When the assumptions are violated, the model tells you with a low C-index.",
+      "The textbook explains Gompertz-Makeham. Writing the gradient descent yourself shows why the second term matters in the data you actually have.",
   }
 };
 
