@@ -114,8 +114,6 @@ export function Nav() {
           })}
         </ul>
 
-        <ThemeToggle />
-
         {/* Mobile toggle */}
         <button
           type="button"
