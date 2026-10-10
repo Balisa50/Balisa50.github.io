@@ -38,16 +38,16 @@ const config: Config = {
         // read as the darkest thing on the page.
         ink: "var(--ink)",
         text: {
-          DEFAULT: "#1C1917",
-          secondary: "#57534E",
-          faint: "#A8A29E"
+          DEFAULT: "var(--text, #1C1917)",
+          secondary: "var(--text-secondary, #57534E)",
+          faint: "var(--text-faint, #A8A29E)"
         },
 
         // One accent, used for links and the single primary action. Passes AA
         // on the background at body size.
         accent: {
-          DEFAULT: "#1D4ED8",
-          soft: "#EFF4FF"
+          DEFAULT: "var(--accent, #1D4ED8)",
+          soft: "var(--accent-soft, #EFF4FF)"
         },
         // Kept so older components compile; both now resolve to the one accent.
         cyan: { DEFAULT: "#1D4ED8", dark: "#1E40AF" },

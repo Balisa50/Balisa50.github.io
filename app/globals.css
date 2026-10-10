@@ -206,40 +206,40 @@ html {
  * is nearly white, and the accent is lifted a step so it stays legible on
  * dark, which is the same trick every design system uses.
  */
+ * that body text lands around #E7E5E4 (which reads cleanly on #0B0B0C at
+ * AA), faint text stays legible instead of vanishing, and the accent lifts
+ * to #60A5FA so it survives on a dark background.
+ */
 html[data-theme="dark"] {
-  color-scheme: dark;
-
-  --bg: #0B0B0C;
-  --ink: #FAFAF9;
+  --text: #E7E5E4;
+  --text-secondary: #A8A29E;
+  --text-faint: #78716C;
   --accent: #60A5FA;
-  --rule: #26262A;
-  --surface: #131316;
-  --card: #131316;
-  --border: #26262A;
-  --rule-strong: #3F3F46;
-
-  /* Tailwind's colour tokens read from these variables via the config, so
-     overriding them here flips the whole site without touching a class name. */
-  --tw-bg: #0B0B0C;
+  --accent-soft: #1E3A8A;
 }
 
-html[data-theme="dark"] {
-  background-color: #0B0B0C;
+/* Primary body copy under dark. Body text is the one thing that cannot be
+   allowed to dim, because every paragraph depends on it. */
+html[data-theme="dark"] body {
   color: #E7E5E4;
 }
 
-html[data-theme="dark"] body {
-  background-color: #0B0B0C;
-}
-
-/* Surface sits one step up from the page in dark, unlike light where it
-   sits one step down. Same idea, opposite direction. */
-html[data-theme="dark"] .figure {
-  background: #131316;
-  border-color: #26262A;
-}
-
-html[data-theme="dark"] ::selection {
-  background: #1E3A8A;
+/* Display headings go to near-white. The serif needs the contrast or it
+   reads as a smudge at large sizes. */
+html[data-theme="dark"] .display {
   color: #FAFAF9;
+}
+
+/* Small caps labels sit one step dimmer than body but stay above the
+   contrast floor. */
+html[data-theme="dark"] .label {
+  color: #A8A29E;
+}
+
+/* Underline colour on links darkens to match the accent. */
+html[data-theme="dark"] .link-underline {
+  text-decoration-color: #3F3F46;
+}
+html[data-theme="dark"] .link-underline:hover {
+  text-decoration-color: #60A5FA;
 }
