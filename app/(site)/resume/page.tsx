@@ -181,6 +181,16 @@ export default function ResumePage() {
         </ul>
       </header>
 
+      <SectionHeading>Summary</SectionHeading>
+      <p className="measure text-[16px] leading-relaxed text-text-secondary">
+        Statistics undergraduate at KNUST and Mastercard Foundation Scholar.
+        Work in data science, machine learning and statistical modeling, mainly
+        in Python, R and SQL. Projects run end to end, from data pipeline to
+        working interface, with validation documented as carefully as results.
+        Three working papers test whether a model, or the uncertainty it
+        reports, holds up when moved to a country it was never fitted on.
+      </p>
+
       <SectionHeading>Working papers</SectionHeading>
       <p className="mb-6 text-[14px] italic text-text-faint">
         Manuscripts, unrefereed and not submitted. Full texts at{" "}
