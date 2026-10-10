@@ -63,7 +63,7 @@ const config: Config = {
         // Inter for interface and body, a serif for display. The generator
         // proposed Playfair as the BODY face, which is a display serif and
         // unreadable at paragraph length; the roles are swapped here.
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["-apple-system", "BlinkMacSystemFont", "var(--font-inter)", "system-ui", "sans-serif"],
         serif: ["var(--font-serif)", "Georgia", "serif"],
         mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"]
       },

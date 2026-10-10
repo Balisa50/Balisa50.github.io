@@ -40,11 +40,13 @@ html {
 
 html,
 body {
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, sans-serif;
   min-height: 100%;
   min-height: 100svh;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-inter), system-ui, sans-serif;
   background-color: var(--bg);
 }
 
