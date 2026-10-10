@@ -51,7 +51,7 @@ const config: Config = {
         },
         // Kept so older components compile; both now resolve to the one accent.
         cyan: { DEFAULT: "#1D4ED8", dark: "#1E40AF" },
-        pink: "#57534E",
+
 
         status: {
           live: "#15803D",
