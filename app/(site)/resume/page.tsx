@@ -321,25 +321,63 @@ export default function ResumePage() {
       </ul>
 
       <SectionHeading>Leadership</SectionHeading>
-      <div>
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h3 className="text-[16px] font-medium text-ink">
-            Vice President, previously Organising Secretary
-          </h3>
-          <span className="font-mono text-[11px] text-text-faint">
-            2025 - Present
-          </span>
-        </div>
-        <p className="mt-0.5 text-[14px] italic text-text-secondary">
-          GAMTECH, Gambian Students Association at KNUST &middot; Kumasi, Ghana
-        </p>
-        <p className="mt-2 measure text-[15px] leading-relaxed text-text-secondary">
-          Lead the executive committee, assigning portfolios and holding the
-          team to its delivery dates, and plan the year&apos;s events including
-          orientation for newly arrived Gambian students. Previously Organising
-          Secretary, managing meetings and official correspondence.
-        </p>
+      <div className="space-y-8">
+        <article>
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h3 className="text-[16px] font-medium text-ink">
+              Project Lead &amp; Technical Lead, Final Year Project
+            </h3>
+            <span className="font-mono text-[11px] text-text-faint">
+              2026 - 2027
+            </span>
+          </div>
+          <p className="mt-0.5 text-[14px] italic text-text-secondary">
+            KNUST &middot; Kumasi, Ghana
+          </p>
+          <ul className="mt-2 space-y-1.5 measure">
+            <Bullet>
+              Leading a 4-person team building the Assumption Audit Engine, a
+              statistical decision system that enforces assumption checks
+              before a test is trusted, proves the consequences of violations
+              through Monte Carlo simulation, and recommends the correct
+              alternative when assumptions fail.
+            </Bullet>
+            <Bullet>
+              Responsible for problem definition and scope, and for the rule
+              engine that maps each supported statistical test (t-test,
+              ANOVA, regression, chi-square) to its required assumptions, its
+              diagnostics, and its fallback.
+            </Bullet>
+            <Bullet>
+              The project rests on evidence from a 2025 PLoS One study showing
+              that only 37 percent of published regression papers check any
+              assumption, and zero check all of them.
+            </Bullet>
+          </ul>
+        </article>
+
+        <article>
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h3 className="text-[16px] font-medium text-ink">
+              Vice President, previously Organising Secretary
+            </h3>
+            <span className="font-mono text-[11px] text-text-faint">
+              2025 - Present
+            </span>
+          </div>
+          <p className="mt-0.5 text-[14px] italic text-text-secondary">
+            GAMTECH, Gambian Students Association at KNUST &middot; Kumasi, Ghana
+          </p>
+          <p className="mt-2 measure text-[15px] leading-relaxed text-text-secondary">
+            Lead the executive committee, assigning portfolios and holding
+            the team to its delivery dates, and plan the year&apos;s events
+            including orientation for newly arrived Gambian students.
+            Previously Organising Secretary, managing meetings and official
+            correspondence.
+          </p>
+        </article>
       </div>
+
     </main>
   );
 }
