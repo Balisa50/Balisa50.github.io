@@ -154,11 +154,7 @@ export default function ResumePage() {
         <h1 className="display text-[clamp(2.25rem,5vw,3.75rem)]">
           Abdoulie Balisa
         </h1>
-        <p className="measure mt-2 text-[16px] leading-relaxed text-text-secondary">
-          Statistics undergraduate at KNUST. Mastercard Foundation Scholar.
-          Three working papers and eleven shipped projects, in the same shape
-          as the rest of the site.
-        </p>
+        
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-text-secondary">
           <li className="inline-flex items-center gap-2">
             <Github className="h-3.5 w-3.5" aria-hidden="true" />
