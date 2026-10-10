@@ -74,7 +74,7 @@ export const viewport: Viewport = {
   themeColor: "#fafaf9",
   width: "device-width",
   initialScale: 1,
-  colorScheme: "light"
+  colorScheme: "light dark"
 };
 
 export default function RootLayout({
@@ -83,16 +83,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/*
+          Runs before React hydrates. Reads the stored theme, or falls back to
+          the OS setting on first visit, and applies the attribute on <html>
+          before the first paint. Without this the page always renders in
+          light and then snaps to dark a frame later, which is the flash users
+          notice on every navigation.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){try{var t=localStorage.getItem("theme");var d=window.matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"||(!t&&d)){document.documentElement.setAttribute("data-theme","dark");}}catch(e){}})();',
+          }}
+        />
+      </head>
       <body className="bg-background font-sans text-text antialiased">
-        {/* The animated background, scanline sweep, warp navigation, console
-            easter egg and floating CTA were removed rather than restyled.
-            None of them carried information, they competed with the work for
-            attention, and they cost a Three.js bundle on first paint. */}
         <SkipLink />
         {children}
 
-        {/* Register the service worker (progressive enhancement) */}
         <script
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
