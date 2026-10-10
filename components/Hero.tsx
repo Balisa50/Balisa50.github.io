@@ -28,7 +28,7 @@ export function Hero() {
               className="inline-block h-1.5 w-1.5 rounded-full bg-status-live"
               aria-hidden="true"
             />
-            Available for new work · {PROFILE.location}
+            Open to internships · {PROFILE.location}
           </p>
 
           <h1

@@ -4,7 +4,7 @@ import { Papers } from "@/components/Papers";
 export const metadata: Metadata = {
   title: "Papers",
   description:
-    "Working papers, unrefereed. Mortality projection, poverty transfer learning and device-invariant screening, including the results that did not support their own hypotheses."
+    "Three working papers on mortality projection, poverty transfer learning, and device-invariant screening. Drafts, not peer-reviewed, and honest about the results that did not work."
 };
 
 export default function PapersPage() {
