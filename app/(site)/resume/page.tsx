@@ -4,6 +4,7 @@ import { Github, Linkedin, ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Background",
+  robots: { index: false, follow: false },
   description:
     "Statistics undergraduate, three working papers, and eleven shipped data science and machine learning projects."
 };

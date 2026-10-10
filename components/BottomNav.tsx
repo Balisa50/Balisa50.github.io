@@ -2,24 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, FileText, User, Send } from "lucide-react";
+import { Home, Layers, BookOpen, User, Send } from "lucide-react";
 
 /**
  * iOS-style floating tab bar. Mobile only.
  *
- * Five tabs is the maximum that stays readable on a small phone. The set is
- * chosen for the reader who lands on the site from a cold link and wants to
- * decide in one tap whether to reach out: home, work, resume, about, contact.
- *
- * Papers and the build log are still reachable from the top nav on desktop,
- * from the home page, and by URL. They are the destinations a returning
- * reader goes looking for, not the ones a first-time visitor needs on a
- * phone screen.
+ * Resume is not in this bar on purpose. It is unlinked and marked noindex
+ * so it stays off search engines and off the browsing path, and it is
+ * shared by URL when someone asks for the CV.
  */
 const LINKS = [
   { href: "/", label: "Home", Icon: Home },
   { href: "/work", label: "Work", Icon: Layers },
-  { href: "/resume", label: "Resume", Icon: FileText },
+  { href: "/papers", label: "Papers", Icon: BookOpen },
   { href: "/about", label: "About", Icon: User },
   { href: "/contact", label: "Contact", Icon: Send },
 ] as const;
