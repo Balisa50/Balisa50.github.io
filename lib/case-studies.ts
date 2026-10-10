@@ -795,7 +795,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "Should have added video question support from the start. Some senior roles want to see candidates speak, not just type. Roadmap. Also should have built an ATS-export integration (Greenhouse, Lever, Workday) earlier, recruiters live in those tools and copying scored reports manually is friction.",
     takeaway:
-      "A static form can be replaced with an interview at roughly the same UX cost if the model is chosen for the job. Production is full of edge cases nobody warns you about: CORS, cold starts, OAuth loops. The bug list is the case study.",
+      "A static form can be replaced with an interview at roughly the same UX cost if the model is chosen for the job. Production is full of edge cases nobody warns you about: CORS, cold starts, OAuth loops.",
   },
   "credit-risk-scorecard": {
     slug: "credit-risk-scorecard",
