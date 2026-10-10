@@ -152,7 +152,7 @@ export function ProjectRow({ project, index, variant }: Props) {
 
     return (
       <article
-        className="group border-t border-rule py-16 first:border-t-0 md:py-24"
+        className="group py-12 md:py-16"
       >
         <div className="grid grid-cols-1 items-start gap-x-12 gap-y-10 lg:grid-cols-12">
           {/* Figure */}
