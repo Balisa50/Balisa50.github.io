@@ -17,6 +17,10 @@
   --ink: #0c0a09;
   --accent: #1d4ed8;
   --rule: #e7e5e4;
+  --surface: #F4F4F2;
+  --card: #F4F4F2;
+  --border: #E7E5E4;
+  --rule-strong: #D6D3D1;
 
   /* One vertical rhythm unit. Section padding is a multiple of it, which is
      what stops the page reading as a pile of unrelated blocks. */
@@ -191,4 +195,51 @@ html {
   width: 0;
   height: 0;
   display: none;
+}
+
+/* ---------- dark theme ---------- */
+
+/*
+ * Set by the theme toggle and by the flash-prevention script in layout.tsx.
+ * Values are picked to match the light palette's role for each token, not to
+ * be a straight inversion. `--bg` dark is nearly black but not pure, `--ink`
+ * is nearly white, and the accent is lifted a step so it stays legible on
+ * dark, which is the same trick every design system uses.
+ */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #0B0B0C;
+  --ink: #FAFAF9;
+  --accent: #60A5FA;
+  --rule: #26262A;
+  --surface: #131316;
+  --card: #131316;
+  --border: #26262A;
+  --rule-strong: #3F3F46;
+
+  /* Tailwind's colour tokens read from these variables via the config, so
+     overriding them here flips the whole site without touching a class name. */
+  --tw-bg: #0B0B0C;
+}
+
+html[data-theme="dark"] {
+  background-color: #0B0B0C;
+  color: #E7E5E4;
+}
+
+html[data-theme="dark"] body {
+  background-color: #0B0B0C;
+}
+
+/* Surface sits one step up from the page in dark, unlike light where it
+   sits one step down. Same idea, opposite direction. */
+html[data-theme="dark"] .figure {
+  background: #131316;
+  border-color: #26262A;
+}
+
+html[data-theme="dark"] ::selection {
+  background: #1E3A8A;
+  color: #FAFAF9;
 }
