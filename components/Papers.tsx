@@ -38,9 +38,9 @@ export function Papers() {
           Research
         </h2>
         <p className="max-w-2xl text-text-secondary">
-          Three manuscripts asking the same question of different data: does a
-          model, or the uncertainty it reports, survive being moved to a country
-          it was never fitted on. Unrefereed and not submitted to any venue.
+          Three working papers on mortality projection, poverty transfer
+          learning, and cough-audio screening. Drafts, not peer-reviewed.
+          
         </p>
       </div>
 

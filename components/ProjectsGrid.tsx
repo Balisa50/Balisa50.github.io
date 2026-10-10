@@ -17,7 +17,7 @@ const CATEGORIES: Category[] = [
     id: "statistical",
     title: "Statistical modeling and forecasting",
     blurb:
-      "Forecasts and risk models, mostly for places where the data is thin and the answer has to be checkable.",
+      "Population projections, credit scoring, and life insurance risk. Mostly for places where data is thin.",
     slugs: [
       "gambia-population-projection",
       "credit-risk-scorecard",
@@ -29,13 +29,13 @@ const CATEGORIES: Category[] = [
     id: "ai",
     title: "AI systems",
     blurb:
-      "Retrieval, generative, and search systems, with the validation work that sits between a model and something a person can rely on.",
+      "Retrieval, generative, and search systems. Includes the validation layer that makes them usable.",
     slugs: ["nova", "gambia-legal-aid", "ayat", "hireiq"],
   },
   {
     id: "shipped",
     title: "Also shipped",
-    blurb: "Smaller builds and client work. Each one delivered.",
+    blurb: "Smaller builds and client work.",
     slugs: ["vantage", "forge", "bs-real-estate"],
   },
 ];
@@ -73,7 +73,7 @@ export function ProjectsGrid() {
           id="projects-heading"
           className="display text-[clamp(2rem,4.5vw,3.25rem)]"
         >
-          Three disciplines, one identity
+          Work
         </h2>
         <p className="measure text-[15px] leading-relaxed text-text-secondary">
           {PROJECTS.length} projects across statistics, AI systems, and client

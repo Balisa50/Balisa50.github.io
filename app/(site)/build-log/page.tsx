@@ -6,7 +6,7 @@ import { ContributionGrid, type ContributionsData } from "@/components/Contribut
 export const metadata: Metadata = {
   title: "Build log",
   description:
-    "Every day I shipped something to a public repository, over the last year. The record, not the highlight reel."
+    "Every commit to a public repository, over the last year."
 };
 
 function loadData(): ContributionsData {
@@ -28,8 +28,8 @@ export default function BuildLogPage() {
           Days shipped
         </h1>
         <p className="measure mt-5 text-[16px] leading-relaxed text-text-secondary">
-          Every commit to a public repository, over the last year. Not streaks,
-          not totals that flatter. The record of showing up.
+          Every commit to a public repository, over the last year.
+
         </p>
       </header>
 
@@ -40,13 +40,13 @@ export default function BuildLogPage() {
       <section className="mt-16 max-w-[78ch] space-y-4 text-[15px] leading-relaxed text-text-secondary">
         <p>
           The graph is fetched daily by a GitHub Action and rebuilt with the site.
-          Nothing is animated or staged. If a row is thin, that is what the week
-          looked like.
+
+
         </p>
         <p>
-          Most of the work in these projects happens in small increments that
-          never make it into a case study. The case study is the end. This is
-          the middle.
+          Most of the work in these projects happens in small commits that
+          never reach a case study.
+
         </p>
       </section>
     </main>
