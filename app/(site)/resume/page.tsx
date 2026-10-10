@@ -349,9 +349,9 @@ export default function ResumePage() {
               diagnostics, and its fallback.
             </Bullet>
             <Bullet>
-              The project rests on evidence from a 2025 PLoS One study showing
-              that only 37 percent of published regression papers check any
-              assumption, and zero check all of them.
+              Defined the scope, split the six-module build across the team,
+              and selected the stack (R for diagnostics, Python for the Monte
+              Carlo simulation, Streamlit for the interface).
             </Bullet>
           </ul>
         </article>
