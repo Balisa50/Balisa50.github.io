@@ -2,25 +2,25 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Layers, FileText, Calendar, Send } from "lucide-react";
+import { Home, Layers, FileText, User, Send } from "lucide-react";
 
 /**
  * iOS-style floating tab bar. Mobile only.
  *
- * The shape is what makes this feel native. A full-width bar welded to the
- * bottom edge is Android. iOS puts a rounded, frosted container with a gap
- * on every side, so the page scrolls behind it and the container looks like
- * a control that happens to be at the bottom rather than a fixture of the
- * screen.
+ * Five tabs is the maximum that stays readable on a small phone. The set is
+ * chosen for the reader who lands on the site from a cold link and wants to
+ * decide in one tap whether to reach out: home, work, resume, about, contact.
  *
- * The container is one rounded pill. No border. One soft shadow. Backdrop
- * blur so what is behind it stays faintly visible.
+ * Papers and the build log are still reachable from the top nav on desktop,
+ * from the home page, and by URL. They are the destinations a returning
+ * reader goes looking for, not the ones a first-time visitor needs on a
+ * phone screen.
  */
 const LINKS = [
   { href: "/", label: "Home", Icon: Home },
   { href: "/work", label: "Work", Icon: Layers },
-  { href: "/papers", label: "Papers", Icon: FileText },
-  { href: "/build-log", label: "Log", Icon: Calendar },
+  { href: "/resume", label: "Resume", Icon: FileText },
+  { href: "/about", label: "About", Icon: User },
   { href: "/contact", label: "Contact", Icon: Send },
 ] as const;
 
