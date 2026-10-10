@@ -34,7 +34,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "nova": {
     slug: "nova",
     problem:
-      "Banks in West Africa hold the data that could power local AI, and they cannot share it. Privacy law, customer trust, and competitive advantage keep loan books and transaction histories on bank servers. For the populations that matter most here, though, the problem is worse than that. Rural borrowers, the informal economy, understudied regions: the data does not exist anywhere, on any server. I did not want to build another model that copies a dataset somebody already has. I wanted two things. Learn a real dataset when one exists. Generate realistic data from domain knowledge when none does. Privacy-safe either way, with the validation numbers shown rather than claimed.",
+      "Banks in West Africa hold the data that could power local AI. They cannot share it. Privacy law, customer trust, and competitive advantage keep loan books and transaction histories on bank servers. For rural borrowers and the informal economy, though, the problem is worse than that. Rural borrowers, the informal economy, understudied regions: the data does not exist anywhere, on any server. I did not want to build another model that copies a dataset somebody already has. I wanted two things. Learn a real dataset when one exists. Generate realistic data from domain knowledge when none does. Privacy-safe either way, with the validation numbers shown rather than claimed.",
     research: [
       "Read the CTGAN paper (Xu et al., 2019) before writing any of the model. Two ideas make tabular GANs work: mode-specific normalisation for multimodal continuous columns, and conditional training-by-sampling for imbalanced categoricals. Neither is obvious. I wanted to implement both from the paper rather than inherit them from a library.",
       "Read the synthetic-data survey (Jordon et al., 2022) and the SDMetrics scoring conventions. That is what told me my first validation run was measuring the wrong thing. A KS p-value is meaningless at n=10,000. The field scores the KS statistic, the effect size, instead.",
@@ -84,7 +84,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     weaknesses: [
       "I did not appreciate how much of this is domain knowledge rather than architecture. The CTGAN paper gives you the network. It does not tell you that microfinance default sits at 20 to 30 percent, that group lending lowers it, or that rural and urban borrowers borrow for different things. I had to learn the domain before the data meant anything.",
-      "I did not realise conditional sampling was the lever for utility. My first train-on-synthetic score was 0.81 and I assumed the model was under-trained. It was not. I was generating wrong. Sampling the target freely instead of conditioning on the reference prevalence. The same checkpoint jumped to 0.92 once I used it properly.",
+      "Conditional sampling was the lever for utility, and I missed it the first time. My train-on-synthetic score was 0.81 and I assumed the model was under-trained. It was not. I was generating wrong. Sampling the target freely instead of conditioning on the reference prevalence. The same checkpoint jumped to 0.92 once I used it properly.",
       "The four metrics are not redundant, and I only learned that by watching them disagree. A model can match every marginal and still break the correlations. It can be useful for prediction and still sit too close to a real row. Seeing which one disagreed is what stopped me from chasing a single score.",
       "I started out thinking synthetic data meant copying. Building the criteria engine changed that. The more useful thing is generating data that should exist but does not. Different problem, different tool. I would not have seen it if I had stopped at the GAN.",
     ],
@@ -100,7 +100,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "The backend runs on Fly's no-card trial, so the machine sleeps after five minutes and cold-starts on the next request. Making it always-on is a card away. 512 MB is tight for the heavier copy-mode validation. DCR shows no memorisation empirically, but it is not a formal guarantee. I would add a differentially-private training option for a formal guarantee. Transaction data here is tabular. Real fraud is sequential, which is why I read TimeGAN. Extending both modes to time series is the next build. I would also push TSTR across all seven domains rather than mainly loans, and add a third mode that blends a handful of real rows with domain rules, for the user who has a little data and a lot of knowledge.",
     takeaway:
-      "Synthetic data is not about copying. It is about producing data that is safe, useful, and sometimes never existed. The GAN was the easy part. Proving the data was worth trusting took longer, and it meant throwing out two metrics that flattered the model for two that did not.",
+      "The GAN took three weeks. Proving the data was worth trusting took the rest of the project, and it meant throwing out two metrics that flattered the model for two that did not.",
   },
   "gambia-population-projection": {
     slug: "gambia-population-projection",
