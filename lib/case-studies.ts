@@ -67,7 +67,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Make NOVA two modes, and refuse to brute-force the second one with seven more GANs.",
         reason:
-          "Copying a real dataset is only half the problem; the harder, more useful half is generating data for populations where none exists, and that is not a GAN job, it needs a rule engine. So I built a criteria engine: define columns, distributions, and domain rules, and it generates from nothing. When the brief later asked for seven separate CTGANs, one per financial domain, I did not train them, roughly a day of CPU, seven model files, and a weaker create-from-nothing story. The seven domains became presets of the criteria engine instead, which is strictly more flexible: a user can define an eighth domain, or rural-Gambia student records, themselves.",
+          "Copying a real dataset is only half the problem; the harder, more useful half is generating data for populations where none exists, and that is not a GAN job, it needs a rule engine. So I built a criteria engine: define columns, distributions, and domain rules, and it generates from nothing. When the brief later asked for seven separate CTGANs, one per financial domain, I did not train them, roughly a day of CPU, seven model files, and a weaker create-from-nothing story. The seven domains became presets of the criteria engine instead, and a user can define an eighth, or rural-Gambia student records, themselves.",
       },
       {
         call: "Ship a deployed web app on a real backend, not a notebook.",
@@ -80,12 +80,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The CTGAN over-produced defaulters, 41 percent against a real 25. The cause was the log-frequency conditioning I used to help rare categories during training, it taught the generator a more balanced default base rate than reality. I switched to true-frequency conditioning and added conditional generation so a user can also dial the rate directly. The marginal snapped back to real, and TSTR rose from about 0.82 to 0.92.",
       "I had generated interest_rate_apr and interest_rate_daily as independent columns, but daily is just apr divided by 36,500, a deterministic identity the GAN had no reason to respect. I added a post-processing step that re-imposes known identities, so the synthetic data is internally consistent rather than subtly contradictory.",
       "My first privacy metric was a real-versus-synthetic detector, and it scored about 0.99, which I almost reported as a privacy failure. It is not a privacy metric at all, it measures distinguishability, and a model that simply memorised the training data would be undetectable yet maximally unsafe. I switched to distance-to-closest-record, are synthetic rows abnormally close to real training rows, ratio 1.10 with only 1.1 percent near-duplicates, and kept the detector on as a fidelity diagnostic.",
-      "The first Docker build was heading for 2.5 GB because the default PyTorch wheel bundles CUDA I never use on a CPU box; installing the CPU-only wheel cut the image to 367 MB. Then the container crashed on boot, the checkpoint was pickled under NumPy 2.x and scikit-learn 1.7, and pinning the older versions the brief suggested raised 'No module named numpy._core'. Matching the library majors fixed it and the model loaded on the first clean try.",
+      "The first Docker build was heading for 2.5 GB because the default PyTorch wheel bundles CUDA I never use on a CPU box; installing the CPU-only wheel cut the image to 367 MB. Then the container crashed on boot, the checkpoint was pickled under NumPy 2.x and scikit-learn 1.7, and pinning the older versions the brief suggested raised 'No module named numpy._core'. Matching the library majors fixed it.",
     ],
     weaknesses: [
       "I did not appreciate how much of this is domain knowledge rather than architecture. The CTGAN paper gives you the network; it does not tell you that microfinance default sits at 20 to 30 percent, that group lending lowers it, or that rural and urban borrowers borrow for different things. I had to go and learn the domain before the data meant anything.",
       "I did not realise conditional sampling was the lever for utility. My first train-on-synthetic score was 0.81 and I assumed the model was under-trained. It was not, I was generating wrong, sampling the target freely instead of conditioning on the reference prevalence. The same checkpoint jumped to 0.92 once I used it properly.",
-      "I learned, by watching them disagree, that the four metrics are not redundant. A model can match every marginal and still break the correlations; it can be useful for prediction and still sit too close to a real row. Only seeing them point in different directions made me stop hunting for one number.",
+      "I learned, by watching them disagree, that the four metrics are not redundant. A model can match every marginal and still break the correlations; it can be useful for prediction and still sit too close to a real row. Seeing which one disagreed is what stopped me from chasing a single score.",
       "I started out thinking synthetic data meant copying, and building the criteria engine is what changed my mind. The more valuable thing is generating data that should exist but does not, a different problem with a different tool, and I would not have seen that if I had stopped at the GAN.",
     ],
     outcome: [
@@ -98,9 +98,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "A FastAPI backend serving both copy and create endpoints, live on Fly.io, and a Next.js studio with a Create/Copy toggle, live on Vercel, all open source",
     ],
     regret:
-      "The honest gaps are at the edges. The backend currently runs on Fly's no-card trial, so the machine sleeps after five minutes and cold-starts on the next request, making it always-on is a card away, and 512 MB is tight for the heavier copy-mode validation. DCR shows no memorisation empirically, but it is not a formal guarantee; I would add a differentially-private training option for the strong claim. Transaction data here is tabular whereas real fraud is sequential, which is why I read TimeGAN, extending both modes to time series is the obvious next build. And I would push TSTR across all seven domains rather than mainly loans, and add a third mode that blends a handful of real rows with domain rules, for the user who has a little data and a lot of knowledge.",
+      "The backend currently runs on Fly's no-card trial, so the machine sleeps after five minutes and cold-starts on the next request, making it always-on is a card away, and 512 MB is tight for the heavier copy-mode validation. DCR shows no memorisation empirically, but it is not a formal guarantee; I would add a differentially-private training option for a formal guarantee. Transaction data here is tabular whereas real fraud is sequential, which is why I read TimeGAN, extending both modes to time series is the next build. And I would push TSTR across all seven domains rather than mainly loans, and add a third mode that blends a handful of real rows with domain rules, for the user who has a little data and a lot of knowledge.",
     takeaway:
-      "Synthetic data is not about copying; it is about producing data that is safe, useful, and sometimes never existed. The hard part was never the GAN, it was the validation and the honesty: proving the data is good enough to trust, and being willing to throw out a metric that flatters the model for one that tells the truth. The model is the easy part. The trust is the hard part.",
+      "Synthetic data is not about copying; it is about producing data that is safe, useful, and sometimes never existed. The GAN is the easy part. Proving the data is good enough to trust is the hard part, and it meant throwing out two metrics that flattered the model for two that did not.",
   },
   "gambia-population-projection": {
     slug: "gambia-population-projection",
@@ -152,7 +152,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The UN WPP /data API returned 401 across every variant I tried. Instead of chasing a token, I reverse-engineered the download site, found it builds file URLs from a runtime manifest, and then discovered the cleaner source entirely: the UN team's `PPgp/wpp2024` package on GitHub. Pinned a commit, streamed and filtered to Gambia. A blocker became a more citable, more reproducible pipeline.",
       "The PyMC conda environment failed mid-install with 'No space left on device', the disk was at 50 MB. I cleared regenerable caches, confirmed system Python already had numpy/scipy/pandas, and installed PyMC lean via pip into system Python rather than the multi-GB conda toolchain. The Bayesian model that 'needed' conda ran fine on a 200-line pip install.",
       "The first Bayesian fit would not converge. The 101-dimensional Dirichlet plus a free a_x left a ridge in the posterior. Fixing a_x at the empirical mean (the classical definition) dropped max r-hat from ~1.02 to 1.010 and lifted the effective sample size into the thousands for the parameters that matter.",
-      "Halfway through I noticed WPP's 2023 population (2,728,905) sits about 13% above the 2024 census (around 2.42M), and runs above every historical Gambian census too. That gap was not a bug. It was the headline. WPP was finalised before the census came out, so I rebuilt the projection on the census base, and the gap turned into the most policy-relevant result in the whole project.",
+      "Halfway through I noticed WPP's 2023 population (2,728,905) sits about 13% above the 2024 census (around 2.42M), and runs above every historical Gambian census too. WPP was finalised before the census came out, so I rebuilt the projection on the census base. That gap became the most policy-relevant result in the project.",
     ],
     weaknesses: [
       "This was my first time fitting Lee-Carter in a fully Bayesian framework. I learned why the identifiability constraints (sum of b = 1, sum of k = 0) exist the hard way, by watching chains refuse to mix until I imposed them properly.",
@@ -170,9 +170,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Full research report plus a plain-language policy brief written for Gambian media and planners",
     ],
     regret:
-      "I haven't yet digitised the Farafenni and Basse HDSS published life tables or run a GBD cross-check. Both would turn the validation chapter from 'validated against the UN's reconstruction' into 'validated against independent empirical Gambian data', which is the strongest claim I could make. I flagged them as remaining data tasks rather than inventing numbers. I'd also fit the Bayesian model sex-specifically for the projection and add the UN's own bayesPop as a fourth benchmark.",
+      "I haven't yet digitised the Farafenni and Basse HDSS published life tables or run a GBD cross-check. Both would turn the validation chapter from 'validated against the UN's reconstruction' into 'validated against independent empirical Gambian data'. I flagged them as remaining data tasks rather than inventing numbers. I'd also fit the Bayesian model sex-specifically for the projection and add the UN's own bayesPop as a fourth benchmark.",
     takeaway:
-      "Research quality is capped by data quality. For a country with no death registration, the honest thing is to make that gap the question and to carry the uncertainty through to the end, instead of hiding it behind one confident number. The most important result, that the UN figure is about 13% too high for The Gambia, came from nothing clever. It came from taking the new census seriously and checking every step against a known answer before believing it.",
+      "The most important result, that the UN figure is about 13% too high for The Gambia, came from taking the new census seriously and checking every step against a known answer before believing it.",
   },
   "gambia-political-risk": {
     slug: "gambia-political-risk",
@@ -875,9 +875,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Explainable end-to-end: every score traceable back to feature contributions",
     ],
     regret:
-      "I'd swap synthetic data for real anonymised data the moment I have access. The synthetic generator is calibrated to public stats but it can't capture interaction effects I haven't thought of. Real data always surprises you. Also need to extend to LGD and EAD for full Basel II coverage.",
+      "I'd swap synthetic data for real anonymised data the moment I have access. The synthetic generator is calibrated to public stats but it can't capture interaction effects I haven't thought of. Also need to extend to LGD and EAD for full Basel II coverage.",
     takeaway:
-      "In regulated domains, explainability isn't a feature, it's the constraint that picks the model. Logistic regression isn't old-fashioned, it's accountable. Validation theatre is worse than no validation: random-split metrics that look good but won't survive production are how models fail in deployment.",
+      "In regulated domains, explainability is the constraint that picks the model. Logistic regression with WoE is the industry standard because a regulator can read the points off it. Random-split metrics that look good but will not survive production are how models fail after deployment.",
   },
   "life-insurance-risk": {
     slug: "life-insurance-risk",
