@@ -33,7 +33,7 @@ const SKILLS = [
   { group: "Data Analysis", items: "pandas, NumPy, SciPy, ETL pipelines, data cleaning, exploratory data analysis, data visualization, A/B testing" },
   { group: "NLP & AI", items: "Sentence embeddings, semantic search, retrieval-augmented generation (RAG), large language models, prompt design" },
   { group: "Visualization & BI", items: "Matplotlib, Seaborn, Plotly, Power BI, Tableau" },
-  { group: "Tools & Deployment", items: "Git, Jupyter, FastAPI, Docker, PostgreSQL, Next.js, LaTeX" }
+  { group: "Tools & Deployment", items: "Git, Jupyter, FastAPI, Docker, PostgreSQL, Next.js, Streamlit, LaTeX" }
 ];
 
 const EXPERIENCE = [
