@@ -556,13 +556,13 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Forecast accuracy had to be honest about uncertainty (intervals, not point estimates).",
       "Dashboard had to load in seconds on a Gambian 3G connection, most users are on Tecno/Infinix phones, not iPhones.",
       "Could not call any paid API at runtime (per-user cost would crush the project).",
-      "Had to be visually trustworthy. Bad design + financial data = users assume the data is wrong.",
+      "Had to be visually trustworthy. Financial data on a badly designed page reads as wrong even when it is not.",
     ],
     decisions: [
       {
         call: "Reverse-engineer the CBG's undocumented JSON endpoint as the primary data source.",
         reason:
-          "The Central Bank publishes daily indicative rates as a webpage with no documented API. Opened the network tab and found `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates as JSON, no auth required. Official, authoritative, free. Found by curiosity, not documentation. Built the entire pipeline on it; cross-validated against `exchangerate.host` as a backup. Found by opening devtools, not by reading docs.",
+          "The Central Bank publishes daily indicative rates as a webpage with no documented API. Opened the network tab and found `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates as JSON, no auth required. Official, authoritative, free. Built the entire pipeline on it; cross-validated against `exchangerate.host` as a backup.",
       },
       {
         call: "SARIMA only, and the holiday model is still unbuilt.",
@@ -605,7 +605,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I did not know how Prophet and SARIMA differed before this project. I read both papers and fitted SARIMA with walk-forward holdouts, but I never got Prophet running on the Dalasi series, so the comparison I set out to make is still unmade.",
       "I was new to GitHub Actions cron schedules. First version had the wrong cron syntax and the job ran every minute. Fortunately discovered before committing API-key usage to that.",
       "Time-series cross-validation is different from random-split CV. You can't shuffle time-ordered data without leaking the future into the training set. Read about walk-forward validation and rewrote the evaluation pipeline. Forecast metrics dropped from optimistic to realistic.",
-      "I underestimated how much pre-2010 Dalasi data was non-comparable to post-2010 data due to a methodology break. Adding the correction factor was a research task, not a coding task, I had to read the CBG's methodology footnotes to find the conversion ratio.",
+      "I underestimated how much pre-2010 Dalasi data was non-comparable to post-2010 data due to a methodology break. Adding the correction factor was a research task rather than a coding task. I had to read the CBG's methodology footnotes to find the conversion ratio.",
     ],
     outcome: [
       "Live FX dashboard for Dalasi vs USD, EUR, GBP, CHF, JPY",
@@ -631,7 +631,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Studied behavioural-economics literature on commitment devices: Dean Karlan's stickK, Beeminder's monetary penalties, Forest's tree-killing. The apps that work make failure expensive in a way you actually feel.",
       "Read interrogation methodology, not literally, but the structure: how a good cross-examination works (Reid technique critique, NIJ structured interviewing). What makes it hard to fake is asking for SPECIFICS the liar doesn't have. 'What did you build?' is gameable. 'What was the bug, what did you try first, why didn't it work?' isn't.",
       "Studied Apple Screen Time and Android's Focus Mode. Both have the same flaw: they're disabled from inside themselves. If you can disable the constraint when willpower is low, the constraint does nothing. Settings are behind a PIN.",
-      "Read about OpenRouter's routing model. Quality on a daily 200-token interrogation is fine across many models. Locking to one provider is paying for moat that doesn't exist.",
+      "Read about OpenRouter's routing model. Quality on a daily 200-token interrogation is fine across many models. Locking to one provider costs more without a quality benefit.",
       "Studied accountability-pod patterns from Nat Eliason and Tim Ferriss.",
     ],
     constraints: [
@@ -645,12 +645,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "An LLM interrogator, not a form.",
         reason:
-          "A form asks 'what did you do today?' and accepts any answer. The interrogator reads your claim and asks specific cross-examining follow-ups. Generic 'I studied React' gets pushed back: 'what specifically did you build, what was the bug, what would you do differently?' The system prompt is calibrated to reject vague claims and require specifics. Faking specifics is harder than doing the work.",
+          "A form asks 'what did you do today?' and accepts any answer. The interrogator reads your claim and asks specific cross-examining follow-ups. Generic 'I studied React' gets pushed back: 'what specifically did you build, what was the bug, what would you do differently?' The system prompt is calibrated to reject vague claims and require specifics.",
       },
       {
         call: "PIN-locked settings, not user-disable.",
         reason:
-          "If you can disable the app from inside the app, you will when willpower runs out at 11 PM after a bad day. Settings live behind a PIN you set up sober, can't change without re-entering. Same logic as ScreenTime parental controls, restrict your future self. The PIN is checked server-side; clearing app cache or reinstalling doesn't help.",
+          "If you can disable the app from inside the app, you will when willpower runs out at 11 PM after a bad day. Settings live behind a PIN you set up sober, can't change without re-entering. Same logic as ScreenTime parental controls. The PIN is checked server-side, so clearing the app cache or reinstalling does not help.",
       },
       {
         call: "OpenRouter, not major AI labs direct.",
@@ -679,10 +679,10 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
-      "Original interrogator was too soft, accepted 'I studied for 2 hours' without follow-up. Tightened the system prompt: 'Reject any claim that lacks specifics. Ask for what was built, what failed, what was learned.' Pass rate dropped 40%, which was the point. Iteratively rewrote the prompt 6+ times to get the right level of skepticism.",
+      "Original interrogator was too soft, accepted 'I studied for 2 hours' without follow-up. Tightened the system prompt: 'Reject any claim that lacks specifics. Ask for what was built, what failed, what was learned.' Pass rate dropped 40%. Iteratively rewrote the prompt 6+ times to get the right level of skepticism.",
       "First model was the model Sonnet, which was overkill and expensive for daily check-ins. Moved to OpenRouter with cheaper routing (Llama / Gemma / Mixtral, picked by cost-quality bid). Quality stayed identical, cost dropped 90%.",
       "Tried camera-based proctoring, make the user appear on camera during interrogation to make lying harder. Removed it (commit b032662). Reasons: too invasive for the religious and privacy-conscious users I cared about, and it proved you were physically there without preventing lying about what was done.",
-      "Added a leaderboard of streaks. Removed it (commit b032662). Public ranking turned the system into a competition and produced the wrong incentive: people gaming streak length instead of doing work. Built it, lived with it, deleted it.",
+      "Added a leaderboard of streaks. Removed it (commit b032662). Public ranking turned the system into a competition and produced the wrong incentive: people gaming streak length instead of doing work. Built it, shipped it, removed it.",
       "Re-entry flow: when a user broke their streak, the original UX showed them a sad face and 'streak: 0'. Felt punishing in a demoralising way, not a productive way. Rewrote the re-entry as 'day 1 again, what's the first specific thing you'll build?' (commit 7fbcdb2).",
       "Initially required sign-up for every visit. Added a guest/demo mode (commit 12cdb83). Users try the interrogator without creating an account, data wipes on tab close. Activation went up about 10x.",
     ],
@@ -740,7 +740,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Scored report with strengths + concerns + binary recommendation.",
         reason:
-          "Hiring teams need to defend decisions to compliance, to other interviewers, to themselves. A score with no reasoning is useless. The report breaks down what the candidate did well, what was weak, and gives a hire/no-hire recommendation. Hiring manager can override but has the structure to override against.",
+          "Hiring teams need to defend decisions to compliance, to other interviewers, to themselves. The report breaks down what the candidate did well, what was weak, and gives a hire/no-hire recommendation. Hiring manager can override but has the structure to override against.",
       },
       {
         call: "PDF reports via WeasyPrint, not browser print.",
@@ -795,7 +795,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "Should have added video question support from the start. Some senior roles want to see candidates speak, not just type. Roadmap. Also should have built an ATS-export integration (Greenhouse, Lever, Workday) earlier, recruiters live in those tools and copying scored reports manually is friction.",
     takeaway:
-      "A static form can be replaced with an interview at roughly the same UX cost if the model is chosen for the job. Production is full of edge cases nobody warns you about: CORS, cold starts, OAuth loops.",
+      "A static form can be replaced with an interview at roughly the same UX cost if the model is chosen for the job. The remaining work was edge cases: CORS, cold starts, OAuth loops.",
   },
   "credit-risk-scorecard": {
     slug: "credit-risk-scorecard",
