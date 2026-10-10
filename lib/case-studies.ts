@@ -370,7 +370,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "vantage": {
     slug: "vantage",
     problem:
-      "Tech news is unreadable. The volume per day is in the hundreds of thousands of articles globally, and most of it is noise, patch notes, gadget sales, recycled press releases, identical takes on the same Reuters wire. I wanted a feed that did the synthesis for me, scored each story by signal strength, and let me skim only what mattered across six regions. I also wanted it to read like an actual editorial voice, Ben Thompson, Matt Levine, The Economist, not like a Twitter bot summarising headlines.",
+      "Tech news is unreadable. The volume per day is in the hundreds of thousands of articles globally, and most of it is noise, patch notes, gadget sales, recycled press releases, identical takes on the same Reuters wire. I wanted a feed that did the synthesis for me, scored each story by signal strength, and let me skim only what mattered across six regions. I also wanted it to read like editorial, the register of Ben Thompson or The Economist, not a Twitter bot summarising headlines.",
     research: [
       "Read 100+ Stratechery articles to internalise Ben Thompson's structure: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. Translated this into an explicit system prompt with banned phrases ('In a move that…', 'It's worth noting…') and required structures.",
       "Studied NewsAPI's free tier limits in detail before architecting anything. 100 requests/day, language=en filter, 10 articles per query. That number determined the entire pipeline: I couldn't fan-out to all six regions in parallel, I had to chain them through a single daily run.",
@@ -394,7 +394,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Slug-based de-duplication BEFORE the AI call.",
         reason:
-          "NewsAPI returns the same headline from multiple sources (Reuters, AP, then 30 outlets quoting them). I slugify the title and check Supabase first, if the slug exists, skip the model entirely. Saves an the LLM provider call per duplicate, which is ~70% of what's returned. The cheapest call is the one you don't make.",
+          "NewsAPI returns the same headline from multiple sources (Reuters, AP, then 30 outlets quoting them). I slugify the title and check Supabase first, if the slug exists, skip the model entirely. Saves the LLM call on roughly 70% of what NewsAPI returns.",
       },
       {
         call: "Edge runtime + direct fetch to the LLM provider, no SDK.",
@@ -414,24 +414,24 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Region-by-region article cap (1 per region per run).",
         reason:
-          "Originally tried to generate 3 articles per region per cron. Hit Vercel's 60s edge timeout repeatedly. Cut to 1 per region per run. Trade-off: less content per day, but the cron actually completes. Better to ship 6 high-signal articles than to time out at article 9 and lose the region's whole batch.",
+          "Originally tried to generate 3 articles per region per cron. Hit Vercel's 60s edge timeout repeatedly. Cut to 1 per region per run. Less content per day, but the cron completes.",
       },
       {
         call: "Disable article deletion when credits run out, even though it bloats the feed.",
         reason:
-          "Originally a nightly /api/expire cron deleted articles older than 48 hours to keep the feed fresh. When LLM credits exhausted, regeneration stopped, but expiration kept running. I'd wake up to a half-empty feed with no way to refill it. Disabled the expire cron + neutered the route to return `{disabled: true}` even on manual trigger. Better to show old articles than to show nothing.",
+          "Originally a nightly /api/expire cron deleted articles older than 48 hours to keep the feed fresh. When LLM credits exhausted, regeneration stopped, but expiration kept running. I'd wake up to a half-empty feed with no way to refill it. Disabled the expire cron, and the route now returns `{disabled: true}` even on manual trigger.",
       },
     ],
     pivots: [
-      "First version stored articles forever. Quickly the feed had 800 articles and the page took 4 seconds to load. Added the /api/expire route to delete >48h. Then ran out of credits, disabled deletion. The feed now persists historic articles intentionally, context as a feature.",
-      "Pipeline timeout was a recurring battle. First attempt with full prompt at 4000 tokens timed out. Trimmed prompt, then still timed out. Switched Haiku, then fitted. Then added Reddit + HN sub-pipelines, then timed out again. Dropped them. Final: lean RSS-only ingestion, 2500 tokens, Haiku, fits 60s. Half the iterations were 'add capability, blow timeout, remove capability'.",
-      "NEXT_PUBLIC_SITE_URL was hardcoded to a stale Vercel auto-URL (`vantage-three-chi.vercel.app`) that broke after a project rename. The chain-of-regions silently died because `fetch().catch(() => {})` swallowed the DNS error. No alarm fired; the feed just stopped updating regional content. Took me weeks to notice because global was still working. Lesson: silent fire-and-forget + free-tier observability = bugs that hide for weeks.",
-      "Found a stray `OneDrive/Desktop/FORGE/` folder accidentally committed inside the vantage repo (probably a Windows OneDrive sync mishap). Vercel build failed with a TypeScript error pointing into FORGE's `prisma.config.ts`. Removed the folder, added it to .gitignore. Cross-project filesystem leakage is a real Windows-specific hazard.",
+      "First version stored articles forever. Quickly the feed had 800 articles and the page took 4 seconds to load. Added the /api/expire route to delete >48h. Then ran out of credits, disabled deletion. The feed now persists historic articles intentionally.",
+      "Pipeline timeout was a recurring battle. First attempt with full prompt at 4000 tokens timed out. Trimmed prompt, then still timed out. Switched Haiku, then fitted. Then added Reddit + HN sub-pipelines, then timed out again. Dropped them. Final: lean RSS-only ingestion, 2500 tokens, Haiku, fits 60s. Half the iterations were: add capability, blow timeout, remove capability.",
+      "NEXT_PUBLIC_SITE_URL was hardcoded to a stale Vercel auto-URL (`vantage-three-chi.vercel.app`) that broke after a project rename. The chain-of-regions silently died because `fetch().catch(() => {})` swallowed the DNS error. No alarm fired; the feed just stopped updating regional content. Took me weeks to notice because global was still working.",
+      "Found a stray `OneDrive/Desktop/FORGE/` folder accidentally committed inside the vantage repo (probably a Windows OneDrive sync mishap). Vercel build failed with a TypeScript error pointing into FORGE's `prisma.config.ts`. Removed the folder, added it to .gitignore.",
     ],
     weaknesses: [
       "I didn't fully understand SSE streaming when I started. Vercel Edge has different streaming semantics than Node. Spent a day debugging why chunks were buffering instead of arriving incrementally. Fix was using `controller.enqueue(encoder.encode(chunk))` instead of trying to write to the response body directly.",
       "I underestimated how aggressive Vercel's edge timeout is. 60s sounds like a lot until your pipeline does fetch, then JSON parse, then embedding lookup, then the model call, then DB insert per article. Learning to budget across the chain (under 10s per article, leave headroom for cold start) was a forcing function.",
-      "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns major AI labs news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global to escape NewsAPI's relevancy bias.",
+      "I learned the hard way that NewsAPI sorts by `relevancy` differently across regions. 'AI' in `global` returns major AI labs news. 'AI' in `africa` returns 80% Nigerian fintech. Ended up using region-specific keyword sets and RSS feeds for non-global regions to escape NewsAPI's relevancy bias.",
     ],
     outcome: [
       "6 regions × 6 categories = 36 distinct content streams",
@@ -443,18 +443,18 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Graceful degradation: when credits exhaust, articles persist instead of dying silently",
     ],
     regret:
-      "I'd add an embedding-based 'find me articles like this one' next step. Right now the user picks a region/category to filter, but semantic similarity is more useful than topical buckets, readers want 'more on this thread', not 'more in this folder'. Same trick I used in AYAT could ride along here.",
+      "I'd add an embedding-based 'find me articles like this one' next step. Right now the user picks a region and category. Semantic similarity would be more useful than topical buckets. Same trick I used in AYAT would work here.",
     takeaway:
-      "When you're optimising AI cost, the cheapest call is the one you don't make. De-dup before you spend. When you're optimising on a free tier, treat every constraint (60s timeout, 100 req/day, 500MB DB) as the input to your architecture, not an obstacle. Constraints force creative wiring.",
+      "De-duplicating before the model call cut roughly 70% of the LLM spend. The free-tier constraints (60s timeout, 100 requests a day, 500 MB database) shaped the whole pipeline: chain-of-regions instead of parallel fetch, RSS instead of scraping, Haiku instead of Sonnet.",
   },
   "gambia-legal-aid": {
     slug: "gambia-legal-aid",
     problem:
-      "Gambians have almost no access to legal information. Lawyers are scarce and expensive, a one-hour consultation is more than a week's wage for most. The laws themselves are scattered across PDFs that most people will never find or be able to read. Hallucinated legal advice from a chatbot would be actively harmful: a person told they have rights they don't, or vice versa, in matters of arrest, dismissal, eviction, domestic violence. So the bar wasn't 'build a chatbot'. The bar was: build a chatbot that REFUSES to lie, even at the cost of being less useful.",
+      "Gambians have almost no access to legal information. Lawyers are scarce and expensive, a one-hour consultation is more than a week's wage for most. The laws themselves are scattered across PDFs that most people will never find or be able to read. Hallucinated legal advice from a chatbot would be actively harmful: a person told they have rights they don't, or vice versa, in matters of arrest, dismissal, eviction, domestic violence. The requirement was a chatbot that refuses to invent an answer, even at the cost of being less useful.",
     research: [
       "Read every Act we ingested (Constitution, Criminal Code, Labour Act, Children's Act, Sexual Offences Act, Domestic Violence Act, Immigration Act, Rent Act 2014/2017/2024, etc.) end-to-end before writing the system prompt. Could not enforce grounding without knowing what grounded actually meant.",
       "Studied how Westlaw and LexisNexis structure citations. They cite by section number, sub-section, and Act. Realised my retrieval had to surface those exact metadata pieces or the citations would be unverifiable.",
-      "Read the OpenAI 'Constitutional AI' paper and the provider's RAG literature. The pattern that stuck: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry, don't ship and apologise.",
+      "Read the OpenAI 'Constitutional AI' paper and the provider's RAG literature. The pattern that stuck: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry.",
       "Studied curly-quote vs straight-quote behaviour across browsers and PDFs because the model would generate the curly version of \"section 14\" when the source text had the straight version, and my substring validator initially missed this and let hallucinations through.",
       "Read Gambian legal cases on unfair dismissal, domestic violence prosecutions, and immigration appeals to make sure the topic anchors I was building actually retrieved the sections that mattered to real disputes.",
     ],
@@ -513,17 +513,17 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       },
     ],
     pivots: [
-      "First version retrieved top-5 chunks unconditionally and let the model write whatever. Tested it on questions outside the corpus, it confabulated convincingly, citing fake section numbers with fake quotes. Built the citation-anchor + verbatim-quote check as the gate. Pass rate dropped sharply, trust went up. Ship the system that says 'I don't know' over the one that confidently lies.",
+      "First version retrieved top-5 chunks unconditionally and let the model write whatever. Tested it on questions outside the corpus, it confabulated convincingly, citing fake section numbers with fake quotes. Built the citation-anchor + verbatim-quote check as the gate. Pass rate dropped sharply. Trust went up.",
       "Initial chunking was naive 1000-char windows. A user asked about marriage law and got back chunks from a tax statute that happened to share a phrase. Switched to section-aware chunking: parse the statute's section markers, chunk on them, each chunk is a self-contained legal unit (commit 22f5c6f).",
       "Curly quotes vs straight quotes broke the validator silently. the model would output the curly version of a quoted span and the substring check against straight-quote source text would fail to match. Tightened the regex to normalise both flavours and added 3-word span detection (commit 8cb717a). The bug was invisible in dev (where I copy-pasted source) and only appeared in production where the model's outputs differed from my inputs.",
-      "Added a hard-fail validation that REFUSES to ship the answer if the retry also produces hallucinated citations. Logging shows the user 'I couldn't find this in the statutes I have' instead of returning a confidently wrong answer. The metric I optimise is 'lies shipped per million queries', hard fail is the only way to drive that to zero (commit 5d5a1e4).",
-      "Surfaced 400-status messages in the UI. Originally the client showed 'Something went wrong' for every failure. Now legal-validation rejection is shown as 'I couldn't ground this in the statutes I have' which is a different message from network failure. Honest UX is harder than generic UX (commit 5f68053).",
+      "Added a hard-fail validation that REFUSES to ship the answer if the retry also produces hallucinated citations. Logging shows the user 'I couldn't find this in the statutes I have' instead of returning a confidently wrong answer. The metric I optimise is fabricated citations per million queries, and hard fail is the only way to drive it to zero (commit 5d5a1e4).",
+      "Surfaced 400-status messages in the UI. Originally the client showed 'Something went wrong' for every failure. Legal-validation rejection now shows 'I couldn't ground this in the statutes I have' instead of 'Something went wrong' (commit 5f68053).",
     ],
     weaknesses: [
       "I did not understand TF-IDF deeply enough at the start. Pure semantic retrieval was failing on rare-but-critical terms (specific section numbers, specific named provisions). Spent a weekend reading sklearn's TF-IDF implementation, then wrote my own minimal version that combined cosine similarity from embeddings with sparse TF-IDF scores. The hybrid retrieves better than either alone.",
       "I had never written a hallucination guard before. First version was just 'check each cited section number against the source'. That caught 30% of bugs. Iteratively added: verbatim quote check, section title matching, banned phrase post-processing, hard-fail on retry, diagnostic headers. Each layer caught a class of failure the previous layers missed.",
-      "I didn't know how messy real statute PDFs would be. Footnotes inline in body text, OCR errors ('s.l4' instead of 's.14'), inconsistent section numbering across acts. Wrote a per-Act ingestion script that normalised each one's quirks before chunking. It's not generalisable, every act needed its own preprocessing rules. The honest answer is: legal-doc ingestion is a manual job pretending to be an automated one.",
-      "I underestimated how aggressively users would test the system. Within a week of deploying, someone asked 'what does the constitution say about [made up topic]?', the model used to confabulate. Adding the hard-fail was the response to that. The lesson: every confident answer is implicitly a contract. Break it once and the whole system loses trust.",
+      "I didn't know how messy real statute PDFs would be. Footnotes inline in body text, OCR errors ('s.l4' instead of 's.14'), inconsistent section numbering across acts. Wrote a per-Act ingestion script that normalised each one's quirks before chunking. It is not generalisable. Every act needed its own preprocessing rules.",
+      "I underestimated how aggressively users would test the system. Within a week of deploying, someone asked 'what does the constitution say about [made up topic]?', the model used to confabulate. Adding the hard-fail was the response to that.",
     ],
     outcome: [
       "Live RAG chatbot answering Gambian legal questions",
@@ -538,7 +538,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I'd add multilingual support, Wolof, Mandinka, Fula, Jola. Most of my target users speak those before English. The retrieval layer can stay English (the source statutes are English) but input/output translation around it would dramatically expand the audience. Especially for women in rural areas dealing with the Domestic Violence Act, who often don't have written English literacy.",
     takeaway:
-      "In high-stakes domains, refusing to answer is a feature, not a failure. The system that says 'I don't know' is more useful than the one that confidently hallucinates. Hallucination prevention is not one technique, it's a stack: better retrieval, allowlists, verbatim validation, banned phrases, hard-fail on retry. Each layer catches what the previous one missed.",
+      "Hallucination prevention is a stack: better retrieval, allowlists, verbatim validation, banned phrases, hard-fail on retry. Each layer catches what the previous one missed.",
   },
   "dalasi-pulse": {
     slug: "dalasi-pulse",
@@ -592,19 +592,19 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Live-status badge with CBG date stamp, polled every 15 minutes.",
         reason:
-          "Users don't trust financial data without knowing when it last updated. Added a 'Live · CBG date 2026-05-08' badge that polls the API every 15 minutes. If the date is more than 24 hours stale, it visibly flags it. Honest provenance over fake real-time-ness (commit db5e7b1).",
+          "Users don't trust financial data without knowing when it last updated. Added a 'Live · CBG date 2026-05-08' badge that polls the API every 15 minutes. If the date is more than 24 hours stale, it visibly flags it (commit db5e7b1).",
       },
     ],
     pivots: [
-      "First version was just FX. Added remittances as an afterthought. Realised they mattered MORE than FX for the typical Gambian family, most don't trade currencies, they receive transfers. Reframed the dashboard around remittances and made FX the supporting layer. Reframing what the product is about, not just what it shows, was the harder pivot.",
-      "Used `exchangerate.host` as the primary FX source initially. Then discovered the CBG endpoint by accident while inspecting the bank's website. Switched primary to CBG (official) and kept exchangerate.host as a cross-validation backup. Sometimes you build the wrong thing first because the right thing wasn't visible yet.",
-      "Original ETL pipeline had no cleaning layer, just fetched, plotted. Found that CBG had occasional duplicate rows from their backend, plus a methodology break around 2010 where the calculation changed and rates jumped 8% overnight. Wrote a cleaning script: dedupe, outlier removal (3-sigma), and a methodology-break correction factor for pre-2010 rates. The data looked sane after, the forecasts stopped having weird spikes (commit ba82a7e).",
-      "Mobile UX broke because the currency selector pills wrapped onto a second line under the amount input on narrow screens, pushing content off-screen. Restructured the layout so currency pills sit ABOVE the amount field on mobile, side-by-side on desktop. Mobile-first means actually testing on a real phone, which I should have done sooner (commit 64e7bec).",
+      "First version was just FX. Added remittances as an afterthought. Realised they mattered MORE than FX for the typical Gambian family, most don't trade currencies, they receive transfers. Reframed the dashboard around remittances and made FX the supporting layer.",
+      "Used `exchangerate.host` as the primary FX source initially. Then discovered the CBG endpoint by accident while inspecting the bank's website. Switched primary to CBG and kept exchangerate.host as a cross-validation backup.",
+      "Original ETL pipeline had no cleaning layer, just fetched, plotted. Found that CBG had occasional duplicate rows from their backend, plus a methodology break around 2010 where the calculation changed and rates jumped 8% overnight. Wrote a cleaning script: dedupe, outlier removal (3-sigma), and a methodology-break correction factor for pre-2010 rates. The forecasts stopped having weird spikes (commit ba82a7e).",
+      "Mobile UX broke because the currency selector pills wrapped onto a second line under the amount input on narrow screens, pushing content off-screen. Restructured the layout so currency pills sit above the amount field on mobile, side-by-side on desktop (commit 64e7bec).",
     ],
     weaknesses: [
       "I did not know how Prophet and SARIMA differed before this project. I read both papers and fitted SARIMA with walk-forward holdouts, but I never got Prophet running on the Dalasi series, so the comparison I set out to make is still unmade.",
       "I was new to GitHub Actions cron schedules. First version had the wrong cron syntax and the job ran every minute. Fortunately discovered before committing API-key usage to that.",
-      "Time-series cross-validation is different from random-split CV. You can't shuffle time-ordered data without leaking the future into the training set. Read about walk-forward validation and rewrote my evaluation pipeline. Forecast metrics dropped from optimistic to realistic, which was the point.",
+      "Time-series cross-validation is different from random-split CV. You can't shuffle time-ordered data without leaking the future into the training set. Read about walk-forward validation and rewrote the evaluation pipeline. Forecast metrics dropped from optimistic to realistic.",
       "I underestimated how much pre-2010 Dalasi data was non-comparable to post-2010 data due to a methodology break. Adding the correction factor was a research task, not a coding task, I had to read the CBG's methodology footnotes to find the conversion ratio.",
     ],
     outcome: [
@@ -621,18 +621,18 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I'd add a free SMS-out for non-smartphone users, text the dashboard a query like 'GBP forecast' and get the answer back. Most of the audience that would benefit most is not on smartphones. Would need a free SMS gateway (Africa's Talking has limited free credits) or a Telegram bot as a stopgap. Adding next.",
     takeaway:
-      "Open data exists in unlikely places. The CBG endpoint was sitting in the network tab the whole time. Curiosity outranks documentation. When publishing financial forecasts, honesty about uncertainty (intervals, model ensembles, plain-language interpretation, last-updated timestamps) is the difference between trustworthy data and fake-precise data.",
+      "The CBG endpoint was sitting in the network tab the whole time. For financial forecasts, uncertainty intervals, model ensembles, plain-language interpretation, and last-updated timestamps are what make the numbers usable.",
   },
   "forge": {
     slug: "forge",
     problem:
-      "I kept skipping days on my own learning and lying to myself about it. Streak apps don't work because they're trivially fakeable, you tap 'yes I studied' and move on. I wanted a lock screen that would actually grill me on what I claimed to have done, the way a good coach would. The app's job is not to be liked. It's to be the friend who says 'that's not enough, what specifically did you build?' when you try to coast. If I succeed I uninstall it; if I fail I keep it.",
+      "I kept skipping days on my own learning and lying to myself about it. Streak apps don't work because they're trivially fakeable, you tap 'yes I studied' and move on. I wanted a lock screen that would actually grill me on what I claimed to have done, the way a good coach would. The app's job is to push back when I try to coast.",
     research: [
-      "Studied behavioural-economics literature on commitment devices: Dean Karlan's stickK, Beeminder's monetary penalties, Forest's tree-killing. Pattern: the apps that work make failure expensive in a way you actually feel. Apps that just track without consequence are noise.",
+      "Studied behavioural-economics literature on commitment devices: Dean Karlan's stickK, Beeminder's monetary penalties, Forest's tree-killing. The apps that work make failure expensive in a way you actually feel.",
       "Read interrogation methodology, not literally, but the structure: how a good cross-examination works (Reid technique critique, NIJ structured interviewing). What makes it hard to fake is asking for SPECIFICS the liar doesn't have. 'What did you build?' is gameable. 'What was the bug, what did you try first, why didn't it work?' isn't.",
-      "Studied Apple Screen Time and Android's Focus Mode. Both have the same flaw: they're disabled from inside themselves. If you can disable the constraint when willpower is low (which is exactly when you'd want to), the constraint is theatre. PIN-locking the settings is the fix.",
+      "Studied Apple Screen Time and Android's Focus Mode. Both have the same flaw: they're disabled from inside themselves. If you can disable the constraint when willpower is low, the constraint does nothing. Settings are behind a PIN.",
       "Read about OpenRouter's routing model. Quality on a daily 200-token interrogation is fine across many models. Locking to one provider is paying for moat that doesn't exist.",
-      "Studied accountability-pod patterns from Nat Eliason, Tim Ferriss, and a few habit-tracking communities. External accountability beats internal accountability when willpower fails.",
+      "Studied accountability-pod patterns from Nat Eliason and Tim Ferriss.",
     ],
     constraints: [
       "Has to be impossible to bypass casually, a checkbox isn't enough.",
@@ -645,7 +645,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "An LLM interrogator, not a form.",
         reason:
-          "A form asks 'what did you do today?' and accepts any answer. The interrogator reads your claim and asks specific cross-examining follow-ups. Generic 'I studied React' gets pushed back: 'what specifically did you build, what was the bug, what would you do differently?' The system prompt is calibrated to reject vague claims and require specifics. Faking specifics is harder than just doing the work, that's the whole mechanism.",
+          "A form asks 'what did you do today?' and accepts any answer. The interrogator reads your claim and asks specific cross-examining follow-ups. Generic 'I studied React' gets pushed back: 'what specifically did you build, what was the bug, what would you do differently?' The system prompt is calibrated to reject vague claims and require specifics. Faking specifics is harder than doing the work.",
       },
       {
         call: "PIN-locked settings, not user-disable.",
@@ -660,31 +660,31 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Streak resets on skip, no make-ups, no buybacks.",
         reason:
-          "If you can buy back yesterday with twice the work today, you will gamble on it and skip more. Streak loss has to be permanent or it isn't a deterrent. Hard, but the whole point of accountability is the cost of failure.",
+          "If you can buy back yesterday with twice the work today, you will gamble on it and skip more. Streak loss has to be permanent or it is not a deterrent.",
       },
       {
         call: "Accountability pods, small groups (3-5), public skip notifications.",
         reason:
-          "Internal motivation is unreliable. External accountability is harder to fool. When you skip, your pod sees it. When they skip, you see it. Social pressure becomes the second deterrent layer behind the streak. Built this in (commit 7fbcdb2). It's opt-in because forced groups feel coercive.",
+          "Internal motivation is unreliable. External accountability is harder to fool. When you skip, your pod sees it. When they skip, you see it. Built this in (commit 7fbcdb2). Opt-in because forced groups feel coercive.",
       },
       {
         call: "Public build log, posts of what users built, opt-in.",
         reason:
-          "Showing the work IS the work. A public stream of 'today I built X' creates a soft pressure to have something interesting to post. Also doubles as marketing for the app, visitors see real users actually building things. Two-for-one motivational layer.",
+          "A public stream of 'today I built X' creates a soft pressure to have something interesting to post.",
       },
       {
         call: "Grace days, but limited and visible.",
         reason:
-          "Pure no-skip is too brittle. Real life: travel, illness, family emergencies. I added 3 grace days per quarter, visible in the streak UI. Using them costs nothing but is visible to your pod. Skipping without grace days resets the streak. Grace makes the system humane without gaming it.",
+          "Pure no-skip is too brittle. Real life: travel, illness, family emergencies. I added 3 grace days per quarter, visible in the streak UI. Using them costs nothing but is visible to your pod. Skipping without grace days resets the streak.",
       },
     ],
     pivots: [
       "Original interrogator was too soft, accepted 'I studied for 2 hours' without follow-up. Tightened the system prompt: 'Reject any claim that lacks specifics. Ask for what was built, what failed, what was learned.' Pass rate dropped 40%, which was the point. Iteratively rewrote the prompt 6+ times to get the right level of skepticism.",
       "First model was the model Sonnet, which was overkill and expensive for daily check-ins. Moved to OpenRouter with cheaper routing (Llama / Gemma / Mixtral, picked by cost-quality bid). Quality stayed identical, cost dropped 90%.",
-      "Tried camera-based proctoring, make the user appear on camera during interrogation to make lying harder. Removed it (commit b032662). Reasons: too invasive for the religious / privacy-conscious users I cared about, and it didn't actually prevent lying about what was DONE, only proved you were physically there. Wrong layer of accountability.",
-      "Added a leaderboard of streaks. Removed it (commit b032662). Public ranking turned the system into a competition and produced the wrong incentive: people gaming streak length over real work. Built it, lived with it, deleted it. Some features look good in mockups and bad in production.",
-      "Re-entry flow: when a user broke their streak, the original UX showed them a sad face and 'streak: 0'. Felt punishing in a demoralising way, not a productive way. Rewrote the re-entry as 'day 1 again, what's the first specific thing you'll build?' Reframes the failure as a fresh start without sugar-coating it (commit 7fbcdb2).",
-      "Initially required sign-up for every visit. Added a guest/demo mode (commit 12cdb83), users can try the interrogator without creating an account, the data is wiped on tab close. Lowered the activation barrier to 'click try', 10x more people actually use it once.",
+      "Tried camera-based proctoring, make the user appear on camera during interrogation to make lying harder. Removed it (commit b032662). Reasons: too invasive for the religious and privacy-conscious users I cared about, and it proved you were physically there without preventing lying about what was done.",
+      "Added a leaderboard of streaks. Removed it (commit b032662). Public ranking turned the system into a competition and produced the wrong incentive: people gaming streak length instead of doing work. Built it, lived with it, deleted it.",
+      "Re-entry flow: when a user broke their streak, the original UX showed them a sad face and 'streak: 0'. Felt punishing in a demoralising way, not a productive way. Rewrote the re-entry as 'day 1 again, what's the first specific thing you'll build?' (commit 7fbcdb2).",
+      "Initially required sign-up for every visit. Added a guest/demo mode (commit 12cdb83). Users try the interrogator without creating an account, data wipes on tab close. Activation went up about 10x.",
     ],
     weaknesses: [
       "I had not built a NextAuth v5 app before. Spent days on the new auth.config / middleware patterns. NextAuth v4, then v5 is a breaking redesign. Had to rebuild the whole auth surface around the new useSession hook + edge-friendly middleware.",
@@ -706,7 +706,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I'd add a calendar-blocking feature: when you set 'I'll build between 7 AM and 9 AM tomorrow', the app automatically blocks distracting apps during that window. Pure check-in is reactive. Pre-commitment + blocking is proactive. Adding next iteration.",
     takeaway:
-      "The hardest software to build is software that's hard on you. Most apps optimise for retention; FORGE optimises for honesty. Ship the feature, watch how it actually changes behaviour, kill it if it produces the wrong incentive, even if you were proud of it. Removing software is harder than adding it.",
+      "FORGE optimises for honesty over retention. The leaderboard and camera proctoring both shipped and were removed when they produced the wrong incentive. Removing software is harder than adding it.",
   },
   "hireiq": {
     slug: "hireiq",
@@ -720,7 +720,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Read WeasyPrint's docs and CSS-print specs. PDF generation from HTML is a well-trodden path but small mistakes (missing print stylesheet, browser-quirk fonts) ruin the output.",
     ],
     constraints: [
-      "Conversation has to feel like a real interview, not a bot quiz, multi-second response delays kill the vibe.",
+      "The conversation has to feel like a real interview. Multi-second response delays kill the flow.",
       "Hiring teams have to justify their decisions internally, so the scoring has to be defensible on its own terms.",
       "Couldn't pay for GPT-4 on every candidate at scale.",
       "Candidates apply on slow connections; all interactions had to feel instant.",
@@ -750,7 +750,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "LocalStorage session persistence with auto-resume.",
         reason:
-          "Candidates abandon mid-interview if they lose connection or close the tab. Lost candidates = wasted interview cost. I persist the conversation state to localStorage on every turn. On refresh, the app silently resumes from the last turn without re-asking anything. Removed the auth screen entirely for `/apply`, anyone with the link can apply, the session token is in the URL (commits a370f33, 540b575).",
+          "Candidates abandon mid-interview if they lose connection or close the tab. Lost candidates = wasted interview cost. I persist the conversation state to localStorage on every turn. On refresh, the app silently resumes from the last turn without re-asking anything. Removed the auth screen entirely for `/apply`. Anyone with the link can apply, and the session token is in the URL (commits a370f33, 540b575).",
       },
       {
         call: "Knockout questions + severity engine, not just open Q&A.",
@@ -765,22 +765,22 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Cold-start CORS warmup gate.",
         reason:
-          "Render free tier sleeps the backend after 15 min idle. First candidate after a sleep hits a 30-second cold start that ALSO causes CORS failures (preflight fails before the function is up). Built a `/health` warmup gate that the frontend pings before showing the chat UI. UI shows 'getting interview ready…' for the cold-start window, then transitions cleanly. Hides the bug from the user without papering over it (commit 0c55a07).",
+          "Render free tier sleeps the backend after 15 min idle. First candidate after a sleep hits a 30-second cold start that ALSO causes CORS failures (preflight fails before the function is up). Built a `/health` warmup gate that the frontend pings before showing the chat UI. UI shows 'getting interview ready…' for the cold-start window, then transitions cleanly (commit 0c55a07).",
       },
     ],
     pivots: [
       "First version generated all questions upfront from the job description, then asked them in order. Felt robotic. Switched to streaming question generation per turn, conditioning on prior answers. Slower per turn but the conversation flowed (commit 354462b).",
-      "Initial scoring model gave wildly different scores for the same answer when re-run. Added temperature=0 + a structured prompt with explicit rubric (1-5 on each criterion). Consistency went up 80%. The lesson: scoring needs to be deterministic in a way generation doesn't.",
-      "Tried AsyncGroq SDK first, then ran into mysterious connection bugs in production. Switched to direct httpx REST calls, proven working approach (commit f2b896d). 'The library exists' is not the same as 'the library works in production'.",
+      "Initial scoring model gave wildly different scores for the same answer when re-run. Added temperature=0 plus a structured prompt with an explicit rubric (1-5 on each criterion). Consistency went up 80%.",
+      "Tried AsyncGroq SDK first, then ran into mysterious connection bugs in production. Switched to direct httpx REST calls (commit f2b896d).",
       "Originally used Gemini Flash everywhere. Hit rate-limit issues during traffic spikes. Added Groq as a fallback (commit 5b3df5d, 6874a2e). Multi-provider with automatic failover became table stakes after that.",
-      "Auth flash bug: candidates would briefly see a login screen even though /apply doesn't require auth. Caused by a race condition, AuthProvider mounted before checking the route. Excluded /apply from AuthProvider entirely (commit 1109b40). Sometimes the right fix is removing the protection from a public page.",
+      "Auth flash bug: candidates would briefly see a login screen even though /apply doesn't require auth. Caused by a race condition, AuthProvider mounted before checking the route. Excluded /apply from AuthProvider entirely (commit 1109b40).",
       "OAuth loop: signing in with Google would redirect into an infinite cycle on certain edge cases. Spent two days debugging Supabase OAuth + Vercel SSR + Render API CORS interactions. Fix involved hardcoding the production CORS origin instead of wildcard+credentials (which is invalid CORS), and a fix in the redirect_to flow (commit 3e651e0).",
     ],
     weaknesses: [
       "I had not built a multi-page Streamlit-like flow with state persistence before. Streamlit's state model resets on every interaction. Switched to Next.js pages with localStorage hydration after a frustrating week.",
       "CORS in production with credentials + multiple origins is genuinely confusing. I shipped wildcard+credentials twice before realising it's silently invalid. Now I default to hardcoded explicit origins per environment.",
       "I underestimated how brittle SSE streaming is across reverse proxies. Vercel's edge proxy buffered chunks instead of forwarding them. Had to set explicit response headers (`X-Accel-Buffering: no`, `Cache-Control: no-cache, no-transform`) to force pass-through (commit a2bbe53 in coldpilot, but the lesson came from hireiq first).",
-      "Scoring rubric design is a research field I had not entered. First scoring prompt produced inconsistent results because I was asking the model to score on multiple dimensions simultaneously without clear weight. Studied multi-criteria decision-analysis literature, rewrote scoring as per-criterion 1-5 with explicit anchors, then aggregated.",
+      "Scoring rubric design is a research field I had not entered. First scoring prompt produced inconsistent results because I was asking the model to score on multiple dimensions simultaneously without clear weight. Studied multi-criteria decision-analysis literature, rewrote scoring as per-criterion 1-5 with explicit anchors, and aggregated.",
     ],
     outcome: [
       "Full pipeline: job posting, then adaptive interview, then scored report, then PDF",
@@ -795,12 +795,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "Should have added video question support from the start. Some senior roles want to see candidates speak, not just type. Roadmap. Also should have built an ATS-export integration (Greenhouse, Lever, Workday) earlier, recruiters live in those tools and copying scored reports manually is friction.",
     takeaway:
-      "You can replace a static form with intelligence at the same UX cost, if you pick the right model for the job. Don't use GPT-4 for what Flash can do. Production is full of edge cases (CORS, cold starts, OAuth loops) that nobody warns you about, the bug list is the case study.",
+      "A static form can be replaced with an interview at roughly the same UX cost if the model is chosen for the job. Production is full of edge cases nobody warns you about: CORS, cold starts, OAuth loops. The bug list is the case study.",
   },
   "credit-risk-scorecard": {
     slug: "credit-risk-scorecard",
     problem:
-      "Microfinance institutions in West Africa make lending decisions on intuition because the analytical infrastructure isn't there. Loans are granted or denied based on the loan officer's read of the applicant's character, with results that range from biased to disastrous depending on the officer. I wanted to build a Basel II-compliant credit scorecard from scratch, not import a black-box library, to actually understand WoE, IV, points conversion, validation gauntlets, and stress testing the way an actuary would. It is there to give the loan officer a quantified second opinion, not to take the decision off them.",
+      "Microfinance institutions in West Africa make lending decisions on intuition because the analytical infrastructure isn't there. Loans are granted or denied based on the loan officer's read of the applicant's character, with results that range from biased to disastrous depending on the officer. I wanted to build a Basel II-compliant credit scorecard from scratch, not import a black-box library, to actually understand WoE, IV, points conversion, validation gauntlets, and stress testing the way an actuary would. It gives the loan officer a quantified second opinion rather than taking the decision off them.",
     research: [
       "Read Naeem Siddiqi's 'Credit Risk Scorecards: Developing and Implementing Intelligent Credit Scoring' end-to-end. The WoE/IV chapter alone is the methodology bible. Read it twice.",
       "Studied the Basel II framework (BCBS Pillar 1) for credit risk. Specifically the Internal Ratings-Based Approach: PD (probability of default), LGD (loss given default), EAD (exposure at default). My scorecard implements PD; the rest are placeholders for the next iteration.",
@@ -834,17 +834,17 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Validation gauntlet: Gini, KS, PSI, ROC, all required to pass.",
         reason:
-          "Three different lenses on model quality: Gini (overall discrimination, want > 0.4), KS (best cutoff separation, want > 0.3), PSI (population stability over time, want < 0.1). A model that passes one and fails another is a red flag. I rejected several feature sets that had high Gini but unstable PSI before settling on the final. Final: Gini 0.29 and KS 0.23 on the time-based holdout, both short of those thresholds, with PSI 0.008 comfortably inside. The discrimination ceiling is set by the generator, not the modelling: no feature clears Strong information value (previous_defaults tops out at IV 0.13, total IV across the eight selected features is about 0.51), and a scorecard cannot separate better than its features do. I report the number the pipeline actually produces rather than the one I wanted.",
+          "Three different lenses on model quality: Gini (overall discrimination, want > 0.4), KS (best cutoff separation, want > 0.3), PSI (population stability over time, want < 0.1). A model that passes one and fails another is a red flag. I rejected several feature sets that had high Gini but unstable PSI before settling on the final set. Final: Gini 0.29 and KS 0.23 on the time-based holdout, both short of those thresholds, with PSI 0.008 comfortably inside. The discrimination ceiling is set by the generator, not the modelling: no feature clears Strong information value (previous_defaults tops out at IV 0.13, total IV across the eight selected features is about 0.51), and a scorecard cannot separate better than its features do. The number reported is the one the pipeline actually produces.",
       },
       {
         call: "Time-based holdout, not random-split holdout.",
         reason:
-          "The first version validated on a random split, so the holdout came from the same months as the training data and every stability measure was flattering by construction. The loan book had no origination date at all, so a time-based split was not merely unused, it was impossible. Adding a vintage column and refitting on the earlier 70 percent of the book cost about 0.02 Gini, and it produced a result I did not expect: PSI stayed at 0.002 while realised defaults rose from 12.3 to 15.9 percent. PSI compares score distributions, so it cannot see a deterioration driven by something no feature measures. Monitoring PSI alone would have reported this model as stable the whole way down.",
+          "The first version validated on a random split, so the holdout came from the same months as the training data and every stability measure was flattering by construction. The loan book had no origination date at all, so a time-based split was not merely unused, it was impossible. Adding a vintage column and refitting on the earlier 70 percent of the book cost about 0.02 Gini, and it produced a result I did not expect: PSI stayed at 0.002 while realised defaults rose from 12.3 to 15.9 percent. PSI compares score distributions, so it cannot see a deterioration driven by something no feature measures. Monitoring PSI alone would have reported this model as stable.",
       },
       {
         call: "Multi-scenario stress tests: drought, currency crisis, pandemic.",
         reason:
-          "Real lenders need to know: what happens to default rates under shock? I implemented stress tests that multiply default probabilities by scenario-specific factors (drought: 1.5x for agriculture loans, currency crisis: 1.3x across the board, pandemic: 2.0x for services). The output shows band-by-band default-rate impact and capital-requirement implications. Stresses the system, not just the score.",
+          "Real lenders need to know: what happens to default rates under shock? I implemented stress tests that multiply default probabilities by scenario-specific factors (drought: 1.5x for agriculture loans, currency crisis: 1.3x across the board, pandemic: 2.0x for services). The output shows band-by-band default-rate impact and capital-requirement implications. The stress test runs the whole book through the scenario, not just the score distribution.",
       },
       {
         call: "Basel II points conversion with explicit factor + offset.",
@@ -855,14 +855,14 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     pivots: [
       "First feature set had monthly_income as raw, high IV but skewed. WoE-binning by deciles became more stable across population shifts. Standard scorecard practice but I had to discover it via the validation failing.",
       "I assumed a time-based holdout would make PSI reveal the drift. It did not. The split was still the right change, because a same-period holdout measures nothing, but the number I expected to move stayed flat and the damage showed up in the outcome rate instead. That taught me more than a confirming result would have: a stability metric can only see the thing it is computed on.",
-      "Originally tried XGBoost first because the accuracy was higher. Realised the explainability requirement made it disqualifying. Killed the XGBoost branch and went back to logistic regression. The right model is the one regulators allow, not the one that scores best.",
+      "Originally tried XGBoost first because the accuracy was higher. Realised the explainability requirement made it disqualifying. Killed the XGBoost branch and went back to logistic regression. The right model is the one regulators allow.",
       "Stress tests originally hardcoded scenario multipliers in the script. Refactored to a `SCENARIOS` config so new shocks (climate, geopolitical) could be added without rewriting validation code.",
     ],
     weaknesses: [
-      "I had not implemented WoE/IV from scratch before. Read Siddiqi's book chapter twice, then implemented `compute_all_woe_iv` and `woe_transform` myself. The implementation taught me what every formula in the book actually meant.",
-      "Population Stability Index was new. The intuition, comparing two distributions via a sum of `(actual - expected) * ln(actual/expected)`, wasn't obvious at first. Built it on a synthetic test where I manually shifted the distribution and watched PSI track the shift.",
-      "Synthetic data generation is more art than science. My first generator produced loans where every feature was uniformly distributed; the model learned nothing because there was no real signal. Re-built the generator with realistic correlations: higher income, then lower default, longer term, then higher default, group lending, then lower default. Then the model could actually learn.",
-      "Capital-requirement math (RWA, capital floor) is in the Basel II framework but I'm only at the PD layer. I know what LGD and EAD are; haven't implemented them. Honest about the scope limit.",
+      "I had not implemented WoE/IV from scratch before. Read Siddiqi's book chapter twice, then implemented `compute_all_woe_iv` and `woe_transform` myself. The implementation made the formulas concrete.",
+      "Population Stability Index was new. The intuition, comparing two distributions via a sum of `(actual - expected) * ln(actual/expected)`, wasn't obvious at first. Built a synthetic test where I manually shifted the distribution and watched PSI track it.",
+      "Synthetic data generation is more art than science. My first generator produced loans where every feature was uniformly distributed; the model learned nothing because there was no real signal. Re-built the generator with realistic correlations: higher income, lower default; longer term, higher default; group lending, lower default.",
+      "Capital-requirement math (RWA, capital floor) is in the Basel II framework but I'm only at the PD layer. I have not implemented LGD or EAD.",
     ],
     outcome: [
       "12,000 synthetic West African microfinance loans, regionally-calibrated",
@@ -875,76 +875,76 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Explainable end-to-end: every score traceable back to feature contributions",
     ],
     regret:
-      "I'd swap synthetic data for real anonymised data the moment I have access. The synthetic generator is calibrated to public stats but it can't capture interaction effects I haven't thought of. Also need to extend to LGD and EAD for full Basel II coverage.",
+      "I'd swap synthetic data for real anonymised data the moment I have access. The synthetic generator is calibrated to public stats, but it cannot capture interaction effects I have not thought of. I also need to extend to LGD and EAD for full Basel II coverage.",
     takeaway:
       "In regulated domains, explainability is the constraint that picks the model. Logistic regression with WoE is the industry standard because a regulator can read the points off it. Random-split metrics that look good but will not survive production are how models fail after deployment.",
   },
   "life-insurance-risk": {
     slug: "life-insurance-risk",
     problem:
-      "I wanted to learn actuarial science by doing, not by reading textbooks. Built a full life insurance risk model for Sub-Saharan Africa from scratch, mortality, survival analysis, premium pricing, Monte Carlo VaR. The point was to implement every step myself instead of importing a pre-built actuarial package. Sub-Saharan Africa specifically because the standard models (calibrated on US/UK data) under-represent the constant background hazard rate that matters here, accidents, infectious disease, road traffic, and over-represent old-age mortality patterns that don't apply to a younger demographic.",
+      "I wanted to learn actuarial science by doing, not by reading textbooks. Built a full life insurance risk model for Sub-Saharan Africa from scratch, mortality, survival analysis, premium pricing, Monte Carlo VaR. Every step is implemented myself rather than imported from an actuarial package. Sub-Saharan Africa specifically, because the standard models are calibrated on US and UK data. They under-represent the constant background hazard rate that matters here: accidents, infectious disease, road traffic. They also over-represent old-age mortality patterns that do not apply to a younger population.",
     research: [
-      "Read the original Gompertz (1825) paper and Makeham's (1860) extension. Pure Gompertz models exponential mortality increase with age; Makeham adds a constant background hazard. For Sub-Saharan Africa where the constant hazard is materially higher (malaria, road traffic, infectious disease), the Makeham term is essential. Reading the original papers, not the textbook summaries, was where the intuition came from.",
+      "Read the original Gompertz (1825) paper and Makeham's (1860) extension. Pure Gompertz models exponential mortality increase with age; Makeham adds a constant background hazard. For Sub-Saharan Africa where the constant hazard is materially higher (malaria, road traffic, infectious disease), the Makeham term is essential. The original papers, rather than the textbook summaries, were where the intuition came from.",
       "Studied Cox (1972) Proportional Hazards literature. The C-index (concordance) is the survival-analysis equivalent of AUC. Industry-standard 'good' is > 0.7, 'excellent' is > 0.8.",
-      "Read Klein & Moeschberger's 'Survival Analysis: Techniques for Censored and Truncated Data' for the censoring + truncation handling, most insurance data has both (right-censoring when policy term ends, left-truncation for delayed entry).",
-      "Studied Monte Carlo simulation methods, specifically variance-reduction techniques (control variates, antithetic variables). Useful when you need 5,000 scenarios to converge to stable VaR estimates.",
+      "Read Klein & Moeschberger's 'Survival Analysis: Techniques for Censored and Truncated Data' for censoring and truncation handling. Most insurance data has both: right-censoring when a policy term ends, left-truncation for delayed entry.",
+      "Studied Monte Carlo variance-reduction techniques (control variates, antithetic variables) for stable VaR estimates at 5,000 scenarios.",
       "Read Sub-Saharan Africa health stats from World Bank and WHO, life expectancy distributions, mortality ratios by age band, leading causes of death. Calibrated the synthetic profile distributions against these sources.",
-      "Read about COVID-era mortality shocks across regions to calibrate the pandemic stress scenario. Sub-Saharan Africa's reported pandemic mortality was lower than other regions but with higher uncertainty bands.",
+      "Read COVID-era mortality data across regions to calibrate the pandemic stress scenario. Sub-Saharan Africa's reported pandemic mortality was lower than other regions, with higher uncertainty bands.",
     ],
     constraints: [
       "No real African insurance data, most insurers don't share, and what's published is too aggregate to fit individual-level models.",
       "Pandemic was recent. Any stress test had to take that seriously without overfitting to a one-time event.",
       "Aspirational target: Cox PH C-index above 0.75 (industry good).",
-      "Had to be auditable, actuarial work is inherently regulated; black-box ML doesn't pass review.",
+      "Actuarial work is regulated. Black-box ML does not pass review.",
     ],
     decisions: [
       {
         call: "Gompertz-Makeham, not just Gompertz.",
         reason:
-          "Pure Gompertz models the exponential mortality increase with age. Makeham adds a constant background hazard rate, accidents, infectious disease, baseline causes that don't depend on age. For Sub-Saharan Africa where the constant hazard is materially higher (malaria, road traffic), the Makeham term matters. Better fit, more honest model. Implemented the Makeham fit via maximum likelihood with scipy.optimize, not a canned package.",
+          "Pure Gompertz models the exponential mortality increase with age. Makeham adds a constant background hazard rate, accidents, infectious disease, baseline causes that don't depend on age. For Sub-Saharan Africa, where the constant hazard is materially higher (malaria, road traffic), the Makeham term matters. Implemented via maximum likelihood with scipy.optimize rather than a canned package.",
       },
       {
         call: "Cox Proportional Hazards via lifelines, not bespoke.",
         reason:
-          "Implementing Cox PH from scratch is a rabbit hole, Breslow ties, partial likelihood, baseline hazard estimation. lifelines is rock-solid for the regression part. I implemented Gompertz-Makeham fitting myself (where the learning was) and used lifelines for Cox where I just needed a working tool. Pick your battles. The point of the project was to learn, but learning everything from scratch is a different project.",
+          "Implementing Cox PH from scratch is a rabbit hole, Breslow ties, partial likelihood, baseline hazard estimation. lifelines is solid for the regression part. I implemented Gompertz-Makeham fitting myself, where the learning was, and used lifelines for Cox.",
       },
       {
         call: "Add age × risk-class interaction term to Cox PH.",
         reason:
-          "First Cox PH had C-index of 0.62, below industry standard. The marginal effect of being a smoker is different at age 25 vs age 65. Adding the interaction term (age × risk_class) jumped C-index to 0.77. The interaction was obvious in retrospect: a 25-year-old smoker has different relative risk than a 65-year-old smoker. Cox PH's 'proportional hazards' assumption is violated when interactions matter, and I had to learn that by debugging a low C-index.",
+          "First Cox PH had C-index of 0.62, below industry standard. The marginal effect of being a smoker is different at age 25 vs age 65. Adding the interaction term (age × risk_class) jumped C-index to 0.77. A 25-year-old smoker has a different relative risk than a 65-year-old smoker. Cox PH's proportional-hazards assumption is violated when interactions matter, and the low C-index is what surfaced it.",
       },
       {
         call: "Monte Carlo VaR with 5,000 scenarios + pandemic shock.",
         reason:
-          "VaR at 95% and 99% gives the insurer two budget constraints. Single-point projections are useless for capital reserves; only the tail matters. The pandemic scenario multiplies mortality by 1.8x-3.5x, calibrated loosely to COVID excess-mortality data. 5,000 scenarios is enough for stable 99th-percentile VaR, anything less and the tail estimate jumps around between runs.",
+          "VaR at 95% and 99% gives the insurer two budget constraints. Single-point projections are useless for capital reserves; only the tail matters. The pandemic scenario multiplies mortality by 1.8x to 3.5x, calibrated to COVID excess-mortality data. 5,000 scenarios is enough for a stable 99th-percentile VaR.",
       },
       {
         call: "5,000 synthetic profiles calibrated to regional age distributions.",
         reason:
-          "Same constraint as the credit scorecard, no real data. I built profiles whose age, sex, and risk-class distributions match Sub-Saharan Africa World Bank data. The model learns realistic patterns, not American actuarial textbook patterns. Would prefer real data; calibrated synthetic is the next-best honest alternative.",
+          "Same constraint as the credit scorecard, no real data. The profiles match Sub-Saharan Africa World Bank data on age, sex, and risk class. The model learns regional patterns, not American textbook ones. Real data would be better, and calibrated synthetic is the next best alternative.",
       },
       {
         call: "Vectorise Monte Carlo in NumPy, not pandas.",
         reason:
-          "First implementation looped over 5,000 scenarios in a pandas DataFrame. Took 4 minutes per run. Rewrote in NumPy with vectorised sampling, 8 seconds. Same results, 30x faster. The lesson: in numerical Python, the second time you write the loop you're doing it wrong. Vectorise from the start.",
+          "First implementation looped over 5,000 scenarios in a pandas DataFrame. Took 4 minutes per run. Rewrote in NumPy with vectorised sampling. 8 seconds, same results, 30x faster.",
       },
       {
         call: "Mobile-first dashboard with responsive percentile cells.",
         reason:
-          "Actuarial dashboards are usually desktop-first. The percentile table (P50, P75, P95, P99 of loss distribution) overflowed on phones. Rewrote each cell as a responsive grid with label-left / value-right on phone, full row on desktop. The dashboard ships value to a wider audience because the experience scales (commits 3882545, b89e8c2).",
+          "Actuarial dashboards are usually desktop-first. The percentile table (P50, P75, P95, P99 of loss distribution) overflowed on phones. Rewrote each cell as a responsive grid with label-left and value-right on phone, full row on desktop (commits 3882545, b89e8c2).",
       },
     ],
     pivots: [
-      "First Cox PH had C-index of 0.62, below industry standard. Realised I'd left out interaction effects between age and risk class. Adding the interaction term jumped C-index to 0.77. Standard PH assumption was being violated; the model needed help.",
+      "First Cox PH had C-index of 0.62, below industry standard. Realised I'd left out interaction effects between age and risk class. Adding the interaction term jumped C-index to 0.77.",
       "Monte Carlo initially ran in pandas. 4 minutes per run. Rewrote in NumPy with vectorised sampling. 8 seconds. Same results.",
-      "Pandemic stress factor was originally a single 2.5x multiplier across all ages. Realised the COVID excess-mortality data shows much higher concentration at older ages. Re-calibrated to age-band-specific multipliers (1.5x at 30-50, 3.5x at 70+). More accurate, more honest.",
-      "Survival curve plots had inconsistent y-axis ranges across risk groups, making them hard to compare. Standardised the y-axis range and added grid lines. Visual comparability matters when the audience is humans not models.",
+      "Pandemic stress factor was originally a single 2.5x multiplier across all ages. Realised the COVID excess-mortality data shows much higher concentration at older ages. Re-calibrated to age-band-specific multipliers: 1.5x at 30-50, 3.5x at 70+.",
+      "Survival curve plots had inconsistent y-axis ranges across risk groups, making them hard to compare. Standardised the y-axis range and added grid lines so the curves compare directly.",
     ],
     weaknesses: [
-      "I had not used scipy.optimize for MLE before this project. Spent a day learning the BFGS optimiser's quirks and how to set good initial parameter estimates so it converges. Bad initial estimates = optimiser diverges = no fit.",
+      "I had not used scipy.optimize for MLE before this project. Spent a day learning the BFGS optimiser's quirks and how to set initial parameter estimates so it converges.",
       "Censoring and truncation are subtle. My first survival fit ignored left-truncation (delayed entry into the risk pool), which biased the hazard rate downward. Re-read Klein & Moeschberger, fixed the entry-time handling.",
       "Cox PH's proportional-hazards assumption is exactly that, an assumption. When violated, the model is wrong in subtle ways. Diagnosing it via Schoenfeld residuals took me longer than it should have. Now I check residuals as part of every fit.",
-      "Variance reduction in Monte Carlo (control variates, antithetic variables) sounded scary in textbooks but reduced my run time and improved tail-estimate stability noticeably once I implemented them. Good textbook techniques are usually less mysterious in code.",
+      "Variance reduction in Monte Carlo (control variates, antithetic variables) reduced the run time and stabilised the tail estimates once implemented.",
     ],
     outcome: [
       "Gompertz-Makeham mortality model fitted from scratch via MLE",
@@ -957,9 +957,9 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Live Next.js + Recharts mobile-responsive dashboard",
     ],
     regret:
-      "I'd add a reserves projection module, given current policies and the mortality model, what's the IBNR (incurred but not reported) estimate? That's the actuary's bread and butter and I skipped it. Also need to add LGD/EAD analogues for life products (sum-assured at risk). Adding next iteration.",
+      "I'd add a reserves projection module: given current policies and the mortality model, what's the IBNR (incurred but not reported) estimate? I also need to add LGD and EAD analogues for life products (sum-assured at risk).",
     takeaway:
-      "You learn actuarial science by writing the math. The textbook tells you Gompertz-Makeham; doing the gradient descent yourself shows you why the second term matters in the data you actually have. When the assumptions are violated (proportional hazards, no interaction), the model tells you with a low C-index, listen to it.",
+      "The textbook explains Gompertz-Makeham. Writing the gradient descent yourself shows why the second term matters in the data you actually have. When the assumptions are violated, the model tells you with a low C-index.",
   }
 };
 
