@@ -1,8 +1,8 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, FileText } from "lucide-react";
+import { Mail, FileText, ArrowRight } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 
 export function About() {
@@ -12,16 +12,12 @@ export function About() {
       className="relative mx-auto w-full max-w-shell px-6 sm:px-10 scroll-mt-20 py-20 md:py-28"
       aria-labelledby="about-heading"
     >
-      <div
-        className="flex flex-col items-start gap-4"
-      >
+      <div className="flex flex-col items-start gap-4">
         <span className="font-mono text-xs uppercase tracking-[0.2em] text-cyan">
           About
         </span>
 
-        {/* Photo + heading row */}
         <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-          {/* Profile photo */}
           <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-full border border-rule bg-surface shadow-glow-cyan sm:h-28 sm:w-28">
             <Image
               src="/avatar.jpg"
@@ -30,11 +26,9 @@ export function About() {
               className="relative z-10 object-cover object-center"
               sizes="(max-width: 640px) 96px, 112px"
               onError={(e) => {
-                // Hide broken image, fallback initials show through bg
                 (e.currentTarget as HTMLImageElement).style.display = "none";
               }}
             />
-            {/* Initials fallback, sits behind the image, only visible if image fails */}
             <span
               aria-hidden="true"
               className="absolute inset-0 z-0 flex items-center justify-center font-mono text-2xl font-semibold text-cyan/80 select-none"
@@ -47,39 +41,48 @@ export function About() {
             id="about-heading"
             className="text-balance text-[clamp(1.75rem,4vw,2.75rem)] font-semibold leading-tight tracking-tight"
           >
-            I got into this because I kept seeing problems
-            around me{" "}
+            Statistics student. Systems builder.{" "}
             <span className="text-text-secondary">
-              that nobody was building for.
+              I turn statistical theory into working tools.
             </span>
           </h2>
         </div>
 
         <div className="mt-2 space-y-4 text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
           <p>
-            Based in Fajikunda, The Gambia, studying Statistics at KNUST in
-            Ghana. I build things alongside the coursework, mostly because the
-            problems I run into at home are not the ones the tutorials are
-            written about.
+            I am finishing a BSc in Statistics at KNUST. I am a Mastercard
+            Foundation Scholar. Most of my work starts from a problem I can
+            see, and ends with a running system, not a notebook.
           </p>
           <p>
-            Most of it started from something specific. The Gambia&apos;s
-            population figures come from the UN, and they were set before the
-            country&apos;s first digital census. Banks in West Africa sit on
-            customer data they are not allowed to share, and for rural borrowers
-            the data was never collected. A Qur&apos;an app that treats 6,236
-            verses as a linear list makes it easy to miss the way the book
-            cross-references itself. Each project is a version of one question:
-            what would it take to make this checkable? Some answer it better
-            than others, and every one of them is still open.
+            The Gambia has no death registration system, so its population
+            projections come entirely from the UN, set before the 2024 census.
+            I built an independent Bayesian projection. Banks in West Africa
+            sit on data they cannot share, and for rural borrowers the data
+            was never collected, so I built a synthetic-data engine that does
+            not need a source dataset. Every Qur&apos;an app treats 6,236
+            verses as a flat list, and the corpus cross-references itself, so
+            I built a galaxy that reorganises around a question.
           </p>
           <p>
-            I work in Python and TypeScript, with statistical modelling on the
-            side I care about most. I am reading toward actuarial exams at the
-            moment, which is where the survival analysis and credit work came
-            from.
+            I work in Python and TypeScript. I read Lee-Carter, Cox, and the
+            Basel II framework the same way I read Next.js docs. I am working
+            toward actuarial exams, and applying for internships in data
+            analytics, statistics, actuarial science, machine learning, and
+            quantitative finance.
           </p>
         </div>
+
+        <Link
+          href="/build-log"
+          className="group mt-2 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.2em] text-text-secondary transition-colors hover:text-ink"
+        >
+          See the days I shipped
+          <ArrowRight
+            className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
+        </Link>
 
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <Link
