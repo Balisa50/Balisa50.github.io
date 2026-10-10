@@ -1,51 +1,51 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Download, Mail, MapPin, Github, Linkedin, ArrowUpRight } from "lucide-react";
+import { Github, Linkedin, ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Resume",
+  title: "Background",
   description:
-    "Curriculum vitae for Abdoulie Balisa: statistics undergraduate, three working papers, and eleven shipped data science and machine learning projects."
+    "Statistics undergraduate, three working papers, and eleven shipped data science and machine learning projects."
 };
 
 const PAPERS = [
   {
     year: "2026",
     title: "Site-invariant representations for cough-audio screening: removing the confound does not recover disease signal",
-    summary: "Adversarial domain-invariance removes the recording site from cough representations in eight of nine held-out countries (p = 0.012), while a null model using country prevalence alone outscores the classifier (0.741 against 0.489). Reported as a negative result."
+    summary: "Adversarial domain-invariance removed recording site from cough representations in eight of nine held-out countries (p = 0.012), but a null model using country prevalence alone beat the classifier (0.741 against 0.489). Reported as a negative result."
   },
   {
     year: "2026",
     title: "Do prediction intervals for satellite-based poverty estimates survive a national border? A pre-registered evaluation in West Africa",
-    summary: "Twelve DHS surveys, 6,706 clusters, 155,796 households, with The Gambia withheld from every stage and evaluated once. Conformal coverage transfers on average and disperses 2.8 to 4.7 times more than sampling permits for an individual country."
+    summary: "Twelve DHS surveys, 6,706 clusters, 155,796 households, with The Gambia withheld from every stage and evaluated once. Conformal coverage transfers on average, but disperses 2.8 to 4.7 times more than sampling permits for an individual country."
   },
   {
     year: "2026",
     title: "Reconstructed mortality series understate forecast uncertainty: evidence from The Gambia and thirty countries",
-    summary: "Median innovation standard deviation is 2.95 where civil registration is complete and 1.02 where it is not (Mann-Whitney p < 0.0001), which accounts for prediction intervals three to five years wide against the United Nations&apos; twenty."
+    summary: "Median innovation standard deviation is 2.95 where civil registration is complete and 1.02 where it is not (Mann-Whitney p < 0.0001), which accounts for prediction intervals three to five years wide against the United Nations' twenty."
   }
 ];
 
 const SKILLS = [
   { group: "Programming", items: "Python, R, SQL, TypeScript, MATLAB" },
-  { group: "Statistics & Modeling", items: "statistical inference, hypothesis testing, regression analysis, Bayesian inference (PyMC, MCMC), survival analysis, time-series forecasting, conformal prediction, Monte Carlo simulation, stochastic processes" },
-  { group: "Machine Learning", items: "scikit-learn, PyTorch, classification, clustering, dimensionality reduction, generative models, domain adaptation, feature engineering, model validation" },
-  { group: "Data Analysis", items: "pandas, NumPy, SciPy, ETL pipelines, data cleaning, exploratory data analysis, A/B testing" },
-  { group: "NLP & AI", items: "sentence embeddings, semantic search, retrieval-augmented generation (RAG), large language models, prompt design" },
+  { group: "Statistics & Modeling", items: "Statistical inference, hypothesis testing, regression, Bayesian inference (PyMC, MCMC), survival analysis, time-series forecasting, conformal prediction, Monte Carlo simulation, stochastic processes" },
+  { group: "Machine Learning", items: "scikit-learn, PyTorch, deep learning, classification, clustering, dimensionality reduction, generative models, domain adaptation, feature engineering, model validation" },
+  { group: "Data Analysis", items: "pandas, NumPy, SciPy, ETL pipelines, data cleaning, exploratory data analysis, data visualization, A/B testing" },
+  { group: "NLP & AI", items: "Sentence embeddings, semantic search, retrieval-augmented generation (RAG), large language models, prompt design" },
   { group: "Visualization & BI", items: "Matplotlib, Seaborn, Plotly, Power BI, Tableau" },
   { group: "Tools & Deployment", items: "Git, Jupyter, FastAPI, Docker, PostgreSQL, Next.js, LaTeX" }
 ];
 
 const EXPERIENCE = [
   {
-    role: "Data Science and Machine Learning Developer",
+    role: "Data Science & Machine Learning Developer",
     period: "2024 - Present",
     org: "Independent",
     place: "Remote",
     bullets: [
-      "Built and deployed eleven data science and machine learning projects end to end, each open-sourced and running in production.",
-      "Work spans Bayesian forecasting, generative models for tabular data, credit scoring, survival analysis and domain adaptation, with the validation documented as carefully as the headline number.",
-      "Repeatedly found and corrected errors in my own published results, including a projection re-based after the 2024 census and a model whose apparent accuracy was an artefact of the train-test split."
+      "Built and deployed a portfolio of end-to-end data science and machine learning projects, each open-sourced and running in production.",
+      "Work spans Bayesian forecasting, generative models for tabular data, credit scoring, survival analysis and domain adaptation.",
+      "Found and corrected errors in my own published results, including a projection re-based after the 2024 census and a model whose apparent accuracy came from the train-test split."
     ]
   },
   {
@@ -80,37 +80,37 @@ const EXPERIENCE = [
 
 const PROJECTS = [
   {
-    name: "The Gambia 2074: Bayesian Population Projection",
+    name: "The Gambia 2074",
     tech: "Python, PyMC, NumPy, pandas",
     bullets: [
       "Projected national population to 2074 for a country with no death registration, using Lee-Carter mortality in classical, Bayesian Poisson and coherent multi-country forms feeding a cohort-component model.",
       "Validated the engine against the United Nations projection to within 1 percent, and backtested the mortality forecast to a mean error of 0.65 years over 13 held-out years.",
-      "Identified that published UN figures sit about 13 percent above the 2024 census, and re-based the projection accordingly."
+      "Found that published UN figures sit about 13 percent above the 2024 census, and re-based the projection accordingly."
     ],
-    link: "https://balisa50.github.io/research/gambia-2074",
-    linkLabel: "balisa50.github.io/research/gambia-2074"
+    link: "/research/gambia-2074",
+    linkLabel: "Read the research"
   },
   {
-    name: "NOVA: Synthetic Financial Data Engine",
+    name: "NOVA",
     tech: "Python, PyTorch, FastAPI, Docker, Next.js",
     bullets: [
-      "Implemented a Conditional Tabular GAN from the original paper in PyTorch, including mode-specific normalization, WGAN-GP and conditional training-by-sampling, without using an existing library.",
+      "Implemented a Conditional Tabular GAN from the original paper in PyTorch, including mode-specific normalization, WGAN-GP and conditional training-by-sampling.",
       "Reported statistical similarity 0.94, correlation L1 0.05, train-on-synthetic test-on-real 0.92 and a distance-to-closest-record privacy ratio of 1.10.",
       "Added a rule-based generation mode for populations with no source dataset."
     ],
-    link: "https://nova-fin.vercel.app",
-    linkLabel: "nova-fin.vercel.app"
+    link: "/case-studies/nova",
+    linkLabel: "Case study"
   },
   {
-    name: "Credit Risk Scorecard for West African Microfinance",
+    name: "Credit Risk Scorecard",
     tech: "Python, scikit-learn, pandas",
     bullets: [
       "Built a Basel II compliant scorecard with Weight of Evidence and Information Value feature selection, logistic regression and points conversion.",
       "Ran a full validation gauntlet (Gini, KS, ROC, PSI) on a time-based holdout after finding that a random split understated population drift.",
       "Added multi-scenario stress testing for drought, currency crisis and pandemic."
     ],
-    link: "https://credit-risk-ab.vercel.app",
-    linkLabel: "credit-risk-ab.vercel.app"
+    link: "/case-studies/credit-risk-scorecard",
+    linkLabel: "Case study"
   }
 ];
 
@@ -150,39 +150,16 @@ export default function ResumePage() {
   return (
     <main className="mx-auto w-full max-w-shell px-6 sm:px-10 py-20 md:py-24">
       <header className="mb-16 flex flex-col items-start gap-4">
-        <p className="label">Resume</p>
+        <p className="label">Background</p>
         <h1 className="display text-[clamp(2.25rem,5vw,3.75rem)]">
-          Curriculum vitae
+          Abdoulie Balisa
         </h1>
         <p className="measure mt-2 text-[16px] leading-relaxed text-text-secondary">
-          Statistics undergraduate, three working papers, and eleven shipped
-          data science and machine learning projects. The PDF is built from a
-          LaTeX source in this repository, so the two versions always match.
+          Statistics undergraduate at KNUST. Mastercard Foundation Scholar.
+          Three working papers and eleven shipped projects, in the same shape
+          as the rest of the site.
         </p>
-        <a
-          href="/Abdoulie-Balisa-CV.pdf"
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cyan/40 bg-cyan/[0.06] px-5 py-2.5 text-sm font-medium text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70"
-        >
-          <Download className="h-4 w-4" aria-hidden="true" />
-          Download PDF
-        </a>
-      </header>
-
-      <section aria-label="Contact">
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-text-secondary">
-          <li className="inline-flex items-center gap-2">
-            <Mail className="h-3.5 w-3.5" aria-hidden="true" />
-            <a
-              href="mailto:abdouliebalisa904@gmail.com"
-              className="link-underline text-text"
-            >
-              abdouliebalisa904@gmail.com
-            </a>
-          </li>
-          <li className="inline-flex items-center gap-2">
-            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-            Kumasi, Ghana
-          </li>
           <li className="inline-flex items-center gap-2">
             <Github className="h-3.5 w-3.5" aria-hidden="true" />
             <a
@@ -206,26 +183,13 @@ export default function ResumePage() {
             </a>
           </li>
         </ul>
-      </section>
-
-      <SectionHeading>Summary</SectionHeading>
-      <p className="measure text-[16px] leading-relaxed text-text-secondary">
-        Statistics undergraduate and Mastercard Foundation Scholar working in
-        data science, machine learning and statistical modeling. Comfortable in
-        Python, R and SQL, with project experience in predictive modeling,
-        Bayesian inference, time-series forecasting, survival analysis and
-        natural language processing. Three working papers, all asking whether a
-        model or the uncertainty it reports survives being moved to a country
-        it was never fitted on. I build projects end to end, from the data
-        pipeline through the model to a working interface, and I document the
-        validation as carefully as the result.
-      </p>
+      </header>
 
       <SectionHeading>Working papers</SectionHeading>
       <p className="mb-6 text-[14px] italic text-text-faint">
         Manuscripts, unrefereed and not submitted. Full texts at{" "}
         <Link href="/papers" className="link-underline text-text">
-          balisa50.github.io/papers
+          /papers
         </Link>
         .
       </p>
@@ -299,24 +263,22 @@ export default function ResumePage() {
                 <Bullet key={i}>{b}</Bullet>
               ))}
             </ul>
-            <a
+            <Link
               href={p.link}
-              target="_blank"
-              rel="noreferrer noopener"
               className="mt-2 inline-flex items-center gap-1.5 text-[13px] text-text-secondary transition-colors hover:text-accent"
             >
               {p.linkLabel}
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </a>
+            </Link>
           </article>
         ))}
       </div>
 
       <p className="mt-6 measure text-[15px] leading-relaxed text-text-secondary">
-        <span className="font-medium text-ink">Additional projects:</span>{" "}
-        {ADDITIONAL} Full write-ups at{" "}
+        <span className="font-medium text-ink">Also shipped:</span>{" "}
+        {ADDITIONAL}{" "}
         <Link href="/work" className="link-underline text-text">
-          balisa50.github.io/work
+          Full write-ups on the work page
         </Link>
         .
       </p>
@@ -371,16 +333,6 @@ export default function ResumePage() {
           orientation for newly arrived Gambian students. Previously Organising
           Secretary, managing meetings and official correspondence.
         </p>
-      </div>
-
-      <div className="mt-16 border-t border-border pt-8">
-        <a
-          href="/Abdoulie-Balisa-CV.pdf"
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-cyan/40 bg-cyan/[0.06] px-5 py-2.5 text-sm font-medium text-cyan transition hover:bg-cyan/[0.12] hover:border-cyan/70"
-        >
-          <Download className="h-4 w-4" aria-hidden="true" />
-          Download PDF
-        </a>
       </div>
     </main>
   );
