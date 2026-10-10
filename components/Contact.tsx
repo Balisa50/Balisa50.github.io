@@ -1,6 +1,7 @@
 import { Github, Linkedin, MapPin, Send } from "lucide-react";
 import { PROFILE } from "@/lib/projects";
 import { ContactForm } from "./ContactForm";
+import { SectionReveal } from "./SectionReveal";
 
 /**
  * Contact, without publishing anything worth harvesting.
@@ -41,7 +42,9 @@ export function Contact() {
           CV, ask here and I will send it across.
         </p>
 
+        <SectionReveal>
         <ContactForm />
+        </SectionReveal>
 
         <div className="relative mt-10 flex flex-wrap items-center gap-5 text-sm text-text-secondary">
           <a

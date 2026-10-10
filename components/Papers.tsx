@@ -2,6 +2,7 @@
 
 import { ArrowUpRight, FileText, Github, Lock, BookOpen } from "lucide-react";
 import { PAPERS } from "@/lib/papers";
+import { SectionReveal } from "./SectionReveal";
 
 /**
  * Working papers.
@@ -43,6 +44,7 @@ export function Papers() {
         </p>
       </div>
 
+      <SectionReveal>
       <ol className="flex flex-col">
         {PAPERS.map((paper, i) => (
           <li
@@ -129,6 +131,7 @@ export function Papers() {
           </li>
         ))}
       </ol>
+      </SectionReveal>
     </section>
   );
 }

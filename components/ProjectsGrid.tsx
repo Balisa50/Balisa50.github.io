@@ -3,6 +3,7 @@
 import { Layers } from "lucide-react";
 import { PROJECTS, type Project } from "@/lib/projects";
 import { ProjectRow } from "./ProjectRow";
+import { SectionReveal } from "./SectionReveal";
 
 interface Category {
   id: string;
@@ -81,26 +82,28 @@ export function ProjectsGrid() {
       </div>
 
       {sections.map((cat) => (
-        <div key={cat.id} className="mb-24 last:mb-0">
-          <header className="mb-10 flex flex-col items-start gap-3">
-            <h3 className="display text-[clamp(1.5rem,3vw,2rem)]">
-              {cat.title}
-            </h3>
-            <p className="measure text-[15px] leading-relaxed text-text-secondary">
-              {cat.blurb}
-            </p>
-          </header>
-          <div>
-            {cat.projects.map(({ project, index }) => (
-              <ProjectRow
-                key={project.slug}
-                project={project}
-                index={index}
-                variant={project.featured ? "featured" : "compact"}
-              />
-            ))}
+        <SectionReveal key={cat.id}>
+          <div className="mb-24 last:mb-0">
+            <header className="mb-10 flex flex-col items-start gap-3">
+              <h3 className="display text-[clamp(1.5rem,3vw,2rem)]">
+                {cat.title}
+              </h3>
+              <p className="measure text-[15px] leading-relaxed text-text-secondary">
+                {cat.blurb}
+              </p>
+            </header>
+            <div>
+              {cat.projects.map(({ project, index }) => (
+                <ProjectRow
+                  key={project.slug}
+                  project={project}
+                  index={index}
+                  variant={project.featured ? "featured" : "compact"}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </SectionReveal>
       ))}
     </section>
   );
