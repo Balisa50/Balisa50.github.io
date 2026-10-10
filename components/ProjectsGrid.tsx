@@ -10,24 +10,12 @@ interface Category {
   slugs: string[];
 }
 
-/**
- * Work grouped by discipline, not by status or date.
- *
- * A statistics recruiter should be able to read the first section and answer
- * "can this person do the job" without scrolling into the AI work. An ML
- * recruiter should be able to skip to section two and get the same signal.
- * The grouping tells each reader which part of the page is for them.
- *
- * Order is deliberate. Statistical work first, because that is the identity.
- * AI second, as systems built on top of that foundation. Client work last,
- * as evidence of range rather than a headline.
- */
 const CATEGORIES: Category[] = [
   {
     id: "statistical",
     title: "Statistical modeling and forecasting",
     blurb:
-      "Bayesian and classical methods applied to problems where the data is thin and the answer has to be checkable.",
+      "Forecasts and risk models, mostly for places where the data is thin and the answer has to be checkable.",
     slugs: [
       "gambia-population-projection",
       "credit-risk-scorecard",
@@ -39,14 +27,14 @@ const CATEGORIES: Category[] = [
     id: "ai",
     title: "AI systems",
     blurb:
-      "Models built from scratch, then wrapped in the validation layer that tells you whether they can be trusted.",
+      "Retrieval, generative, and search systems, with the validation work that sits between a model and something a person can rely on.",
     slugs: ["nova", "gambia-legal-aid", "ayat", "hireiq"],
   },
   {
     id: "shipped",
     title: "Also shipped",
     blurb:
-      "Smaller builds and client work. Real, delivered, and worth a sentence each.",
+      "Smaller builds and client work. Each one delivered.",
     slugs: ["vantage", "forge", "bs-real-estate"],
   },
 ];
@@ -60,9 +48,6 @@ export function ProjectsGrid() {
   const liveCount = PROJECTS.filter((p) => p.status === "live").length;
   const wipCount = PROJECTS.length - liveCount;
 
-  // Number rows 01, 02, 03 continuously across all three sections so "the
-  // fifth project" means one thing. Compute numbering before render so the
-  // map callback stays pure.
   let counter = 0;
   const sections = CATEGORIES.map((cat) => ({
     ...cat,
