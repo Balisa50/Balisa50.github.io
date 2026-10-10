@@ -211,6 +211,7 @@ html {
  * to #60A5FA so it survives on a dark background.
  */
 html[data-theme="dark"] {
+  --ink: #FAFAF9;
   --text: #E7E5E4;
   --text-secondary: #A8A29E;
   --text-faint: #78716C;
