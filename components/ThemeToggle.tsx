@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 
 /**
- * Sun/moon toggle. The actual attribute is applied by the boot script in
- * layout.tsx before React mounts; this component reads the current value
- * once on mount and writes it back on click.
+ * Sun/moon toggle.
  *
- * LocalStorage keys are deliberately plain ("theme") because the boot script
- * runs before any framework code and needs to read the same key by hand.
+ * Pill shape, wide enough to read as a control at a glance, matching the
+ * size of the other top-bar buttons in the nav. The attribute is set on
+ * <html> so the CSS variables in globals.css swap without a re-render of
+ * anything else.
  */
 type Theme = "light" | "dark";
 
@@ -48,7 +48,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       aria-pressed={isDark}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-rule bg-background/70 text-text-secondary transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
+      className="inline-flex h-8 w-14 items-center justify-center rounded-full border border-rule bg-background/60 text-text-secondary transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan"
     >
       {isDark ? (
         <Sun className="h-4 w-4" aria-hidden="true" />
