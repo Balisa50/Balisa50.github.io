@@ -17,7 +17,6 @@ import type { CaseStudy } from "@/lib/case-studies";
 import { architectureFor } from "@/lib/architecture";
 import { Mermaid } from "@/components/Mermaid";
 
-const MEDIUM = "https://medium.com/@abdouliebalisa904";
 
 export function CaseStudyView({
   project,
@@ -276,9 +275,6 @@ export function StandaloneCredit() {
           </a>
           <a href={PROFILE.github} target="_blank" rel="noreferrer noopener" className={link}>
             <Github className="h-3.5 w-3.5" aria-hidden="true" /> GitHub
-          </a>
-          <a href={MEDIUM} target="_blank" rel="noreferrer noopener" className={link}>
-            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" /> Medium
           </a>
         </div>
       </div>
