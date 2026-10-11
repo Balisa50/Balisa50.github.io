@@ -36,11 +36,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Banks in West Africa hold the data that could power local AI. They cannot share it. Privacy law, customer trust, and competitive advantage keep loan books and transaction histories on bank servers. For rural borrowers, the informal economy, and most of the interior, though, the data does not exist anywhere to begin with. I did not want to build another model that copies a dataset somebody already has. I wanted two things. Learn a real dataset when one exists. Generate realistic data from domain knowledge when none does. Privacy-safe either way, with the validation numbers shown rather than claimed.",
     research: [
-      "Read the CTGAN paper (Xu et al., 2019) before writing any of the model. Two ideas make tabular GANs work: mode-specific normalisation for multimodal continuous columns, and conditional training-by-sampling for imbalanced categoricals. Neither is obvious. I wanted to implement both from the paper rather than inherit them from a library.",
-      "Read the synthetic-data survey (Jordon et al., 2022) and the SDMetrics scoring conventions. That is what told me my first validation run was measuring the wrong thing. A KS p-value is meaningless at n=10,000. The field scores the KS statistic, the effect size, instead.",
-      "Studied WGAN-GP (Gulrajani et al., 2017). Plain GAN training on tabular data is unstable. The gradient penalty is what keeps the critic honest. PacGAN packing is a cheap defence against mode collapse.",
-      "Read TimeGAN (Yoon et al., 2019) for sequential data. I did not end up building time series; the transactions here are tabular. It is the right next step for real fraud data, and I wanted to understand the gap before claiming the domain.",
-      "Researched West African microfinance. Loan sizes run 50 to 2,000 USD. APRs sit at 8 to 30 percent. Default rates at 20 to 30 percent. Group-lending lowers that. Rural borrowers skew agricultural, urban borrowers skew trading. None of this is in the architecture papers, and without it the ground-truth data would be a fantasy.",
+      "The CTGAN paper (Xu et al., 2019) is the basis for the model. Two ideas make tabular GANs work: mode-specific normalisation for multimodal continuous columns, and conditional training-by-sampling for imbalanced categoricals. Neither is obvious, and both are implemented from the paper rather than inherited from a library.",
+      "The synthetic-data survey (Jordon et al., 2022) and the SDMetrics scoring conventions set the evaluation. They are why the first validation run was measuring the wrong thing. A KS p-value is meaningless at n=10,000. The field scores the KS statistic, the effect size, instead.",
+      "WGAN-GP (Gulrajani et al., 2017) is the stabiliser. Plain GAN training on tabular data is unstable. The gradient penalty keeps the critic honest, and PacGAN packing is a cheap defence against mode collapse.",
+      "TimeGAN (Yoon et al., 2019) covers sequential data. This project is tabular, so it was not used. It is the right next step for real fraud data.",
+      "West African microfinance dynamics set the calibration. Loan sizes run 50 to 2,000 USD. APRs sit at 8 to 30 percent. Default rates at 20 to 30 percent. Group-lending lowers that. Rural borrowers skew agricultural, urban borrowers skew trading. None of this is in the architecture papers, and without it the ground-truth data would be a fantasy.",
     ],
     constraints: [
       "No real financial data. Banks do not hand loan books to students, and the compliance burden makes it a non-starter even when someone is willing. Every number had to be either synthetic-by-design or sourced. Nothing invented and passed off as real.",
@@ -107,12 +107,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "The Gambia has no complete civil registration. Deaths go largely unrecorded, so there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, the standard input for mortality forecasting. Every long-range public decision still runs on population projections: how many classrooms to build, how large the future labour force and pension bill will be, how many clinics to staff. The only figures available are the UN's. Those were finalised before The Gambia's first-ever digital census in 2024. I wanted to build an independent projection, census-based, uncertainty-quantified, that a Gambian could verify and a planner could use. Same methodology family the UN Population Division uses. Rebuilt from scratch on open data.",
     research: [
-      "Read Lee & Carter's 1992 original paper before writing any model. The single-index log-bilinear structure (log m(x,t) = a_x + b_x k_t) is the backbone of every mortality forecast the UN publishes. I implemented the classical SVD version first as a transparent baseline.",
-      "Read Brouhns, Denuit & Vermunt (2002) on the Poisson log-bilinear approach. The standard SVD assumes homoskedastic Gaussian errors on log-rates, which is wrong where death counts are small and noisy. Exactly The Gambia's case. Poisson-on-deaths is the principled fix and the basis for the Bayesian version.",
-      "Read Li & Lee (2005) on coherent forecasting. A single small-population forecast can drift to implausible long-run mortality; the coherent extension forecasts a country jointly with a reference group so it can't diverge. That paper is the reason I fetched seven West-African neighbours, not just The Gambia.",
-      "Read Raftery et al. (2012, PNAS), the Bayesian hierarchical method the UN actually adopted for WPP in 2015. I needed to understand it before benchmarking against WPP rather than just citing it.",
-      "Read Preston, Heuveline & Guillot's 'Demography' Ch. 6 for the cohort-component method: survivorship ratios from life tables, Leslie-matrix accounting, the open-age interval.",
-      "Checked the Human Mortality Database (Gambia absent). Found the thing that made the project feasible: the Farafenni Health & Demographic Surveillance System has run since 1981, Basse since 2007. Rare multi-decade empirical mortality data for a sub-Saharan country.",
+      "Lee & Carter's 1992 paper is the basis for the model. The single-index log-bilinear structure (log m(x,t) = a_x + b_x k_t) is the backbone of every mortality forecast the UN publishes. The classical SVD version was the first implementation, as a transparent baseline.",
+      "Brouhns, Denuit & Vermunt (2002) is the Poisson log-bilinear approach. The standard SVD assumes homoskedastic Gaussian errors on log-rates, which is wrong where death counts are small and noisy. Exactly The Gambia's case. Poisson-on-deaths is the principled fix and the basis for the Bayesian version.",
+      "Li & Lee (2005) is the coherent forecasting method. A single small-population forecast can drift to implausible long-run mortality. The coherent extension forecasts a country jointly with a reference group so it cannot diverge, and it is why the model pools The Gambia with seven West-African neighbours.",
+      "Raftery et al. (2012, PNAS) is the Bayesian hierarchical method the UN adopted for WPP in 2015. Understanding it was necessary before benchmarking against WPP rather than just citing it.",
+      "Preston, Heuveline & Guillot's 'Demography' Ch. 6 is the reference for the cohort-component method: survivorship ratios from life tables, Leslie-matrix accounting, the open-age interval.",
+      "The Human Mortality Database does not list The Gambia. The thing that made the project feasible is the Farafenni Health & Demographic Surveillance System, running since 1981, and Basse since 2007. Rare multi-decade empirical mortality data for a sub-Saharan country.",
     ],
     constraints: [
       "No civil registration, no national age-specific death-rate series, The Gambia is absent from the HMD. Any model runs on reconstructed or surveillance data, and pretending otherwise would be indefensible to an examiner.",
@@ -179,12 +179,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "I had been reading the Qur'an my whole life through scrolling apps that treat the book as a list of 6,236 numbered cells. Every Quran app does the same thing: scroll, tap, scroll, tap. But the Qur'an is not linear. It loops. It cross-references itself. Surah 2 borrows imagery from Surah 12. Surah 12 mirrors structures from Surah 7. Reading it linearly is like reading a hypertext document with all the links removed. I wanted to make those connections physically visible. Let a reader feel the book's geometry instead of just see its text.",
     research: [
-      "Read the original UMAP paper (McInnes, Healy 2018) before picking it over t-SNE. UMAP preserves global structure better, which is what I needed, themes have to land near each other across the whole corpus, not just locally.",
-      "Studied which sentence-transformer model to use. Tried `all-mpnet-base-v2` (768-dim, slower) and `all-MiniLM-L6-v2` (384-dim, faster). Compared cluster coherence on a 200-verse sample. MiniLM lost ~3% on coherence but ran 2.5x faster on CPU. Picked MiniLM because the corpus is fixed and the speed lets me iterate on clustering parameters at no cost.",
-      "Read existing Quran apps in detail before designing UX (Quran.com, Tarteel, Muslim Pro, Bayyinah). Identified what they all share: the verse list. Identified what none of them have: a spatial sense of the corpus.",
-      "Studied Three.js batching strategies. Naive Three.js creates one DrawCall per object, fine for 50 cubes, fatal for 6,236 verses on a phone. Read three example codebases, two using InstancedMesh and one using a Points cloud, and compared what each actually costs per particle before writing my own.",
-      "Read Aupetit and Espadoto's work on user-steerable projections (arXiv 2506.15479, June 2025) before designing the query-driven layout. Their approach zero-shot-classifies every item with an LLM, then re-runs UMAP. Reported throughput is 2.4-3.6 items/sec, which for 6,236 verses is roughly half an hour per question. That number is what pushed me to steer the projection geometrically from the query vector alone and spend exactly one model call afterwards, on labelling, instead of six thousand.",
-      "Read about the Meccan vs Medinan classification. Surahs were revealed in two distinct phases (Meccan: 13 years, cosmic, urgent, short; Medinan: 10 years, legislative, communal, long). Realised this was free metadata I could use for color, a layer of meaning that a religious reader would already recognize.",
+      "The UMAP paper (McInnes, Healy 2018) is the reason for picking it over t-SNE. UMAP preserves global structure better, which is what the visualisation needs: themes have to land near each other across the whole corpus, not just locally.",
+      "Two sentence-transformer candidates were tested: `all-mpnet-base-v2` (768-dim, slower) and `all-MiniLM-L6-v2` (384-dim, faster). MiniLM lost about 3% on cluster coherence over a 200-verse sample but ran 2.5x faster on CPU. MiniLM was picked because the corpus is fixed and the speed allows iterating on clustering parameters at no cost.",
+      "Existing Quran apps (Quran.com, Tarteel, Muslim Pro, Bayyinah) all share one thing: the verse list. None of them have a spatial sense of the corpus.",
+      "Three.js batching was the constraint. Naive Three.js creates one DrawCall per object, fine for 50 cubes, fatal for 6,236 verses on a phone. Three example codebases were compared, two using InstancedMesh and one using a Points cloud, before writing this one.",
+      "Aupetit and Espadoto's work on user-steerable projections (arXiv 2506.15479, June 2025) is the reference for the query-driven layout. Their approach zero-shot-classifies every item with an LLM, then re-runs UMAP. Reported throughput is 2.4-3.6 items/sec, which for 6,236 verses is roughly half an hour per question. That number is why the projection is steered geometrically from the query vector alone, and why exactly one model call runs afterwards, on labelling, instead of six thousand.",
+      "The Meccan / Medinan classification is free metadata. Surahs were revealed in two distinct phases (Meccan: 13 years, cosmic, urgent, short; Medinan: 10 years, legislative, communal, long). Colouring by revelation period gives the map a layer of meaning a religious reader already recognises.",
     ],
     constraints: [
       "Free tier on everything. No GPU, no managed vector DB, no paid embeddings API. If a feature required a paid service I had to either find a free path or skip it.",
@@ -279,11 +279,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Tech news is unreadable. The volume per day is in the hundreds of thousands of articles globally, and most of it is noise, patch notes, gadget sales, recycled press releases, identical takes on the same Reuters wire. I wanted a feed that did the synthesis for me, scored each story by signal strength, and let me skim only what mattered across six regions. I also wanted it to read like editorial, in the register of Ben Thompson or The Economist.",
     research: [
-      "Read 100+ Stratechery articles to internalise Ben Thompson's structure: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. Translated this into an explicit system prompt with banned phrases ('In a move that…', 'It's worth noting…') and required structures.",
-      "Studied NewsAPI's free tier limits in detail before architecting anything. 100 requests/day, language=en filter, 10 articles per query. That number determined the entire pipeline: I couldn't fan-out to all six regions in parallel, I had to chain them through a single daily run.",
-      "Read Vercel's Hobby plan limits carefully. Crons run once per day max. Edge function timeout is 60s. These two constraints shaped everything: chain-of-regions through a single cron, every region fits inside 60s, drop the slowest sub-pipelines.",
-      "Studied the provider's pricing tiers across model families. Sonnet is 3x the cost of Haiku. For a synthesise-and-score pipeline running unattended, Haiku's quality at one-third the cost was the right trade, I lost subtle nuance, kept the editorial voice via the strict prompt.",
-      "Studied RFC 5005 / RSS specs while building the regional sources. Most regional tech publications still publish RSS even if their websites are bad. Africa especially, TechCabal, Disrupt Africa, Iwacu, etc. RSS was the cheapest way in.",
+      "The Stratechery structure is the model: every piece is a verdict (the headline IS the thesis), follow the money first, name names, end with a falsifiable prediction. It became an explicit system prompt with banned phrases ('In a move that…', 'It's worth noting…') and required structures.",
+      "NewsAPI's free tier sets the pipeline: 100 requests/day, language=en filter, 10 articles per query. That number rules out parallel fan-out across six regions, so the regions chain through a single daily run.",
+      "Vercel's Hobby plan sets the constraints: crons run once per day max, edge functions time out at 60s. Those two limits shaped everything: chain-of-regions through a single cron, every region fits inside 60s, drop the slowest sub-pipelines.",
+      "The provider's pricing tiers made Haiku the choice. Sonnet costs 3x as much. For an unattended synthesise-and-score pipeline, Haiku at one-third the cost is the right trade. The strict prompt carries the editorial voice.",
+      "RSS (RFC 5005 and the general specs) is the entry point. Most regional tech publications publish RSS even if their websites are bad, Africa especially: TechCabal, Disrupt Africa, Iwacu. RSS was the cheapest way in.",
     ],
     constraints: [
       "Free Vercel Hobby plan, one cron per day max, edge functions timeout in 60 seconds.",
@@ -359,11 +359,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Gambians have almost no access to legal information. Lawyers are scarce and expensive, a one-hour consultation is more than a week's wage for most. The laws themselves are scattered across PDFs that most people will never find or be able to read. Hallucinated legal advice from a chatbot would be actively harmful: a person told they have rights they don't, or vice versa, in matters of arrest, dismissal, eviction, domestic violence. The requirement was a chatbot that refuses to invent an answer, even at the cost of being less useful.",
     research: [
-      "Read every Act we ingested (Constitution, Criminal Code, Labour Act, Children's Act, Sexual Offences Act, Domestic Violence Act, Immigration Act, Rent Act 2014/2017/2024, etc.) end-to-end before writing the system prompt. Could not enforce grounding without knowing what grounded actually meant.",
-      "Studied how Westlaw and LexisNexis structure citations. They cite by section number, sub-section, and Act. Realised my retrieval had to surface those exact metadata pieces or the citations would be unverifiable.",
-      "Read the OpenAI 'Constitutional AI' paper and the provider's RAG literature. The pattern that stuck: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry.",
-      "Studied curly-quote vs straight-quote behaviour across browsers and PDFs because the model would generate the curly version of \"section 14\" when the source text had the straight version, and my substring validator initially missed this and let hallucinations through.",
-      "Read Gambian legal cases on unfair dismissal, domestic violence prosecutions, and immigration appeals to make sure the topic anchors I was building actually retrieved the sections that mattered to real disputes.",
+      "The full text of every Act ingested (Constitution, Criminal Code, Labour Act, Children's Act, Sexual Offences Act, Domestic Violence Act, Immigration Act, Rent Act 2014/2017/2024) set the system prompt. Grounding cannot be enforced without knowing what grounded actually means.",
+      "Westlaw and LexisNexis cite by section number, sub-section, and Act. The retrieval had to surface those exact metadata pieces or the citations would be unverifiable.",
+      "The pattern from the Constitutional AI paper and the provider's RAG literature is: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry.",
+      "Curly-quote vs straight-quote behaviour differs across browsers and PDFs. The model would generate the curly version of \"section 14\" when the source text had the straight version, and the substring validator initially missed this and let hallucinations through."section 14\" when the source text had the straight version, and my substring validator initially missed this and let hallucinations through.",
+      "Gambian legal cases on unfair dismissal, domestic violence prosecutions, and immigration appeals set the topic anchors, so the retrieval surfaces the sections that matter to real disputes.",
     ],
     constraints: [
       "Hallucinated legal advice is worse than no legal advice, could literally harm people who acted on it.",
@@ -452,11 +452,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Remittances are ~20% of The Gambia's GDP. Every Gambian family has someone abroad sending money home. The Central Bank of The Gambia has internal forecasts of FX rates and remittance inflows; ordinary Gambians don't. There is no public-facing forecast of what the Dalasi will do next month, no dashboard showing diaspora corridors, no calculator for 'what will £100 be worth when I receive it'. I built the citizens' version: a public dashboard that shows what the Dalasi is doing, where remittances are coming from, and what the next six months look like, so a family deciding when to send or receive can plan instead of guess.",
     research: [
-      "Read the Central Bank of The Gambia's annual reports (2019-2024) to understand which currencies matter for the Dalasi's stability (USD, EUR, GBP, CHF, JPY) and how seasonality plays in (remittance peaks during Ramadan, Eid, school-year start in September).",
-      "Read World Bank KNOMAD methodology on bilateral remittance estimation. The data is corridor-level: UK to GM, US to GM, ES to GM, DE to GM, and so on. Knowing the methodology was crucial because it's mostly imputed from migration stocks + sender-country incomes, not from actual transaction data.",
-      "Read Prophet's Bayesian framework (Taylor and Letham 2017) while working out how to handle Ramadan and Eid, which drift 11 days a year against the Gregorian calendar and so are invisible to a month-of-year seasonal term. Compared with SARIMA: Prophet better at multi-period seasonality, SARIMA better at short cyclicality. Used both, ensemble.",
+      "The Central Bank of The Gambia's annual reports (2019-2024) set the currency list (USD, EUR, GBP, CHF, JPY) and the seasonality: remittance peaks during Ramadan, Eid, school-year start in September.",
+      "The World Bank KNOMAD methodology on bilateral remittance estimation is the source. The data is corridor-level: UK to GM, US to GM, ES to GM, DE to GM. The methodology matters because the numbers are mostly imputed from migration stocks and sender-country incomes, not actual transaction data.",
+      "Prophet's Bayesian framework (Taylor and Letham 2017) is the reference for handling Ramadan and Eid, which drift 11 days a year against the Gregorian calendar and are invisible to a month-of-year seasonal term. Prophet is better at multi-period seasonality, SARIMA at short cyclicality. Both are used in ensemble.",
       "Reverse-engineered the Central Bank of The Gambia website's network behaviour by opening their FX rates page in Chrome devtools. Saw an undocumented JSON endpoint at `cbg.gm/ajax/indicative-exchange-rates/{CURRENCY}` returning 25 years of daily rates. Authoritative, free, no key required. Confirmed it worked across all major currencies before betting the project on it.",
-      "Read GitHub Actions cron syntax + storage limits. Decided to refresh forecasts daily via Actions instead of Vercel cron, Vercel's Hobby cron wakes the function once per day at a non-customisable schedule. Actions gave me precise scheduling and a free workflow log.",
+      "GitHub Actions cron is the scheduler, not Vercel's. Vercel's Hobby cron wakes the function once per day at a non-customisable time. Actions gives precise scheduling and a free workflow log.",
     ],
     constraints: [
       "All data sources had to be free. No Bloomberg terminal, no paid APIs, no licensed datasets.",
@@ -511,7 +511,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     weaknesses: [
       "I did not know how Prophet and SARIMA differed before this project. I read both papers and fitted SARIMA with walk-forward holdouts, but I never got Prophet running on the Dalasi series, so the comparison I set out to make is still unmade.",
       "I was new to GitHub Actions cron schedules. First version had the wrong cron syntax and the job ran every minute. Fortunately discovered before committing API-key usage to that.",
-      "Time-series cross-validation is different from random-split CV. You can't shuffle time-ordered data without leaking the future into the training set. Read about walk-forward validation and rewrote the evaluation pipeline. Forecast metrics dropped from optimistic to realistic.",
+      "Time-series cross-validation is different from random-split CV. Shuffling time-ordered data leaks the future into the training set. The evaluation pipeline was rewritten around walk-forward validation. Forecast metrics dropped from optimistic to realistic.",
       "I underestimated how much pre-2010 Dalasi data was non-comparable to post-2010 data due to a methodology break. Adding the correction factor was a research task rather than a coding task. I had to read the CBG's methodology footnotes to find the conversion ratio.",
     ],
     outcome: [
@@ -535,11 +535,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "I kept skipping days on my own learning and lying to myself about it. Streak apps don't work because they're trivially fakeable, you tap 'yes I studied' and move on. I wanted a lock screen that would actually grill me on what I claimed to have done, the way a good coach would. The app's job is to push back when I try to coast.",
     research: [
-      "Studied behavioural-economics literature on commitment devices: Dean Karlan's stickK, Beeminder's monetary penalties, Forest's tree-killing. The apps that work make failure expensive in a way you actually feel.",
-      "Read interrogation methodology, not literally, but the structure: how a good cross-examination works (Reid technique critique, NIJ structured interviewing). What makes it hard to fake is asking for SPECIFICS the liar doesn't have. 'What did you build?' is gameable. 'What was the bug, what did you try first, why didn't it work?' isn't.",
-      "Studied Apple Screen Time and Android's Focus Mode. Both have the same flaw: they're disabled from inside themselves. If you can disable the constraint when willpower is low, the constraint does nothing. Settings are behind a PIN.",
-      "Read about OpenRouter's routing model. Quality on a daily 200-token interrogation is fine across many models. Locking to one provider costs more without a quality benefit.",
-      "Studied accountability-pod patterns from Nat Eliason and Tim Ferriss.",
+      "The behavioural-economics literature on commitment devices (Karlan's stickK, Beeminder's monetary penalties, Forest's tree-killing) is the reference. The apps that work make failure expensive in a way the user actually feels.",
+      "The structure of a good cross-examination (Reid technique critique, NIJ structured interviewing) is the model for the interrogator. What makes it hard to fake is asking for SPECIFICS the liar doesn't have. 'What did you build?' is gameable. 'What was the bug, what did you try first, why didn't it work?' isn't.",
+      "Apple's Screen Time and Android's Focus Mode share the same flaw: they can be disabled from inside themselves. If the constraint can be turned off when willpower is low, it does nothing. Settings live behind a PIN.",
+      "OpenRouter's routing model is the fit. Quality on a daily 200-token interrogation is fine across many models. Locking to one provider costs more without a quality benefit.",
+      "Accountability-pod patterns from Nat Eliason and Tim Ferriss are the reference.",
     ],
     constraints: [
       "Has to be impossible to bypass casually, a checkbox isn't enough.",
@@ -620,11 +620,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Job application forms are a disaster for both sides. Candidates dump CVs into black holes; hiring teams drown in unqualified applications. The conversation that should be happening, 'tell me about a project, I'll ask follow-ups', is replaced with a static form. The static form is the worst possible interface: it can't ask follow-ups, can't probe weak answers, can't tell a strong candidate from a polished CV. I built an AI that has the conversation instead, and produces a scored, defensible report at the end.",
     research: [
-      "Read structured-interview research (Schmidt & Hunter 1998 meta-analysis, more recent McDaniel reviews). Structured interviews predict job performance ~2x better than unstructured ones. Key levers: rubric-based scoring, anchored rating scales, multiple interviewers (or in our case, multiple criteria within one AI run).",
-      "Studied how Workday, Greenhouse, Lever structure their candidate pipelines. ATS systems are built around the static form because that's what 1990s HR software was. The conversation is conspicuously absent.",
-      "Read Gemini Flash 2.0's release notes and benchmarks before picking it. Sub-second responses, 10x cheaper than GPT-4. For a high-volume conversational interviewer, latency and cost matter more than peak reasoning ability, Flash trades a bit of reasoning for the volume math working.",
-      "Studied legal hiring constraints (EEOC US, GDPR EU, employment law generally), specifically what the AI can ASK and what the report can SAY. Avoided protected-category questions, kept assessments role-relevant.",
-      "Read WeasyPrint's docs and CSS-print specs. PDF generation from HTML is a well-trodden path but small mistakes (missing print stylesheet, browser-quirk fonts) ruin the output.",
+      "Structured-interview research (Schmidt & Hunter 1998 meta-analysis, more recent McDaniel reviews) is the basis. Structured interviews predict job performance about 2x better than unstructured ones. Key levers: rubric-based scoring, anchored rating scales, multiple criteria per run.",
+      "Workday, Greenhouse and Lever structure their candidate pipelines around the static form, which is what 1990s HR software was. The conversation is absent from all three.",
+      "Gemini Flash 2.0 was the choice for latency and cost: sub-second responses, 10x cheaper than GPT-4. For a high-volume conversational interviewer, latency and cost matter more than peak reasoning ability.",
+      "Legal hiring constraints (EEOC US, GDPR EU, employment law) set the boundaries on what the AI can ask and what the report can say. Protected-category questions are avoided; assessments are role-relevant.",
+      "WeasyPrint and CSS-print specs are the PDF path. PDF generation from HTML is well-trodden, but small mistakes (missing print stylesheet, browser-quirk fonts) ruin the output.",
     ],
     constraints: [
       "The conversation has to feel like a real interview. Multi-second response delays kill the flow.",
@@ -687,7 +687,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "I had not built a multi-page Streamlit-like flow with state persistence before. Streamlit's state model resets on every interaction. Switched to Next.js pages with localStorage hydration after a frustrating week.",
       "CORS in production with credentials + multiple origins is genuinely confusing. I shipped wildcard+credentials twice before realising it's silently invalid. Now I default to hardcoded explicit origins per environment.",
       "I underestimated how brittle SSE streaming is across reverse proxies. Vercel's edge proxy buffered chunks instead of forwarding them. Had to set explicit response headers (`X-Accel-Buffering: no`, `Cache-Control: no-cache, no-transform`) to force pass-through (commit a2bbe53 in coldpilot, but the lesson came from hireiq first).",
-      "Scoring rubric design is a research field I had not entered. First scoring prompt produced inconsistent results because I was asking the model to score on multiple dimensions simultaneously without clear weight. Studied multi-criteria decision-analysis literature, rewrote scoring as per-criterion 1-5 with explicit anchors, and aggregated.",
+      "Scoring rubric design is its own field. The first scoring prompt produced inconsistent results because it asked the model to score on multiple dimensions simultaneously without clear weight. The multi-criteria decision-analysis literature is the reference. Scoring was rewritten as per-criterion 1-5 with explicit anchors, then aggregated.",
     ],
     outcome: [
       "Full pipeline: job posting, then adaptive interview, then scored report, then PDF",
@@ -709,11 +709,11 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "Microfinance institutions in West Africa make lending decisions on intuition because the analytical infrastructure isn't there. Loans are granted or denied based on the loan officer's read of the applicant's character, with results that range from biased to disastrous depending on the officer. I wanted to build a Basel II-compliant credit scorecard from scratch, not import a black-box library, to actually understand WoE, IV, points conversion, validation gauntlets, and stress testing the way an actuary would. It gives the loan officer a quantified second opinion rather than taking the decision off them.",
     research: [
-      "Read Naeem Siddiqi's 'Credit Risk Scorecards: Developing and Implementing Intelligent Credit Scoring' end-to-end. The WoE/IV chapter alone is the methodology bible. Read it twice.",
-      "Studied the Basel II framework (BCBS Pillar 1) for credit risk. Specifically the Internal Ratings-Based Approach: PD (probability of default), LGD (loss given default), EAD (exposure at default). My scorecard implements PD; the rest are placeholders for the next iteration.",
-      "Read regulatory technical standards from BCBS, EBA, and the Federal Reserve on model validation. The validation gauntlet (Gini, KS, PSI, ROC) is non-negotiable for a regulated model. Implemented all four.",
-      "Studied Population Stability Index methodology (Karakoulas 2004). PSI compares score distributions between training and out-of-time samples. PSI < 0.1 = no shift, 0.1-0.25 = moderate, > 0.25 = significant shift. Industry threshold for 'don't deploy this model' is 0.25.",
-      "Read about West African microfinance dynamics, group lending (joint liability), seasonal income (agricultural cycles), gender roles in finance (women's repayment rates often higher than men's). Calibrated the synthetic data generator to reflect these patterns instead of cloning German Credit defaults.",
+      "Naeem Siddiqi's 'Credit Risk Scorecards' is the methodology reference. The WoE/IV chapter is the core of the pipeline.",
+      "The Basel II framework (BCBS Pillar 1) sets the target. The Internal Ratings-Based Approach has three components: PD (probability of default), LGD (loss given default), EAD (exposure at default). The scorecard implements PD; the rest are placeholders for the next iteration.",
+      "Regulatory technical standards from BCBS, EBA and the Federal Reserve set the validation requirements. The gauntlet (Gini, KS, PSI, ROC) is non-negotiable for a regulated model. All four are implemented.",
+      "Population Stability Index methodology (Karakoulas 2004) sets the drift check. PSI compares score distributions between training and out-of-time samples. Below 0.1 is no shift, 0.1 to 0.25 is moderate, above 0.25 is significant. The industry threshold for 'do not deploy' is 0.25.",
+      "West African microfinance dynamics set the generator: group lending (joint liability), seasonal income (agricultural cycles), gender roles in finance (women's repayment rates often higher than men's). The synthetic generator reflects those patterns rather than cloning German Credit defaults.",
     ],
     constraints: [
       "No real loan data. Privacy, NDAs, none of it accessible to a student researcher.",
@@ -766,7 +766,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Stress tests originally hardcoded scenario multipliers in the script. Refactored to a `SCENARIOS` config so new shocks (climate, geopolitical) could be added without rewriting validation code.",
     ],
     weaknesses: [
-      "I had not implemented WoE/IV from scratch before. Read Siddiqi's book chapter twice, then implemented `compute_all_woe_iv` and `woe_transform` myself. The implementation made the formulas concrete.",
+      "WoE/IV was new to implement from scratch. The Siddiqi chapter is the reference, and `compute_all_woe_iv` and `woe_transform` are the implementation. Writing the code made the formulas concrete.",
       "Population Stability Index was new. The intuition, comparing two distributions via a sum of `(actual - expected) * ln(actual/expected)`, wasn't obvious at first. Built a synthetic test where I manually shifted the distribution and watched PSI track it.",
       "Synthetic data generation is more art than science. My first generator produced loans where every feature was uniformly distributed; the model learned nothing because there was no real signal. Re-built the generator with realistic correlations: higher income, lower default; longer term, higher default; group lending, lower default.",
       "Capital-requirement math (RWA, capital floor) is in the Basel II framework but I'm only at the PD layer. I have not implemented LGD or EAD.",
@@ -791,12 +791,12 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     problem:
       "I wanted to learn actuarial science by doing, not by reading textbooks. Built a full life insurance risk model for Sub-Saharan Africa from scratch, mortality, survival analysis, premium pricing, Monte Carlo VaR. Every step is implemented myself rather than imported from an actuarial package. Sub-Saharan Africa specifically, because the standard models are calibrated on US and UK data. They under-represent the constant background hazard rate that matters here: accidents, infectious disease, road traffic. They also over-represent old-age mortality patterns that do not apply to a younger population.",
     research: [
-      "Read the original Gompertz (1825) paper and Makeham's (1860) extension. Pure Gompertz models exponential mortality increase with age; Makeham adds a constant background hazard. For Sub-Saharan Africa where the constant hazard is materially higher (malaria, road traffic, infectious disease), the Makeham term is essential. The original papers, rather than the textbook summaries, were where the intuition came from.",
-      "Studied Cox (1972) Proportional Hazards literature. The C-index (concordance) is the survival-analysis equivalent of AUC. Industry-standard 'good' is > 0.7, 'excellent' is > 0.8.",
-      "Read Klein & Moeschberger's 'Survival Analysis: Techniques for Censored and Truncated Data' for censoring and truncation handling. Most insurance data has both: right-censoring when a policy term ends, left-truncation for delayed entry.",
-      "Studied Monte Carlo variance-reduction techniques (control variates, antithetic variables) for stable VaR estimates at 5,000 scenarios.",
-      "Read Sub-Saharan Africa health stats from World Bank and WHO, life expectancy distributions, mortality ratios by age band, leading causes of death. Calibrated the synthetic profile distributions against these sources.",
-      "Read COVID-era mortality data across regions to calibrate the pandemic stress scenario. Sub-Saharan Africa's reported pandemic mortality was lower than other regions, with higher uncertainty bands.",
+      "Gompertz (1825) and Makeham (1860) are the basis. Pure Gompertz models exponential mortality increase with age; Makeham adds a constant background hazard. For Sub-Saharan Africa, where the constant hazard is materially higher (malaria, road traffic, infectious disease), the Makeham term is essential. The original papers, rather than the textbook summaries, are where the second term's role becomes clear.",
+      "Cox (1972) Proportional Hazards is the survival-analysis standard. The C-index (concordance) is the equivalent of AUC. Industry-standard 'good' is above 0.7, 'excellent' above 0.8.",
+      "Klein & Moeschberger's 'Survival Analysis' is the reference for censoring and truncation handling. Most insurance data has both: right-censoring when a policy term ends, left-truncation for delayed entry.",
+      "Monte Carlo variance-reduction techniques (control variates, antithetic variables) stabilise VaR at 5,000 scenarios.",
+      "Sub-Saharan Africa health stats from the World Bank and WHO set the profile calibration: life expectancy distributions, mortality ratios by age band, leading causes of death.",
+      "COVID-era mortality data set the pandemic stress calibration. Sub-Saharan Africa's reported pandemic mortality was lower than other regions, with higher uncertainty bands.",
     ],
     constraints: [
       "No real African insurance data, most insurers don't share, and what's published is too aggregate to fit individual-level models.",

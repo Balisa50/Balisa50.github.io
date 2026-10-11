@@ -36,7 +36,7 @@ export function CaseStudyView({
   const toc: Array<[string, string]> = [
     ["problem", "The problem"],
     ...(arch ? ([["architecture", "Architecture"]] as Array<[string, string]>) : []),
-    ["research", "What I read"],
+    ["research", "What this is built on"],
     ["constraints", "Constraints"],
     ["decisions", "Decisions"],
     ...(study.pivots.length ? ([["pivots", "What broke"]] as Array<[string, string]>) : []),
@@ -135,7 +135,7 @@ export function CaseStudyView({
               </Section>
             )}
 
-            <Section id="research" label="03" title="What I read before writing code">
+            <Section id="research" label="03" title="What this is built on">
               <ul className="max-w-[78ch] space-y-3">
                 {study.research.map((r, i) => (
                   <li key={i} className="flex gap-3 text-[15px] leading-relaxed text-text-secondary">
