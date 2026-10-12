@@ -44,30 +44,33 @@ export function About() {
           >
             Statistics student. Systems builder.{" "}
             <span className="text-text-secondary">
-              I turn statistical theory into working tools.
+              Curious about the parts I do not understand yet.
             </span>
           </h2>
         </div>
 
         <div className="mt-2 space-y-4 text-pretty text-base leading-relaxed text-text-secondary md:text-lg">
           <p>
-            I am finishing a BSc in Statistics at KNUST. I am a Mastercard
-            Foundation Scholar. Most of my work starts from a problem I can
-            see, and ends with a running system, not a notebook.
+            I am finishing a BSc in Statistics at KNUST, and I am a Mastercard
+            Foundation Scholar. I build things, usually because I ran into a
+            question I could not answer with what already existed.
           </p>
           <p>
-            The Gambia&apos;s population figures come from the UN, and they were set before the 2024 census. I built an independent Bayesian projection. Banks in West Africa
-            sit on data they cannot share, and for rural borrowers the data
-            was never collected, so I built a synthetic-data engine that does
-            not need a source dataset. Every Qur&apos;an app treats 6,236
-            verses as a flat list, and the corpus cross-references itself, so
-            I built a galaxy that reorganises around a question.
+            The Gambia&apos;s population figures come from the UN and were set
+            before the 2024 census, so I tried an independent Bayesian
+            projection to see what a different method would give. Banks in
+            West Africa cannot share customer data, and rural borrowers were
+            never collected in the first place, so I built a synthetic-data
+            engine that does not need a source dataset. Qur&apos;an apps treat
+            6,236 verses as a flat list, and the corpus cross-references
+            itself, so I built a galaxy that reorganises around a question.
           </p>
           <p>
-            I work in Python and TypeScript. I read Lee-Carter, Cox, and the
-            Basel II framework the same way I read Next.js docs. I am working
-            toward actuarial exams, and applying for internships in data
-            analytics, statistics, or actuarial science.
+            I work in Python and TypeScript. I am reading Lee-Carter, Cox, and
+            the Basel II framework alongside my coursework, toward actuarial
+            exams. Right now I am applying for internships in data analytics,
+            statistics, or actuarial science, and mostly I am looking for
+            people to learn from.
           </p>
         </div>
 

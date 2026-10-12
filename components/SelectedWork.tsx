@@ -22,9 +22,9 @@ export function SelectedWork() {
           Three projects, in full
         </h2>
         <p className="measure text-[15px] leading-relaxed text-text-secondary">
-          Independent research, a synthetic-data engine written from scratch,
-          and a retrieval system that refuses to invent law. Each row links to
-          the live product, the code where it is public, and the case study.
+          Independent research, a synthetic-data engine, and a retrieval
+          system over Gambian law. Each row links to the live product, the
+          code where it is public, and the case study.
         </p>
       </div>
 

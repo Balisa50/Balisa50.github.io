@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Background",
   robots: { index: false, follow: false },
   description:
-    "Statistics undergraduate, three working papers, and eleven shipped data science and machine learning projects."
+    "Statistics undergraduate at KNUST, three working papers, and data science and machine learning projects across forecasting, credit risk, and retrieval."
 };
 
 const PAPERS = [
@@ -44,7 +44,7 @@ const EXPERIENCE = [
     org: "Independent",
     place: "Remote",
     bullets: [
-      "Built and deployed a portfolio of end-to-end data science and machine learning projects, each open-sourced and running in production.",
+      "Built and deployed data science and machine learning projects end to end. Most are open-sourced; some stay private because of client work or training data.",
       "Work spans Bayesian forecasting, generative models for tabular data, credit scoring, survival analysis and domain adaptation.",
       "Found and corrected errors in my own published results, including a projection re-based after the 2024 census and a model whose apparent accuracy came from the train-test split."
     ]

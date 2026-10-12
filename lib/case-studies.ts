@@ -72,7 +72,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Ship a deployed web app on a real backend, not a notebook.",
         reason:
-          "A notebook is for an analyst. An app is for a user. The model is served by a FastAPI backend behind a Next.js studio. Upload a CSV and copy it, or pick a domain and create from rules. Getting it live meant solving the unglamorous parts: a CPU-only torch image, a checkpoint that only unpickles under the right library versions. Those decide whether a thing runs in production or just on my machine.",
+          "A notebook serves an analyst. A running app serves whoever needs the output. The model is served by a FastAPI backend behind a Next.js studio. Upload a CSV and copy it, or pick a domain and create from rules. Getting it live meant solving the unglamorous parts: a CPU-only torch image, a checkpoint that only unpickles under the right library versions. Those decide whether a thing runs in production or just on my machine.",
       },
     ],
     pivots: [
@@ -130,7 +130,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Pin the data to the UN team's open R package, not the token-gated API.",
         reason:
-          "When the /data API returned 401, I found that the UN Population Division's own `PPgp/wpp2024` R package publishes the WPP series as plain text in its data-raw directory. I pinned to a specific commit SHA, streamed each (sometimes 50 MB) file, kept only The Gambia's rows, and wrote a checksummed manifest. The result is more reproducible than the API would have been, no token, exact version, and it sidestepped the disk limit because the full multi-country files never touch disk.",
+          "When the /data API returned 401, I found that the UN Population Division's own `PPgp/wpp2024` R package publishes the WPP series as plain text in its data-raw directory. I pinned to a specific commit SHA, streamed each (sometimes 50 MB) file, kept only The Gambia's rows, and wrote a checksummed manifest. No token, exact commit version, and it sidestepped the disk limit because the full multi-country files never touch disk.",
       },
       {
         call: "Bayesian Poisson Lee-Carter with a_x fixed and b ~ Dirichlet(1).",
@@ -618,7 +618,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "hireiq": {
     slug: "hireiq",
     problem:
-      "Job application forms are a disaster for both sides. Candidates dump CVs into black holes; hiring teams drown in unqualified applications. The conversation that should be happening, 'tell me about a project, I'll ask follow-ups', is replaced with a static form. The static form is the worst possible interface: it can't ask follow-ups, can't probe weak answers, can't tell a strong candidate from a polished CV. I built an AI that has the conversation instead, and produces a scored, defensible report at the end.",
+      "Job application forms are a disaster for both sides. Candidates dump CVs into black holes; hiring teams drown in unqualified applications. The conversation that should be happening, 'tell me about a project, I'll ask follow-ups', is replaced with a static form. A static form can't ask follow-ups, can't probe weak answers, and can't tell a strong candidate from a polished CV. I built an AI that has the conversation instead, and produces a scored, defensible report at the end.",
     research: [
       "Structured-interview research (Schmidt & Hunter 1998 meta-analysis, more recent McDaniel reviews) is the basis. Structured interviews predict job performance about 2x better than unstructured ones. Key levers: rubric-based scoring, anchored rating scales, multiple criteria per run.",
       "Workday, Greenhouse and Lever structure their candidate pipelines around the static form, which is what 1990s HR software was. The conversation is absent from all three.",

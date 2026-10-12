@@ -8,14 +8,10 @@ export default function NotFound() {
           404 · not found
         </p>
         <h1 className="mt-4 text-[clamp(2rem,5vw,3.5rem)] font-semibold leading-tight tracking-tight">
-          Even the{" "}
-          <span className="bg-gradient-to-r from-cyan via-white to-cyan bg-clip-text text-transparent">
-            neural net
-          </span>{" "}
-          doesn&apos;t know this page.
+          This page isn&apos;t here.
         </h1>
         <p className="mt-4 text-text-secondary">
-          It might have been a draft that never shipped. Try the homepage.
+          It may have been a draft that never shipped, or a link that moved.
         </p>
         <Link
           href="/"

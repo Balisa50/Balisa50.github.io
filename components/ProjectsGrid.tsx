@@ -29,7 +29,7 @@ const CATEGORIES: Category[] = [
     id: "ai",
     title: "AI systems",
     blurb:
-      "Retrieval, generative, and search systems. Includes the validation layer that makes them usable.",
+      "Retrieval, generative, and search systems, with the validation layer around them.",
     slugs: ["nova", "gambia-legal-aid", "ayat", "hireiq"],
   },
   {
