@@ -56,9 +56,7 @@ export function About() {
             see, and ends with a running system, not a notebook.
           </p>
           <p>
-            The Gambia has no death registration system, so its population
-            projections come entirely from the UN, set before the 2024 census.
-            I built an independent Bayesian projection. Banks in West Africa
+            The Gambia&apos;s population figures come from the UN, and they were set before the 2024 census. I built an independent Bayesian projection. Banks in West Africa
             sit on data they cannot share, and for rural borrowers the data
             was never collected, so I built a synthetic-data engine that does
             not need a source dataset. Every Qur&apos;an app treats 6,236
