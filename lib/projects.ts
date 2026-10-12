@@ -218,7 +218,7 @@ export const PROJECTS: Project[] = [
 export const PROFILE = {
   name: "Balisa",
   fullName: "Abdoulie Balisa",
-  title: "Statistics student, building retrieval and forecasting systems.",
+  title: "Statistics student. I build the model and the thing that serves it.",
   email: "abdouliebalisa904@gmail.com",
   github: "https://github.com/Balisa50",
   githubHandle: "Balisa50",

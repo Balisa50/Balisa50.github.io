@@ -44,7 +44,7 @@ export function About() {
           >
             Statistics student. Systems builder.{" "}
             <span className="text-text-secondary">
-              Curious about the parts I do not understand yet.
+              I turn statistical theory into working tools.
             </span>
           </h2>
         </div>
@@ -69,8 +69,7 @@ export function About() {
             I work in Python and TypeScript. I am reading Lee-Carter, Cox, and
             the Basel II framework alongside my coursework, toward actuarial
             exams. Right now I am applying for internships in data analytics,
-            statistics, or actuarial science, and mostly I am looking for
-            people to learn from.
+            statistics, or actuarial science.
           </p>
         </div>
 
