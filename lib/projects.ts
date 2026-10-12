@@ -32,7 +32,7 @@ export const PROJECTS: Project[] = [
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
-      "The Gambia has no death registration system, so its population figures come from the UN alone, locked in before the first digital census. I built an independent projection that reaches 4.66 million by 2074, about 0.7 million below the UN. The engine reproduces the UN's published figures to within 1 percent when fed their inputs, using three forms of Lee-Carter mortality over 1,000 futures. Every input is public.",
+      "An independent population projection for a country whose published figures were set before the 2024 digital census. It reaches 4.66 million by 2074, about 0.7 million below the UN. The engine reproduces the UN's own projection to within 1 percent when fed their inputs. Three forms of Lee-Carter mortality, run over 1,000 futures.",
     tech: ["Python", "PyMC", "MCMC", "NumPy", "Pandas", "Matplotlib"],
     github: "https://github.com/Balisa50/gambia-population-projection",
     githubRepo: "Balisa50/gambia-population-projection",
