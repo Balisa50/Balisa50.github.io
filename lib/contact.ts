@@ -15,9 +15,9 @@
  *
  * The key is public by design. It names a destination inbox and grants no read
  * access, so it cannot be used to discover the address it forwards to, or to
- * read anything you have received. It is meant to sit in client-side code.
+ * read anything the recipient has received. It is meant to sit in client-side code.
  *
- * Your email address itself never appears anywhere on the site. That is the
+ * The owner's email address never appears anywhere on the site. That is the
  * entire point of routing through Web3Forms rather than a mailto link.
  *
  * ── WHY IT IS HERE RATHER THAN IN A GITHUB SECRET ──────────────────────────
@@ -25,7 +25,7 @@
  * It was a repository secret first. That meant the form was invisible until a
  * value existed in a settings page nobody was looking at, and the site shipped
  * a contact section with no form in it. A committed constant is one line in one
- * file, and you can see whether it is set by reading it.
+ * file, and whether it is set can be seen by reading it.
  *
  * The environment variable still wins if it is set, so the secret keeps working
  * for anyone who prefers it.
