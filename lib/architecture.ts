@@ -24,7 +24,7 @@ export interface Architecture {
 export const ARCHITECTURE: Record<string, Architecture> = {
   nova: {
     caption:
-      "Two entry points, one validation gate. Copy mode learns a dataset you have; create mode builds records from rules when you have none. Neither reaches the API without passing the same four checks.",
+      "Two entry points, one validation gate. Copy mode learns from a dataset the user supplies; create mode builds records from rules when there is no source data. Neither reaches the API without passing the same four checks.",
     chart: `flowchart LR
   csv["CSV you upload"] --> ctgan["CTGAN, written from the paper"]
   rules["Columns, distributions, rules"] --> eval["Whitelist expression evaluator"]

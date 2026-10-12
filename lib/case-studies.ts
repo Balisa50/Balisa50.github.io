@@ -57,7 +57,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Build the ground truth as a structural-causal model, not independent draws.",
         reason:
-          "Sample every column independently, force a correlation matrix on top, and you get incoherent data. Validating that a GAN preserves correlations becomes meaningless. So the relationships run through shared latent drivers: education and age load onto income, income onto loan size, risk drivers onto a calibrated default logit. Income really does drive loan size. The generator verifies all ten target correlations and seven integrity constraints on every run. Nested default flags, you cannot default more loans than you took, valid ranges. It fails loudly if a change breaks them.",
+          "Sampling every column independently and forcing a correlation matrix on top produces incoherent data. Validating that a GAN preserves correlations becomes meaningless. So the relationships run through shared latent drivers: education and age load onto income, income onto loan size, risk drivers onto a calibrated default logit. Income really does drive loan size. The generator verifies all ten target correlations and seven integrity constraints on every run. Nested default flags, a borrower cannot default more loans than they took, valid ranges. It fails loudly if a change breaks them.",
       },
       {
         call: "Validate four ways, and pick the metric that tells the truth over the one that flatters.",
@@ -125,7 +125,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Make the data-scarcity limitation the research question, not a footnote.",
         reason:
-          "The naive version of this project is to fit Lee-Carter to whatever series you can find and publish a point estimate. That is exactly the thing a sharp examiner sinks. So I reframed: how do you build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage?",
+          "The naive version of this project is to fit Lee-Carter to whatever series is available and publish a point estimate. That is exactly the thing a sharp examiner sinks. So I reframed: how does one build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage?",
       },
       {
         call: "Pin the data to the UN team's open R package, not the token-gated API.",
@@ -222,7 +222,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Let an unanswerable question return nothing.",
         reason:
-          "Every search interface returns something. Type anything into any Qur'an app and you get a ranked list, which implies an answer exists. Because the 384-dim scores are absolutely calibrated I can set a floor with a measured basis rather than a guess: 20 deliberately off-topic queries score 0.187 to 0.442 on their best match, 14 on-topic ones score 0.412 to 0.735. Below the floor the galaxy stays dark and the readout says the Qur'an does not frame it that way.",
+          "Every search interface returns something. Type anything into any Qur'an app and it returns a ranked list, which implies an answer exists. Because the 384-dim scores are absolutely calibrated I can set a floor with a measured basis rather than a guess: 20 deliberately off-topic queries score 0.187 to 0.442 on their best match, 14 on-topic ones score 0.412 to 0.735. Below the floor the galaxy stays dark and the readout says the Qur'an does not frame it that way.",
       },
       {
         call: "AI tafsir cached per verse globally, not per user.",
@@ -316,7 +316,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Use Haiku for the pipeline, not Sonnet.",
         reason:
-          "Article synthesis is high-volume and low-stakes-per-token (you can re-generate tomorrow if today's is mediocre). Haiku at 1/3 the cost lets the pipeline run sustainably on the budget I had. The strict editorial system prompt does the heavy lifting, Haiku follows it well enough for the format.",
+          "Article synthesis is high-volume and low-stakes-per-token (the pipeline can re-generate tomorrow if today's output is mediocre). Haiku at 1/3 the cost lets the pipeline run sustainably on the budget I had. The strict editorial system prompt does the heavy lifting, Haiku follows it well enough for the format.",
       },
       {
         call: "Region-by-region article cap (1 per region per run).",
@@ -401,7 +401,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Stream the answer word-by-word AFTER validation, not during generation.",
         reason:
-          "Standard SSE streaming would write tokens as the model produces them. But if a hallucinated citation appears mid-stream, you can't pull it back, the user already read it. Instead I generate the full answer, validate it, then stream it word-by-word for the typewriter effect. Slightly slower start (the user waits ~3s for first token instead of ~1s), but every word that appears has already been validated (commit dc4ae3f).",
+          "Standard SSE streaming would write tokens as the model produces them. But if a hallucinated citation appears mid-stream, it cannot be pulled back, the user already read it. Instead I generate the full answer, validate it, then stream it word-by-word for the typewriter effect. Slightly slower start (the user waits ~3s for first token instead of ~1s), but every word that appears has already been validated (commit dc4ae3f).",
       },
       {
         call: "Banned-phrase list: no 'consult a lawyer', no 'review your contract'.",
@@ -494,7 +494,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Plain-language interpretation alongside the chart.",
         reason:
-          "A line chart with a forecast band is not enough for the average user. Added a plain-English interpretation paragraph: 'The Dalasi has weakened ~3% against the Pound this year. Forecasts suggest moderate stability through the next 6 months with a wider band around Eid. £100 today buys GMD 8,750, your model suggests it'll buy 8,400-9,100 next month.' The chart is for analysts; the prose is for everyone else (commit ac5e78f).",
+          "A line chart with a forecast band is not enough for the average user. Added a plain-English interpretation paragraph: 'The Dalasi has weakened ~3% against the Pound this year. Forecasts suggest moderate stability through the next 6 months with a wider band around Eid. £100 today buys GMD 8,750, and the forecast suggests it will buy 8,400-9,100 next month.' The chart is for analysts; the prose is for everyone else (commit ac5e78f).",
       },
       {
         call: "Live-status badge with CBG date stamp, polled every 15 minutes.",
@@ -557,7 +557,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "PIN-locked settings, not user-disable.",
         reason:
-          "If you can disable the app from inside the app, you will when willpower runs out at 11 PM after a bad day. Settings live behind a PIN you set up sober, can't change without re-entering. Same logic as ScreenTime parental controls. The PIN is checked server-side, so clearing the app cache or reinstalling does not help.",
+          "If the app can be disabled from inside the app, it will be, when willpower runs out at 11 PM after a bad day. Settings live behind a PIN that was set when the decision was fresh and cannot be changed without re-entering it. Same logic as ScreenTime parental controls. The PIN is checked server-side, so clearing the app cache or reinstalling does not help.",
       },
       {
         call: "OpenRouter, not major AI labs direct.",
@@ -567,7 +567,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Streak resets on skip, no make-ups, no buybacks.",
         reason:
-          "If you can buy back yesterday with twice the work today, you will gamble on it and skip more. Streak loss has to be permanent or it is not a deterrent.",
+          "If yesterday can be bought back with twice the work today, the gamble becomes attractive and skipping increases. Streak loss has to be permanent or it is not a deterrent.",
       },
       {
         call: "Accountability pods, small groups (3-5), public skip notifications.",
@@ -662,7 +662,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Knockout questions + severity engine, not just open Q&A.",
         reason:
-          "Some criteria are non-negotiable: 'do you have legal authorisation to work in country X', 'do you have driver's license for this delivery role'. Those should be knockout questions that auto-reject if failed. Built a severity engine where each question carries a hire/maybe/reject weight, and a single 'reject' on a knockout ends the interview gracefully (commits 920c3d7, 5113156).",
+          "Some criteria are non-negotiable, such as whether the candidate has legal authorisation to work in country X, or a driver's licence for a delivery role. Those should be knockout questions that auto-reject if failed. Built a severity engine where each question carries a hire/maybe/reject weight, and a single 'reject' on a knockout ends the interview gracefully (commits 920c3d7, 5113156).",
       },
       {
         call: "Job form v2 with structured fields (visibility, language proficiency, candidate info sections).",
@@ -731,7 +731,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "WoE/IV feature selection, then logistic regression, no fancier model.",
         reason:
-          "Basel II requires explainability. Random forests and XGBoost are forbidden in production credit scoring without extensive explainability layers because regulators can't audit them. Logistic regression with WoE-transformed features is the industry standard for a reason, you can read the points-per-feature off the model and explain exactly why someone scored 480.",
+          "Basel II requires explainability. Random forests and XGBoost are forbidden in production credit scoring without extensive explainability layers because regulators can't audit them. Logistic regression with WoE-transformed features is the industry standard for a reason: the points-per-feature can be read off the model, and a score of 480 can be explained exactly.",
       },
       {
         call: "WoE binning by deciles for continuous features, optimal binning for categoricals.",
