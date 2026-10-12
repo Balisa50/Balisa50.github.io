@@ -362,7 +362,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "The full text of every Act ingested (Constitution, Criminal Code, Labour Act, Children's Act, Sexual Offences Act, Domestic Violence Act, Immigration Act, Rent Act 2014/2017/2024) set the system prompt. Grounding cannot be enforced without knowing what grounded actually means.",
       "Westlaw and LexisNexis cite by section number, sub-section, and Act. The retrieval had to surface those exact metadata pieces or the citations would be unverifiable.",
       "The pattern from the Constitutional AI paper and the provider's RAG literature is: validate the answer against the retrieved context BEFORE returning it. If the model hallucinated, reject and retry.",
-      "Curly-quote vs straight-quote behaviour differs across browsers and PDFs. The model would generate the curly version of \"section 14\" when the source text had the straight version, and the substring validator initially missed this and let hallucinations through."section 14\" when the source text had the straight version, and my substring validator initially missed this and let hallucinations through.",
+      "Curly-quote vs straight-quote behaviour differs across browsers and PDFs. The model would generate the curly version of \"section 14\" when the source text had the straight version, and the substring validator initially missed this and let hallucinations through.",
       "Gambian legal cases on unfair dismissal, domestic violence prosecutions, and immigration appeals set the topic anchors, so the retrieval surfaces the sections that matter to real disputes.",
     ],
     constraints: [
