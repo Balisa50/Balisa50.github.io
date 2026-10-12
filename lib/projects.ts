@@ -369,7 +369,7 @@ export interface Experience {
 export const EXPERIENCE: Experience[] = [
   {
     company: "Independent",
-    role: "AI Systems Developer · Data Science Student",
+    role: "Statistics student, systems builder",
     period: "2024 - present",
     location: "Remote",
     bullets: [
