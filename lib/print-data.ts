@@ -51,7 +51,7 @@ export const PRINT_ENTRIES: PrintEntry[] = [
       {
         src: "/figures/gambia-2074-projection.png",
         caption:
-          "The independent projection against the UN medium variant, both anchored on the 2024 census: 4.66 million by 2074, with a 95 percent interval of 4.35 to 4.98 million, about 0.7 million below the UN."
+          "The independent projection against the UN medium variant: 4.66 million by 2074, with a 95 percent interval of 4.35 to 4.98 million, about 0.7 million below the UN. This projection is based on the 2024 census; the UN's was finalised before it."
       },
       {
         src: "/figures/gambia-2074-backtest.png",
