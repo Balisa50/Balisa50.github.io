@@ -28,7 +28,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     slug: "gambia-population-projection",
-    figure: { src: "/figures/gambia-2074-projection.png", alt: "This projection reaches 4.66 million by 2074, about 0.7 million under the UN medium variant, with both anchored on the 2024 census." },
+    figure: { src: "/figures/gambia-2074-projection.png", alt: "This projection reaches 4.66 million by 2074, about 0.7 million under the UN medium variant. It is based on the 2024 census; the UN's was finalised before it." },
     title: "The Gambia 2074",
     tagline: "An independent population forecast for The Gambia, out to 2074",
     description:
@@ -66,7 +66,7 @@ export const PROJECTS: Project[] = [
     title: "Gambia Legal Aid",
     tagline: "RAG chatbot for Gambian law",
     description:
-      "Lawyers in The Gambia are expensive, the statutes are scattered across PDFs, and a hallucinated answer in a legal question does real harm. I built a RAG system over 13 Acts of Parliament where every answer names the section it came from. A validator checks each citation against the retrieved text: invented section numbers are stripped, quotes are only allowed around verbatim text, and a claim attached to the wrong section is caught against the section title.",
+      "Lawyers in The Gambia are expensive, the statutes are scattered across PDFs, and a hallucinated answer in a legal question does real harm. I built a RAG system over 13 Acts of Parliament where answers name the section they came from, or say the corpus does not cover the question. A validator checks each citation against the retrieved text: invented section numbers are stripped, quotes are only allowed around verbatim text, and a claim attached to the wrong section is caught against the section title.",
     tech: ["Python", "RAG", "Vector search", "FastAPI", "Next.js"],
     github: "https://github.com/Balisa50/gamba-legal-aid",
     githubRepo: "Balisa50/gamba-legal-aid",
@@ -136,7 +136,7 @@ export const PROJECTS: Project[] = [
     title: "AYAT",
     tagline: "A Qur'an that rearranges itself around your question",
     description:
-      "Every Qur'an app treats the book as a list of 6,236 numbered cells, and reading it linearly hides the way it cross-references itself. I embedded every verse with sentence-transformers, projected them to 3D with UMAP, and rendered them as a live particle galaxy in Three.js. Query embedding runs in the browser with the same MiniLM model the pipeline uses. 6,236 verses reproject in about 22 ms. Ask something the corpus has nothing for and it says so.",
+      "Most Qur'an apps present the book as a list of 6,236 numbered cells, and reading it linearly hides the way it cross-references itself. I embedded every verse with sentence-transformers, projected them to 3D with UMAP, and rendered them as a live particle galaxy in Three.js. Query embedding runs in the browser with the same MiniLM model the pipeline uses. 6,236 verses reproject in about 22 ms. Ask something the corpus has nothing for and it says so.",
     tech: ["Python", "sentence-transformers", "UMAP", "HDBSCAN", "transformers.js", "Next.js 16", "Three.js", "LLM API"],
     github: "https://github.com/Balisa50/ayat",
     githubRepo: "Balisa50/ayat",
