@@ -21,7 +21,7 @@ const REPO = "https://github.com/Balisa50/gambia-population-projection";
 const SECTIONS = [
   ["why", "Why this matters"],
   ["data", "The numbers we actually have"],
-  ["surprise", "A 13% surprise"],
+  ["surprise", "A 13% gap"],
   ["mortality", "How Gambians stopped dying young"],
   ["models", "Three ways to guess the future"],
   ["engine", "Checking the machine"],
@@ -72,9 +72,9 @@ export default function GambiaResearchArticle() {
             The Gambia in 2074
           </h1>
           <p className="mt-5 max-w-[60ch] text-pretty text-lg italic leading-relaxed text-text-secondary md:text-xl">
-            I rebuilt the country&apos;s population forecast from scratch, on the new census,
-            using the same methods the UN does. It comes out about 13% lower than the official
-            number. Here is how, and why it should change the way the country plans.
+            An independent projection for The Gambia, built on the 2024 census and the same
+            family of methods the UN applies. It lands about 13% below the official
+            figure by 2074. The code and inputs are open, so the numbers can be checked.
           </p>
           <p className="mt-6 font-mono text-xs uppercase tracking-wider text-text-secondary">
             Abdoulie Balisa · June 2026 · 12-minute read
@@ -282,10 +282,9 @@ export default function GambiaResearchArticle() {
               Working in the open, on public data, with the methods the UN itself trusts, an independent
               projection puts The Gambia at about 4.7 million people by 2074. That is meaningfully below the
               figure in circulation today, once the new census is taken into account, and the country is
-              heading into a window of falling dependency that is also the run-up to an ageing society. The
-              most important result was not clever. It came from taking the 2024 census seriously and
-              checking every step before believing it. Any plan still anchored to the older UN numbers is
-              worth a second look.
+              heading into a window of falling dependency that is also the run-up to an ageing society. The figure
+              in circulation today was set before the 2024 census. Any plan that still starts from the
+              older numbers now starts from a base that is roughly 13% too high.
             </P>
 
             <nav className="mt-16 flex flex-col gap-4 border-t border-rule pt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-8">
