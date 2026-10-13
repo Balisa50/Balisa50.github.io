@@ -148,7 +148,7 @@ export default function GambiaResearchArticle() {
               the way through to the answer.
             </P>
 
-            <H id="surprise">A 13% surprise</H>
+            <H id="surprise">A 13% gap</H>
             <P>
               The first real finding fell out before I forecast anything. The UN puts The Gambia at about
               2.73 million people in 2023. The 2024 census counted roughly 2.42 million. That is a gap of
