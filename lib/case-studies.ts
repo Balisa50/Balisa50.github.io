@@ -52,7 +52,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Build CTGAN from scratch in PyTorch, not on top of SDV.",
         reason:
-          "SDV ships a perfectly good CTGAN. Using it would have been a black box. I needed to understand every piece: mode-specific normalisation, the conditional generator and its cross-entropy term, the gradient penalty, the training-by-sampling loop. So I implemented all of it from the paper, with no sdv or ctgan import. That decision is what later let me add a second generation mode the library does not ship.",
+          "SDV ships a perfectly good CTGAN. Using it would have been a black box. I needed to understand every piece: mode-specific normalisation, the conditional generator and its cross-entropy term, the gradient penalty, the training-by-sampling loop. So I implemented all of it from the paper, with no sdv or ctgan import. That is also what later made the criteria-engine mode possible, since the generator internals were mine to reuse.",
       },
       {
         call: "Build the ground truth as a structural-causal model, not independent draws.",
@@ -62,7 +62,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Validate four ways, and pick the metric that tells the truth over the one that flatters.",
         reason:
-          "Most GAN write-ups report one number. I scored four things because they measure genuinely different properties: statistical similarity, correlation preservation, train-on-synthetic-test-on-real utility, and privacy. Shape, relationships, usefulness, safety. Twice I changed the metric itself rather than the result. Effect size instead of KS p-values. Distance-to-closest-record instead of a real-versus-synthetic detector. The convenient metric was lying both times.",
+          "I scored four things rather than one, because they measure different properties: statistical similarity, correlation preservation, train-on-synthetic-test-on-real utility, and privacy. Shape, relationships, usefulness, safety. Twice I changed the metric itself rather than the result. Effect size instead of KS p-values. Distance-to-closest-record instead of a real-versus-synthetic detector. The convenient metric was lying both times.",
       },
       {
         call: "Make NOVA two modes, and refuse to brute-force the second one with seven more GANs.",
@@ -100,7 +100,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "The backend runs on Fly's no-card trial, so the machine sleeps after five minutes and cold-starts on the next request. Making it always-on is a card away. 512 MB is tight for the heavier copy-mode validation. DCR shows no memorisation empirically, but it is not a formal guarantee. I would add a differentially-private training option for a formal guarantee. Transaction data here is tabular. Real fraud is sequential, which is why I read TimeGAN. Extending both modes to time series is the next build. I would also push TSTR across all seven domains rather than mainly loans, and add a third mode that blends a handful of real rows with domain rules, for the user who has a little data and a lot of knowledge.",
     takeaway:
-      "The GAN took three weeks. Proving the data was worth trusting took the rest of the project, and it meant throwing out two metrics that flattered the model for two that did not.",
+      "The GAN took three weeks. Proving the data was worth trusting took longer, and it meant replacing two metrics that flattered the model with two that did not.",
   },
   "gambia-population-projection": {
     slug: "gambia-population-projection",
@@ -242,7 +242,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     pivots: [
       "The feature I was proudest of designing did not survive measurement, and killing it was the right call. The plan was that a question would fan the matching verses into a ring of labelled arcs, so 'mercy' would separate into mercy-as-forgiveness, mercy-as-provision, mercy-as-withheld-punishment. I built a demo on synthetic vectors and it looked beautiful. Then I checked it against the actual corpus. The residual after removing the query direction is essentially one-dimensional: across five queries the first eigenvalue carries 22-33% of the variance and the second only 4-6%, indistinguishable from the third and fourth. My two-axis fan was spreading verses along one real direction and one axis of pure noise. I tried clustering the matched set instead, and k-means silhouette scored 0.03-0.07 for every k from 2 to 6, which is near zero, meaning the groups overlap almost entirely. This corpus is semantically continuous rather than clumpy, which is the same property that made HDBSCAN call 78% of it noise.",
-      "What survived that measurement is better than what I designed. One axis of difference is real and reads as a genuine polarity: for 'mercy' it runs from divine attribute (The Most Merciful) to mercy enacted (protect them from evil consequences); for 'patience in hardship' from the counsel to be patient to the affliction itself; for 'forgiving my father' from literal kin to repentance before God. So the galaxy spreads answers along one named axis instead of a fictional ring, and the two ends are labelled by one cached model call rather than the arcs I could not produce. The visualisation now claims only as much structure as the data contains.",
+      "What survived that measurement is different from what I designed. One axis of difference is real and reads as a genuine polarity: for 'mercy' it runs from divine attribute (The Most Merciful) to mercy enacted (protect them from evil consequences); for 'patience in hardship' from the counsel to be patient to the affliction itself; for 'forgiving my father' from literal kin to repentance before God. So the galaxy spreads answers along one named axis instead of a fictional ring, and the two ends are labelled by one cached model call rather than the arcs I could not produce. The visualisation now claims only as much structure as the data contains.",
       "First version did the embedding + clustering at request time on Vercel Edge. It worked but took 8 seconds on cold start. Moved everything to a one-shot Python pipeline that writes the static file at build time. Cold start is now instant. Documented in commit 9520c55: galaxy physics, video reset, debounce, shooting stars all stabilised together.",
       "Originally fetched the AI analysis on every verse open. Realised most users skim, so I made it click-to-reveal, the analysis only fetches when the user explicitly asks for it. Cut my LLM spend by ~70%. This pattern became the default for every AI feature in v2.",
       "First tour implementation had a race condition where the next step would fire before the previous step's animation finished. Caused card overlap on mobile (commit 0309957). Fixed by holding tour state in a state machine with explicit transitions instead of setTimeout chains.",
@@ -376,7 +376,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Groq Llama 3.3 70B as the generation model, not the model or GPT-4.",
         reason:
-          "Legal Q&A is high-volume (every Gambian who has the link uses it for free) and the cost math has to work. Groq's Llama 3.3 70B is fast (sub-second first token), generous on free tier, and quality is high enough for the format I need (one tight paragraph with citations). The strict system prompt + multi-layer hallucination guard does the heavy lifting; the model itself just needs to be coherent and follow instructions. Cost-engineered for a public-good product.",
+          "Legal Q&A is high-volume (every Gambian who has the link uses it for free) and the cost math has to work. Groq's Llama 3.3 70B is fast (sub-second first token), generous on free tier, and quality is high enough for the format I need (one tight paragraph with citations). The strict system prompt + multi-layer hallucination guard does the heavy lifting; the model itself just needs to be coherent and follow instructions. Priced for a public-good product.",
       },
       {
         call: "Multi-layer hallucination guard: section allowlist + verbatim quote validation + banned phrases.",
@@ -613,7 +613,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     regret:
       "I'd add a calendar-blocking feature: when you set 'I'll build between 7 AM and 9 AM tomorrow', the app automatically blocks distracting apps during that window. Pure check-in is reactive. Pre-commitment + blocking is proactive. Adding next iteration.",
     takeaway:
-      "FORGE optimises for honesty over retention. The leaderboard and camera proctoring both shipped and were removed when they produced the wrong incentive. Removing software is harder than adding it.",
+      "The leaderboard and camera proctoring both shipped and were later removed when they produced the wrong incentive.",
   },
   "hireiq": {
     slug: "hireiq",
@@ -691,7 +691,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
     ],
     outcome: [
       "Full pipeline: job posting, then adaptive interview, then scored report, then PDF",
-      "Now runs on NVIDIA's free OpenAI-compatible endpoint (mistral-medium-3.5-128b for both the one-shot scoring and the live interview stream), after pivoting off Gemini for rate limits and then off Groq; the `groq_*` names in config are legacy",
+      "Runs on NVIDIA's free OpenAI-compatible endpoint (mistral-medium-3.5-128b), after pivoting off Gemini for rate limits and then off Groq",
       "Supabase + RLS for candidate data",
       "WeasyPrint PDF reports for hiring teams",
       "LocalStorage session resume, candidates can refresh / lose connection without losing the interview",
