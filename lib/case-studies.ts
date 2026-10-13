@@ -105,7 +105,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
   "gambia-population-projection": {
     slug: "gambia-population-projection",
     problem:
-      "The Gambia has no complete civil registration. Deaths go largely unrecorded, so there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, the standard input for mortality forecasting. Every long-range public decision still runs on population projections: how many classrooms to build, how large the future labour force and pension bill will be, how many clinics to staff. The only figures available are the UN's. Those were finalised before The Gambia's first-ever digital census in 2024. I wanted to build an independent projection, census-based, uncertainty-quantified, that a Gambian could verify and a planner could use. Same methodology family the UN Population Division uses. Rebuilt from scratch on open data.",
+      "The Gambia has no complete civil registration. Deaths go largely unrecorded, so there is no national time series of age-specific death rates, and the country is absent from the Human Mortality Database, the standard input for mortality forecasting. Every long-range public decision still runs on population projections: how many classrooms to build, how large the future labour force and pension bill will be, how many clinics to staff. The only figures available are the UN's. Those were finalised before The Gambia's first-ever digital census in 2024. I wanted to build an independent projection, based on the 2024 census, with uncertainty quantified, that a Gambian could check and a planner could use.",
     research: [
       "Lee & Carter's 1992 paper is the basis for the model. The single-index log-bilinear structure (log m(x,t) = a_x + b_x k_t) is the backbone of every mortality forecast the UN publishes. The classical SVD version was the first implementation, as a transparent baseline.",
       "Brouhns, Denuit & Vermunt (2002) is the Poisson log-bilinear approach. The standard SVD assumes homoskedastic Gaussian errors on log-rates, which is wrong where death counts are small and noisy. Exactly The Gambia's case. Poisson-on-deaths is the principled fix and the basis for the Bayesian version.",
@@ -125,7 +125,7 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       {
         call: "Make the data-scarcity limitation the research question, not a footnote.",
         reason:
-          "The naive version of this project is to fit Lee-Carter to whatever series is available and publish a point estimate. That is exactly the thing a sharp examiner sinks. So I reframed: how does one build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage?",
+          "The obvious version of this project is to fit Lee-Carter to the available series and publish a point estimate. That leaves the central problem, no national death registration, unaddressed. So I reframed: how does one build a credible, uncertainty-honest projection for a country with no death registration, and how much do the answers depend on the method and the data vintage?",
       },
       {
         call: "Pin the data to the UN team's open R package, not the token-gated API.",
@@ -163,16 +163,16 @@ export const CASE_STUDIES: Record<string, CaseStudy> = {
       "Eleven reproducible modules, from data fetch and life tables through the classical, Bayesian and coherent mortality models to the projection engine and validation",
       "Life table reproduces WPP's published e0(2023) of 65.86 exactly",
       "Lee-Carter backtest (fit up to 2010, predict 2011 to 2023): 0.65-year mean error, with the truth inside the 95% range every year",
-      "The three mortality methods agree on life expectancy in 2074 to within about 0.8 years. All three are tighter than WPP's range.",
+      "The three mortality methods agree on life expectancy in 2074 to within about 0.8 years.",
       "Cohort-component engine validated to within 1% of WPP's published projection",
-      "Population reaches 4.66M by 2074 (range 4.35 to 4.98M), about 0.7M below WPP because it is re-based on the census",
+      "Population reaches 4.66M by 2074 (range 4.35 to 4.98M), from a census base rather than the UN's pre-census estimate",
       "The demographic dividend quantified: the dependency ratio falls from 77 to 49 while old-age dependency triples",
       "Full research report plus a plain-language policy brief written for Gambian media and planners",
     ],
     regret:
       "I haven't yet digitised the Farafenni and Basse HDSS published life tables or run a GBD cross-check. Both would turn the validation chapter from 'validated against the UN's reconstruction' into 'validated against independent empirical Gambian data'. I flagged them as remaining data tasks rather than inventing numbers. I'd also fit the Bayesian model sex-specifically for the projection and add the UN's own bayesPop as a fourth benchmark.",
     takeaway:
-      "The UN figure is about 13% too high for The Gambia. That came from taking the new census seriously and checking every step against a known answer before believing it.",
+      "The UN projection was finalised before the 2024 census, so its base is out of date. Re-basing on the census moves the 2074 figure down by roughly 0.7 million.",
   },
   "ayat": {
     slug: "ayat",
